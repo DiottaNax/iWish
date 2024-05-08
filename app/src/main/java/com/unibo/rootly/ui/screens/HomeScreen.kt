@@ -1,4 +1,4 @@
-package com.unibo.rootly.ui.screens.home
+package com.unibo.rootly.ui.screens
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController

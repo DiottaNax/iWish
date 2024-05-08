@@ -8,13 +8,13 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.unibo.rootly.ui.screens.addplant.AddPlantScreen
-import com.unibo.rootly.ui.screens.explore.ExploreScreen
-import com.unibo.rootly.ui.screens.home.HomeScreen
-import com.unibo.rootly.ui.screens.plantdetails.PlantDetailsScreen
-import com.unibo.rootly.ui.screens.settings.SettingsScreen
-import com.unibo.rootly.ui.screens.settings.SettingsViewModel
-import com.unibo.rootly.ui.screens.userdetails.UserDetailsScreen
+import com.unibo.rootly.ui.screens.AddPlantScreen
+import com.unibo.rootly.ui.screens.ExploreScreen
+import com.unibo.rootly.ui.screens.HomeScreen
+import com.unibo.rootly.ui.screens.PlantDetailsScreen
+import com.unibo.rootly.ui.screens.SettingsScreen
+import com.unibo.rootly.ui.screens.SettingsViewModel
+import com.unibo.rootly.ui.screens.UserProfileScreen
 import org.koin.androidx.compose.koinViewModel
 
 sealed class RootlyRoute(
@@ -66,7 +66,7 @@ fun RootlyNavGraph(
         }
         with(RootlyRoute.UserDetails) {
             composable(route, arguments) { backStackEntry ->
-                UserDetailsScreen(backStackEntry.arguments?.getString("userId") ?: "")
+                UserProfileScreen(backStackEntry.arguments?.getString("userId") ?: "")
             }
         }
         with(RootlyRoute.PlantDetails) {

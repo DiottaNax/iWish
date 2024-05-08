@@ -1,4 +1,4 @@
-package com.unibo.rootly.ui.screens.plantdetails
+package com.unibo.rootly.ui.screens
 
 import androidx.compose.runtime.Composable
 

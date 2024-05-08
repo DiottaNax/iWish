@@ -1,11 +1,11 @@
-package com.unibo.rootly.ui.screens.addplant
+package com.unibo.rootly.ui.screens
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 
 @Composable
-fun AddPlantScreen(
+fun ExploreScreen(
     navController: NavHostController
 ) {
-   //TODO
+    //TODO
 }

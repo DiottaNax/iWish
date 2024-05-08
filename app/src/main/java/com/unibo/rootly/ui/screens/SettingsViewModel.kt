@@ -1,4 +1,4 @@
-package com.unibo.rootly.ui.screens.settings
+package com.unibo.rootly.ui.screens
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
