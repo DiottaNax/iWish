@@ -2,11 +2,11 @@ package com.unibo.rootly.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.unibo.rootly.ui.screens.AddPlantScreen
 import com.unibo.rootly.ui.screens.HomeScreen
@@ -78,7 +78,7 @@ fun RootlyNavGraph(
         }
         with(RootlyRoute.UserProfile) {
             composable(route, arguments) { backStackEntry ->
-                UserProfileScreen(backStackEntry.arguments?.getString("userId") ?: "")
+                UserProfileScreen(navController, backStackEntry.arguments?.getString("userId") ?: "")
             }
         }
         with(RootlyRoute.PlantDetails) {
