@@ -28,7 +28,7 @@ import com.unibo.rootly.data.database.daos.WaterDao
     ],
     version = 1
 )
-abstract class YourDatabaseClass : RoomDatabase() {
+abstract class RootlyDatabase : RoomDatabase() {
 
     abstract fun badgeTypeDao(): BadgeTypeDao
     abstract fun fertilizerDao(): FertilizerDao
@@ -42,13 +42,13 @@ abstract class YourDatabaseClass : RoomDatabase() {
 
     companion object {
         @Volatile
-        private var INSTANCE: YourDatabaseClass? = null
+        private var INSTANCE: RootlyDatabase? = null
 
-        fun getDatabase(context: Context): YourDatabaseClass {
+        fun getDatabase(context: Context): RootlyDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    YourDatabaseClass::class.java,
+                    RootlyDatabase::class.java,
                     "your_database_name"
                 ).build()
                 INSTANCE = instance
