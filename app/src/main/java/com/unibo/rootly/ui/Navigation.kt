@@ -9,9 +9,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.unibo.rootly.ui.screens.AddPlantScreen
-import com.unibo.rootly.ui.screens.ExploreScreen
 import com.unibo.rootly.ui.screens.HomeScreen
+import com.unibo.rootly.ui.screens.LoginScreen
 import com.unibo.rootly.ui.screens.PlantDetailsScreen
+import com.unibo.rootly.ui.screens.RegistrationScreen
 import com.unibo.rootly.ui.screens.SettingsScreen
 import com.unibo.rootly.ui.screens.SettingsViewModel
 import com.unibo.rootly.ui.screens.UserProfileScreen
@@ -22,10 +23,11 @@ sealed class RootlyRoute(
     val title: String,
     val arguments: List<NamedNavArgument> = emptyList()
 ){
-    data object Home : RootlyRoute("home" , "Home") // TODO route?
-    data object Explore : RootlyRoute("explore" , "All Plants") //TODO route?
-    data object Settings : RootlyRoute("settings", "Settings")
-    data object AddPlant : RootlyRoute("plants/addPlant","Add Plant")
+    data object Registration : RootlyRoute("registration", "Welcome to rootly!")
+    data object Login : RootlyRoute("login", "Nice to see you again!")
+    data object Home : RootlyRoute("plants" , "Today's to-do")
+    data object Settings : RootlyRoute("profile/settings", "Settings")
+    data object AddPlant : RootlyRoute("plants/add","Add a new plant")
     data object PlantDetails: RootlyRoute(
         "plants/{plantId}",
         "{plantName}",
@@ -35,7 +37,7 @@ sealed class RootlyRoute(
         fun buildRoute(plantId: String) = "plants/$plantId"
     }
 
-    data object UserDetails : RootlyRoute(
+    data object UserProfile : RootlyRoute(
         "user/{userId}",
         "{username}",
         listOf(navArgument("userId") { type = NavType.StringType },
@@ -45,7 +47,7 @@ sealed class RootlyRoute(
     }
 
     companion object {
-        val routes = setOf(Home, Explore, Settings, PlantDetails, UserDetails, AddPlant )
+        val routes = setOf(Login, Registration, Home, Settings, PlantDetails, UserProfile, AddPlant)
     }
 }
 
@@ -56,15 +58,25 @@ fun RootlyNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = RootlyRoute.Home.route,
+        startDestination = RootlyRoute.Registration.route,
         modifier = modifier
     ) {
+        with(RootlyRoute.Registration) {
+            composable(route) {
+                RegistrationScreen(navController)
+            }
+        }
+        with(RootlyRoute.Login) {
+            composable(route) {
+                LoginScreen(navController)
+            }
+        }
         with(RootlyRoute.Home) {
             composable(route) {
                 HomeScreen(navController)
             }
         }
-        with(RootlyRoute.UserDetails) {
+        with(RootlyRoute.UserProfile) {
             composable(route, arguments) { backStackEntry ->
                 UserProfileScreen(backStackEntry.arguments?.getString("userId") ?: "")
             }
@@ -83,11 +95,6 @@ fun RootlyNavGraph(
             composable(route) {
                 val settingsVm = koinViewModel<SettingsViewModel>()
                 SettingsScreen(settingsVm.state, settingsVm::setUsername)
-            }
-        }
-        with(RootlyRoute.Explore){
-            composable(route){
-                ExploreScreen(navController = navController)
             }
         }
     }
