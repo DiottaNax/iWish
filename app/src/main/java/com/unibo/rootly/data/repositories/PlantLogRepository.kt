@@ -16,8 +16,8 @@ class PlantLogRepository @Inject constructor(
             = plantLogDao.getPlantLogsByPlant(userId, plantId)
 
     @WorkerThread
-    suspend fun getSoon(userId: Int) = plantLogDao.getSoonLogs(userId)
+    fun getSoon(userId: Int) = plantLogDao.getSoonLogs(userId)
 
     @WorkerThread
-    suspend fun getToday(userId: Int) = plantLogDao.getTodayLogs(userId)
+    fun getToday(userId: Int) = plantLogDao.getTodayLogs(userId)
 }

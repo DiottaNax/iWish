@@ -17,12 +17,10 @@ class FertilizerViewModel @Inject constructor(
         repository.insert(fertilizer)
     }
 
-    fun getSoonFertilizer(userId: Int) = viewModelScope.launch {
-        repository.getSoon(userId)
-    }
+    fun getSoonFertilizer(userId: Int) = repository.getSoon(userId)
 
-    fun getTodayFertilizer(userId: Int) = viewModelScope.launch {
-        repository.getToday(userId)
-    }
+
+    fun getTodayFertilizer(userId: Int) = repository.getToday(userId)
+
 
 }

@@ -12,8 +12,8 @@ class FertilizerRepository @Inject constructor(
     suspend fun insert(fertilizer: Fertilizer) = fertilizerDao.insertFertilizer(fertilizer)
 
     @WorkerThread
-    suspend fun getSoon(userId: Int) = fertilizerDao.getSoonFertilizer(userId)
+    fun getSoon(userId: Int) = fertilizerDao.getSoonFertilizer(userId)
 
     @WorkerThread
-    suspend fun getToday(userId: Int) = fertilizerDao.getTodayFertilizer(userId)
+    fun getToday(userId: Int) = fertilizerDao.getTodayFertilizer(userId)
 }

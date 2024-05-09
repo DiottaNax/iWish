@@ -17,11 +17,8 @@ class PlantLogViewModel @Inject constructor(
         repository.insert(log)
     }
 
-    fun getSoonPlantLog(userId: Int) = viewModelScope.launch {
-        repository.getSoon(userId)
-    }
+    fun getSoonPlantLog(userId: Int) = repository.getSoon(userId)
 
-    fun getTodayPlantLog(userId: Int) = viewModelScope.launch {
-        repository.getToday(userId)
-    }
+    fun getTodayPlantLog(userId: Int) =  repository.getToday(userId)
+
 }

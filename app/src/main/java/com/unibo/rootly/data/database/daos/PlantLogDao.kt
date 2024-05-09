@@ -23,7 +23,7 @@ interface PlantLogDao {
             "JOIN (SELECT user_id, plant_id, MAX(date) AS last_log_date FROM Plant_log GROUP BY user_id, plant_id) l " +
             "ON p.user_id = l.user_id AND p.plant_id = l.plant_id " +
             "WHERE p.user_id = :userId AND 15 <= DATEDIFF('now', l.last_log_date)")
-    suspend fun getTodayLogs(userId: Int): List<Plant>
+    fun getTodayLogs(userId: Int): Flow<List<Plant>>
 
     @Query("SELECT p.* " +
             "FROM Plant p " +
@@ -31,6 +31,6 @@ interface PlantLogDao {
             "ON p.user_id = l.user_id AND p.plant_id = l.plant_id " +
             "WHERE p.user_id = :userId AND 14 > DATEDIFF('now', l.last_log_date)" +
             "AND 12 <= DATEDIFF('now', l.last_log_date)")
-    suspend fun getSoonLogs(userId: Int): List<Plant>
+    fun getSoonLogs(userId: Int): Flow<List<Plant>>
 
 }

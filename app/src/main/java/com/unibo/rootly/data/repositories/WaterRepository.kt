@@ -12,8 +12,8 @@ class WaterRepository @Inject constructor(
     suspend fun insert(water: Water) = waterDao.insertWater(water)
 
     @WorkerThread
-    suspend fun getSoon(userId: Int) = waterDao.getSoonWater(userId)
+    fun getSoon(userId: Int) = waterDao.getSoonWater(userId)
 
     @WorkerThread
-    suspend fun getToday(userId: Int) = waterDao.getTodayWater(userId)
+    fun getToday(userId: Int) = waterDao.getTodayWater(userId)
 }

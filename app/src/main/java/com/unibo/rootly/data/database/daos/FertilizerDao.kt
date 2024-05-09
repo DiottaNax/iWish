@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.unibo.rootly.data.database.Fertilizer
 import com.unibo.rootly.data.database.Plant
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FertilizerDao {
@@ -21,7 +22,7 @@ interface FertilizerDao {
             "ON p.user_id = f.user_id AND p.plant_id = f.plant_id " +
             "JOIN Specie s ON s.scientific_name = p.scientific_name " +
             "WHERE p.user_id = :userId AND s.fertilizer_frequency <= DATEDIFF('now', f.last_fert_date)")
-    suspend fun getTodayFertilizer(userId: Int): List<Plant>
+    fun getTodayFertilizer(userId: Int): Flow<List<Plant>>
 
     @Query("SELECT p.* " +
             "FROM Plant p " +
@@ -30,5 +31,5 @@ interface FertilizerDao {
             "JOIN Specie s ON s.scientific_name = p.scientific_name " +
             "WHERE p.user_id = :userId AND s.fertilizer_frequency > DATEDIFF('now', f.last_fert_date)" +
             "AND s.fertilizer_frequency <= DATEDIFF('now', f.last_fert_date)+2")
-    suspend fun getSoonFertilizer(userId: Int): List<Plant>
+    fun getSoonFertilizer(userId: Int): Flow<List<Plant>>
 }

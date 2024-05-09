@@ -6,6 +6,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.data.database.Water
+import kotlinx.coroutines.flow.Flow
+
 @Dao
 interface WaterDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -20,7 +22,7 @@ interface WaterDao {
             "ON p.user_id = w.user_id AND p.plant_id = w.plant_id " +
             "JOIN Specie s ON s.scientific_name = p.scientific_name " +
             "WHERE p.user_id = :userId AND s.water_frequency <= DATEDIFF('now', w.last_watered_date)")
-    suspend fun getTodayWater(userId: Int): List<Plant>
+    fun getTodayWater(userId: Int): Flow<List<Plant>>
 
     @Query("SELECT p.* " +
             "FROM Plant p " +
@@ -30,6 +32,6 @@ interface WaterDao {
             "WHERE p.user_id = :userId " +
             "AND s.water_frequency > DATEDIFF('now', w.last_watered_date)" +
             "AND s.water_frequency <= DATEDIFF('now', w.last_watered_date) + 2")
-    suspend fun getSoonWater(userId: Int): List<Plant>
+    fun getSoonWater(userId: Int): Flow<List<Plant>>
 
 }
