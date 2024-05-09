@@ -48,7 +48,7 @@ fun UserProfileScreen(
         floatingActionButton = {
             FloatingActionButton(
                 containerColor = MaterialTheme.colorScheme.primary,
-                onClick = { /* TODO */ }
+                onClick = { navController.navigate(RootlyRoute.Settings.route) }
             ) {
                 Icon(Icons.Outlined.Settings, "Settings")
             }

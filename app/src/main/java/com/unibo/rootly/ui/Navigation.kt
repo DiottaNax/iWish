@@ -93,8 +93,8 @@ fun RootlyNavGraph(
         }
         with(RootlyRoute.Settings) {
             composable(route) {
-                val settingsVm = koinViewModel<SettingsViewModel>()
-                SettingsScreen(settingsVm.state, settingsVm::setUsername)
+                //val settingsVm = koinViewModel<SettingsViewModel>()
+                SettingsScreen(navController) //settingsVm.state, settingsVm::setUsername
             }
         }
     }
