@@ -22,8 +22,8 @@ import com.unibo.rootly.ui.composables.BottomBar
 
 @Composable
 fun UserProfileScreen(
-    userId: String,
-    navController: NavHostController
+    navController: NavHostController,
+    userId: String
 ) {
     Scaffold (
         floatingActionButton = {

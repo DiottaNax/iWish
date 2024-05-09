@@ -95,9 +95,7 @@ fun HomeScreen(navController: NavHostController) {
             items(todayPlants) { item ->
                 TravelItem(
                     item,
-                    onClick = {
-                        //navController.navigate(RootlyRoute.PlantDetails.buildRoute(item)) TODO
-                    }
+                    onClick = { navController.navigate(RootlyRoute.PlantDetails.buildRoute(item)) }
                 )
             }
             item {
@@ -113,9 +111,7 @@ fun HomeScreen(navController: NavHostController) {
             items(soonPlants) { item ->
                 TravelItem(
                     item,
-                    onClick = {
-                        //navController.navigate(RootlyRoute.PlantDetails.buildRoute(item)) TODO
-                    }
+                    onClick = { navController.navigate(RootlyRoute.PlantDetails.buildRoute(item)) }
                 )
             }
         }

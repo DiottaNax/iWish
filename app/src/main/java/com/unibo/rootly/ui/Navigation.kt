@@ -77,13 +77,13 @@ fun RootlyNavGraph(
             }
         }
         with(RootlyRoute.UserProfile) {
-            composable(route, arguments) { backStackEntry ->
+            composable(route) { backStackEntry ->
                 UserProfileScreen(navController, backStackEntry.arguments?.getString("userId") ?: "")
             }
         }
         with(RootlyRoute.PlantDetails) {
-            composable(route, arguments) { backStackEntry ->
-                PlantDetailsScreen(backStackEntry.arguments?.getString("plantId") ?: "")
+            composable(route) { backStackEntry ->
+                PlantDetailsScreen(navController, backStackEntry.arguments?.getString("plantId") ?: "")
             }
         }
         with(RootlyRoute.AddPlant) {
