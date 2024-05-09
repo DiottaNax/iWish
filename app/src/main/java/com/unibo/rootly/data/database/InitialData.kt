@@ -43,4 +43,69 @@ object InitialData {
             BadgeType("badge2", "badge2_image", "Badge 2 description")
         )
     }
+
+    fun getInitialUser(): User {
+        return User(userId = 1, username = "user1", location = "Location 1", profileImg = "path_to_profile_image", numberOfPlants = 10)
+    }
+
+    fun getInitialPlants(): List<Plant> {
+        val plants = mutableListOf<Plant>()
+        for (i in 1..10) {
+            val species = if (i % 2 == 0) {
+                getInitialSpecies()[0] // Spider Plant
+            } else {
+                getInitialSpecies()[1] // Snake Plant
+            }
+            plants.add(
+                Plant(
+                    userId = 1,
+                    plantId = i,
+                    plantName = "Plant $i",
+                    isDead = 'N',
+                    birthday = "2022-01-01", // Adjust the birthday according to your needs
+                    scientificName = species.scientificName
+                )
+            )
+        }
+        return plants
+    }
+
+    //example to test the app
+
+    fun getInitialWaters(): List<Water> {
+        val waters = mutableListOf<Water>()
+        for (i in 1..10) {
+            val waterDate = "2022-01-${i + 5}"
+            waters.add(Water(userId = 1, plantId = i, date = waterDate))
+        }
+        return waters
+    }
+
+    fun getInitialFertilizerss(): List<Fertilizer> {
+        val fertilizers = mutableListOf<Fertilizer>()
+        for (i in 1..10) {
+            val fertilizerDate = "2022-01-${i + 15}"
+            fertilizers.add(Fertilizer(userId = 1, plantId = i, date = fertilizerDate))
+        }
+        return fertilizers
+    }
+
+    fun getInitialPlantLogs(): List<PlantLog> {
+        val plantLogs = mutableListOf<PlantLog>()
+        for (i in 1..10) {
+            val logDate = "2022-01-${i + 10}"
+            plantLogs.add(
+                PlantLog(
+                    userId = 1,
+                    plantId = i,
+                    date = logDate,
+                    description = "Log for Plant $i",
+                    picture = "path_to_picture_$i",
+                    height = 15.0f // Adjust the height according to your needs
+                )
+            )
+        }
+        return plantLogs
+    }
+
 }

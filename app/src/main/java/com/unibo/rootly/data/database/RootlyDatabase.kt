@@ -62,6 +62,12 @@ abstract class RootlyDatabase : RoomDatabase() {
                             CoroutineScope(Dispatchers.IO).launch {
                                 database.badgeTypeDao().insertAll(InitialData.getInitialBadgeTypes())
                                 database.speciesDao().insertAll(InitialData.getInitialSpecies())
+                                database.userDao().insertUser(InitialData.getInitialUser())
+                                database.plantDao().insertAllPlants(InitialData.getInitialPlants())
+                                database.waterDao().insertAllWater(InitialData.getInitialWaters())
+                                database.fertilizerDao().insertAllFertilizer(InitialData.getInitialFertilizerss())
+                                database.plantLogDao().insertAllPlantLogs(InitialData.getInitialPlantLogs())
+
                             }
                         }
                     }

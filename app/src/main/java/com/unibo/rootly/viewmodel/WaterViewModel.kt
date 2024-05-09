@@ -17,4 +17,11 @@ class WaterViewModel @Inject constructor(
         repository.insert(water)
     }
 
+    fun getSoonWater(userId: Int) = viewModelScope.launch {
+        repository.getSoon(userId)
+    }
+
+    fun getTodayWater(userId: Int) = viewModelScope.launch {
+        repository.getToday(userId)
+    }
 }

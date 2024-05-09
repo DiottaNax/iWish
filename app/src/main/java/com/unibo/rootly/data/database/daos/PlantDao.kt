@@ -12,6 +12,8 @@ interface PlantDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPlant(plant: Plant)
 
+    suspend fun insertAllPlants(plants : List<Plant>) = plants.forEach { plant ->  insertPlant(plant)}
+
     @Query("SELECT * FROM Plant WHERE user_id = :userId")
     suspend fun getPlantsByUser(userId: Int): Flow<List<Plant>>
 }
