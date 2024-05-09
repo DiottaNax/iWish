@@ -16,7 +16,9 @@ import androidx.navigation.compose.rememberNavController
 import com.unibo.rootly.ui.RootlyNavGraph
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.theme.RootlyTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
