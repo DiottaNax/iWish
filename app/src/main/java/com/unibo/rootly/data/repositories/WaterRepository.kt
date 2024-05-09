@@ -10,4 +10,6 @@ class WaterRepository @Inject constructor(
 ) {
     @WorkerThread
     suspend fun insert(water: Water) = waterDao.insertWater(water)
+
+
 }

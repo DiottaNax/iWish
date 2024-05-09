@@ -34,7 +34,7 @@ data class Plant(
     @ColumnInfo(name = "scientific_name") val scientificName: String
 )
 
-@Entity(tableName = "Recived", primaryKeys = ["name", "userId"])
+@Entity(tableName = "Received", primaryKeys = ["name", "userId"])
 data class Received(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "user_id") val userId: Int
@@ -57,7 +57,7 @@ data class PlantLog(
     @ColumnInfo(name = "date") val date: String, // todo Use appropriate date representation as per your requirements
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "picture") val picture: String,
-    @ColumnInfo(name = "hight") val height: Float
+    @ColumnInfo(name = "height") val height: Float
 )
 
 @Entity(tableName = "Users")

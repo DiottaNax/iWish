@@ -13,5 +13,8 @@ interface SpeciesDao {
 
     @Query("SELECT * FROM Specie WHERE scientific_name = :scientificName")
     suspend fun getSpeciesByName(scientificName: String): Species?
+    suspend fun insertAll(species: List<Species>) {
+        species.forEach{ s -> insertSpecies(s)}
+    }
 
 }

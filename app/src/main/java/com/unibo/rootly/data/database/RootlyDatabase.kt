@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.unibo.rootly.data.database.daos.BadgeTypeDao
 import com.unibo.rootly.data.database.daos.FertilizerDao
 import com.unibo.rootly.data.database.daos.LikesDao
@@ -13,6 +14,10 @@ import com.unibo.rootly.data.database.daos.ReceivedDao
 import com.unibo.rootly.data.database.daos.SpeciesDao
 import com.unibo.rootly.data.database.daos.UserDao
 import com.unibo.rootly.data.database.daos.WaterDao
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
 
 @Database(
     entities = [
@@ -49,8 +54,19 @@ abstract class RootlyDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     RootlyDatabase::class.java,
-                    "your_database_name"
-                ).build()
+                    "rootly"
+                ).addCallback(object : RoomDatabase.Callback() {
+                    override fun onCreate(db: SupportSQLiteDatabase) {
+                        super.onCreate(db)
+                        INSTANCE?.let { database ->
+                            CoroutineScope(Dispatchers.IO).launch {
+                                database.badgeTypeDao().insertAll(InitialData.getInitialBadgeTypes())
+                                database.speciesDao().insertAll(InitialData.getInitialSpecies())
+                            }
+                        }
+                    }
+                })
+                    .build()
                 INSTANCE = instance
                 instance
             }

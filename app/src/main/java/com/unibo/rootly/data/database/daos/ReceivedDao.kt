@@ -11,6 +11,6 @@ interface ReceivedDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertReceived(received: Received)
 
-    @Query("SELECT * FROM Recived WHERE user_id = :userId")
+    @Query("SELECT * FROM Received WHERE user_id = :userId")
     suspend fun getReceivedByUser(userId: Int): List<Received>
 }
