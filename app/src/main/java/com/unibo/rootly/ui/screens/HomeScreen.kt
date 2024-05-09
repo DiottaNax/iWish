@@ -127,7 +127,7 @@ fun ActivityItem(item: String, onClick: () -> Unit) {
     Card(
         onClick = onClick,
         modifier = Modifier
-            .size(100.dp)
+            .size(110.dp)
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer
