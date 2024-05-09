@@ -43,6 +43,7 @@ import androidx.navigation.NavHostController
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.BottomBar
 
+
 @Composable
 fun HomeScreen(navController: NavHostController) {
     val todayPlants = (1..2).map { "Plant n°$it" } //TODO: add real plants from db
@@ -95,12 +96,17 @@ fun HomeScreen(navController: NavHostController) {
                     }
                 }
             }
-            items(todayPlants) { item ->
-                ActivityItem(
-                    item,
-                    onClick = { navController.navigate(RootlyRoute.PlantDetails.route) }
-                )
+
+            items(todayFertilizerPlants) { plant ->
+                ActivityItem(plant, "fertilize") { navController.navigate(RootlyRoute.PlantDetails.route) }
             }
+            items(todayWaterPlants) { plant ->
+                ActivityItem(plant, "water") { navController.navigate(RootlyRoute.PlantDetails.route) }
+            }
+            items(todayLogsPlants) { plant ->
+                ActivityItem(plant, "update") { navController.navigate(RootlyRoute.PlantDetails.route) }
+            }
+
             item {
                 Text(
                     text = "Soon",

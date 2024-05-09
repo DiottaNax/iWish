@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.unibo.rootly.data.database.daos.BadgeTypeDao
 import com.unibo.rootly.data.database.daos.FertilizerDao
@@ -17,7 +19,7 @@ import com.unibo.rootly.data.database.daos.WaterDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.concurrent.Executors
+import java.time.LocalDate
 
 @Database(
     entities = [
@@ -31,8 +33,10 @@ import java.util.concurrent.Executors
         User::class,
         Water::class
     ],
-    version = 1
+    version = 1,
+    exportSchema = false //todo maybe true?
 )
+@TypeConverters(Converters::class)
 abstract class RootlyDatabase : RoomDatabase() {
 
     abstract fun badgeTypeDao(): BadgeTypeDao
@@ -54,7 +58,7 @@ abstract class RootlyDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     RootlyDatabase::class.java,
-                    "rootly"
+                    "rootly_database"
                 ).addCallback(object : RoomDatabase.Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
@@ -65,17 +69,29 @@ abstract class RootlyDatabase : RoomDatabase() {
                                 database.userDao().insertUser(InitialData.getInitialUser())
                                 database.plantDao().insertAllPlants(InitialData.getInitialPlants())
                                 database.waterDao().insertAllWater(InitialData.getInitialWaters())
-                                database.fertilizerDao().insertAllFertilizer(InitialData.getInitialFertilizerss())
+                                database.fertilizerDao().insertAllFertilizer(InitialData.getInitialFertilizers())
                                 database.plantLogDao().insertAllPlantLogs(InitialData.getInitialPlantLogs())
-
                             }
                         }
                     }
-                })
-                    .build()
+                }).build()
                 INSTANCE = instance
                 instance
             }
         }
+    }
+}
+
+object Converters {
+    @TypeConverter
+    @JvmStatic
+    fun fromTimestamp(value: Long?): LocalDate? {
+        return value?.let { LocalDate.ofEpochDay(it) }
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun dateToTimestamp(date: LocalDate?): Long? {
+        return date?.toEpochDay()
     }
 }

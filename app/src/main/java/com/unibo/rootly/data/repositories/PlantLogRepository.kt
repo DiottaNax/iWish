@@ -12,7 +12,7 @@ class PlantLogRepository @Inject constructor(
     suspend fun insert(plantLog: PlantLog) = plantLogDao.insertPlantLog(plantLog)
 
     @WorkerThread
-    suspend fun getByPlant(userId: Int, plantId: Int)
+    fun getByPlant(userId: Int, plantId: Int)
             = plantLogDao.getPlantLogsByPlant(userId, plantId)
 
     @WorkerThread

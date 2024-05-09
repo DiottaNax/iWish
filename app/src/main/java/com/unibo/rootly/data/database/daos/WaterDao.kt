@@ -18,20 +18,23 @@ interface WaterDao {
 
     @Query("SELECT p.* " +
             "FROM Plant p " +
-            "JOIN (SELECT user_id, plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY user_id, plant_id) w " +
+            "left outer JOIN (SELECT user_id, plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY user_id, plant_id) w " +
             "ON p.user_id = w.user_id AND p.plant_id = w.plant_id " +
             "JOIN Specie s ON s.scientific_name = p.scientific_name " +
-            "WHERE p.user_id = :userId AND s.water_frequency <= DATEDIFF('now', w.last_watered_date)")
+            "WHERE p.user_id = :userId AND s.water_frequency <=" +
+            "   Cast ((julianday('now') - julianday(w.last_watered_date)) As Integer)")
     fun getTodayWater(userId: Int): Flow<List<Plant>>
 
     @Query("SELECT p.* " +
             "FROM Plant p " +
-            "JOIN (SELECT user_id, plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY user_id, plant_id) w " +
+            "left outer JOIN (SELECT user_id, plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY user_id, plant_id) w " +
             "ON p.user_id = w.user_id AND p.plant_id = w.plant_id " +
             "JOIN Specie s ON s.scientific_name = p.scientific_name " +
             "WHERE p.user_id = :userId " +
-            "AND s.water_frequency > DATEDIFF('now', w.last_watered_date)" +
-            "AND s.water_frequency <= DATEDIFF('now', w.last_watered_date) + 2")
+            "AND s.water_frequency > " +
+            "   Cast ((julianday('now') - julianday(w.last_watered_date)) As Integer)" +
+            "AND s.water_frequency <=" +
+            "   Cast ((julianday('now') - julianday(w.last_watered_date)) As Integer) + 2")
     fun getSoonWater(userId: Int): Flow<List<Plant>>
 
 }

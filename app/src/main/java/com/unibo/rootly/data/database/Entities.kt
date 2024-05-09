@@ -3,6 +3,7 @@ package com.unibo.rootly.data.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDate
 
 @Entity(tableName = "Badge_Type")
 data class BadgeType(
@@ -11,30 +12,30 @@ data class BadgeType(
     @ColumnInfo(name = "description") val description: String
 )
 
-@Entity(tableName = "Fertilizer", primaryKeys = ["userId", "plantId", "date"])
+@Entity(tableName = "Fertilizer", primaryKeys = ["user_id", "plant_id", "date"])
 data class Fertilizer(
     @ColumnInfo(name = "user_id") val userId: Int,
     @ColumnInfo(name = "plant_id") val plantId: Int,
-    @ColumnInfo(name = "date") val date: String // todo Use appropriate date representation as per your requirements
+    @ColumnInfo(name = "date") val date: LocalDate
 )
 
-@Entity(tableName = "Likes", primaryKeys = ["userId", "plantId"])
+@Entity(tableName = "Likes", primaryKeys = ["user_id", "plant_id"])
 data class Likes(
     @ColumnInfo(name = "user_id") val userId: Int,
     @ColumnInfo(name = "plant_id") val plantId: Int
 )
 
-@Entity(tableName = "Plant", primaryKeys = ["userId", "plantId"])
+@Entity(tableName = "Plant", primaryKeys = ["user_id", "plant_id"])
 data class Plant(
     @ColumnInfo(name = "user_id") val userId: Int,
     @ColumnInfo(name = "plant_id") val plantId: Int,
     @ColumnInfo(name = "plant_name") val plantName: String,
     @ColumnInfo(name = "dead") val isDead: Char,
-    @ColumnInfo(name = "birthday") val birthday: String, // todo Use appropriate date representation as per your requirements
+    @ColumnInfo(name = "birthday") val birthday: LocalDate,
     @ColumnInfo(name = "scientific_name") val scientificName: String
 )
 
-@Entity(tableName = "Received", primaryKeys = ["name", "userId"])
+@Entity(tableName = "Received", primaryKeys = ["name", "user_id"])
 data class Received(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "user_id") val userId: Int
@@ -50,11 +51,11 @@ data class Species(
     @ColumnInfo(name = "tem_min") val minTemperature: Float
 )
 
-@Entity(tableName = "Plant_log", primaryKeys = ["userId", "plantId", "date"])
+@Entity(tableName = "Plant_log", primaryKeys = ["user_id", "plant_id", "date"])
 data class PlantLog(
     @ColumnInfo(name = "user_id") val userId: Int,
     @ColumnInfo(name = "plant_id") val plantId: Int,
-    @ColumnInfo(name = "date") val date: String, // todo Use appropriate date representation as per your requirements
+    @ColumnInfo(name = "date") val date: LocalDate,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "picture") val picture: String,
     @ColumnInfo(name = "height") val height: Float
@@ -69,10 +70,10 @@ data class User(
     @ColumnInfo(name = "n_plants") val numberOfPlants: Int
 )
 
-@Entity(tableName = "Water", primaryKeys = ["userId", "plantId", "date"])
+@Entity(tableName = "Water", primaryKeys = ["user_id", "plant_id", "date"])
 data class Water(
     @ColumnInfo(name = "user_id") val userId: Int,
     @ColumnInfo(name = "plant_id") val plantId: Int,
-    @ColumnInfo(name = "date") val date: String // todo Use appropriate date representation as per your requirements
+    @ColumnInfo(name = "date") val date: LocalDate
 )
 

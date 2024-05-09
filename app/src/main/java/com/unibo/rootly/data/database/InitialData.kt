@@ -1,5 +1,7 @@
 package com.unibo.rootly.data.database
 
+import java.time.LocalDate
+
 object InitialData {
     fun getInitialSpecies(): List<Species> {
         return listOf(
@@ -62,7 +64,7 @@ object InitialData {
                     plantId = i,
                     plantName = "Plant $i",
                     isDead = 'N',
-                    birthday = "2022-01-01", // Adjust the birthday according to your needs
+                    birthday = LocalDate.of(2022, 1, 1), // Adjust the birthday according to your needs
                     scientificName = species.scientificName
                 )
             )
@@ -75,17 +77,15 @@ object InitialData {
     fun getInitialWaters(): List<Water> {
         val waters = mutableListOf<Water>()
         for (i in 1..10) {
-            val waterDate = "2022-01-${i + 5}"
-            waters.add(Water(userId = 1, plantId = i, date = waterDate))
+            waters.add(Water(userId = 1, plantId = i, date = LocalDate.of(2024, 1, i + 5)))
         }
         return waters
     }
 
-    fun getInitialFertilizerss(): List<Fertilizer> {
+    fun getInitialFertilizers(): List<Fertilizer> {
         val fertilizers = mutableListOf<Fertilizer>()
         for (i in 1..10) {
-            val fertilizerDate = "2022-01-${i + 15}"
-            fertilizers.add(Fertilizer(userId = 1, plantId = i, date = fertilizerDate))
+            fertilizers.add(Fertilizer(userId = 1, plantId = i, date = LocalDate.of(2024, 1, i + 5)))
         }
         return fertilizers
     }
@@ -93,12 +93,11 @@ object InitialData {
     fun getInitialPlantLogs(): List<PlantLog> {
         val plantLogs = mutableListOf<PlantLog>()
         for (i in 1..10) {
-            val logDate = "2022-01-${i + 10}"
             plantLogs.add(
                 PlantLog(
                     userId = 1,
                     plantId = i,
-                    date = logDate,
+                    date = LocalDate.of(2024, 1, i + 5),
                     description = "Log for Plant $i",
                     picture = "path_to_picture_$i",
                     height = 15.0f // Adjust the height according to your needs

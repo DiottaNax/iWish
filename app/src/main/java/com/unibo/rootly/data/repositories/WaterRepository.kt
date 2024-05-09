@@ -16,4 +16,5 @@ class WaterRepository @Inject constructor(
 
     @WorkerThread
     fun getToday(userId: Int) = waterDao.getTodayWater(userId)
+
 }
