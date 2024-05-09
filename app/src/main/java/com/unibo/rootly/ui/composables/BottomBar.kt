@@ -1,8 +1,8 @@
 package com.unibo.rootly.ui.composables
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -17,13 +17,13 @@ fun BottomBar(navController: NavHostController, route: RootlyRoute) {
 
     NavigationBar {
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.Home, contentDescription = "Home") },
+            icon = { Icon(Icons.Outlined.Home, contentDescription = "Home") },
             label = { Text("Home") },
             selected = isHome,
             onClick = { navController.navigate(RootlyRoute.Home.route) }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.Person, contentDescription = "Profile") },
+            icon = { Icon(Icons.Outlined.Person, contentDescription = "Profile") },
             label = { Text("Profile") },
             selected = !isHome,
             onClick = { navController.navigate(RootlyRoute.UserProfile.route) }
