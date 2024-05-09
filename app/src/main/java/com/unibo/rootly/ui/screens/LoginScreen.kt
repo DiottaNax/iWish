@@ -35,7 +35,7 @@ fun LoginScreen(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(MaterialTheme.colorScheme.background)
             .padding(45.dp)
     ) {
         var email by rememberSaveable { mutableStateOf("") }
@@ -81,7 +81,8 @@ fun LoginScreen(navController: NavHostController) {
             Text(
                 text = "Create an account",
                 style = TextStyle(fontWeight = FontWeight.Bold),
-                modifier = Modifier.clickable { navController.navigate(RootlyRoute.Login.route) }
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable { navController.navigateUp() }
             )
         }
     }

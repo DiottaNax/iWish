@@ -35,7 +35,7 @@ fun RegistrationScreen(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(MaterialTheme.colorScheme.background)
             .padding(45.dp)
     ) {
         var name by rememberSaveable { mutableStateOf("") }
@@ -48,7 +48,8 @@ fun RegistrationScreen(navController: NavHostController) {
                 fontFamily = FontFamily.Serif,
                 fontSize = 50.sp,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground
             )
         )
 
@@ -87,8 +88,9 @@ fun RegistrationScreen(navController: NavHostController) {
         Row(modifier = Modifier.padding(top = 10.dp)) {
             Text(text = "Already have an account? ")
             Text(
-                text = "Sign in",
+                text = "Login",
                 style = TextStyle(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable { navController.navigate(RootlyRoute.Login.route) }
             )
         }

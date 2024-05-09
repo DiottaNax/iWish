@@ -46,7 +46,7 @@ fun UserProfileScreen(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(contentPadding)
                 .fillMaxWidth()
         ) {
