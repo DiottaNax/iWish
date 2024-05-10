@@ -17,6 +17,8 @@ class PlantLogViewModel @Inject constructor(
         repository.insert(log)
     }
 
+    fun getLogsForPlant(userId: Int, plantId: Int) = repository.getByPlant(userId, plantId)
+
     fun getSoonPlantLog(userId: Int) = repository.getSoon(userId)
 
     fun getTodayPlantLog(userId: Int) =  repository.getToday(userId)

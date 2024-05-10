@@ -10,5 +10,5 @@ class BadgeTypeRepository @Inject constructor(
     private val badgeTypeDao: BadgeTypeDao
 ) {
     @WorkerThread
-    suspend fun getAllTypes() : Flow<List<BadgeType>> = badgeTypeDao.getAllBadgeTypes() //todo propriety not function
+    fun getAllTypes() : Flow<List<BadgeType>> = badgeTypeDao.getAllBadgeTypes() //todo propriety not function
 }

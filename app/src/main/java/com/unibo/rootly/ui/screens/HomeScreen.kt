@@ -53,6 +53,7 @@ import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.BottomBar
 
 @OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun HomeScreen(navController: NavHostController) {
     val toDo = (1..10).map { "Plant n°$it" } //TODO: add real plants from db
