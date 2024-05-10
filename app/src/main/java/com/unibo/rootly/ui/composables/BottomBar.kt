@@ -8,6 +8,7 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Today
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -30,7 +31,12 @@ fun BottomBar(navController: NavHostController, currentRoute: RootlyRoute) {
                     Icon(Icons.Outlined.Today, contentDescription = "Home")
                 }
             },
-            label = { Text("Home") },
+            label = {
+                Text(
+                    text = "Home",
+                    style = MaterialTheme.typography.labelMedium
+                )
+            },
             selected = currentRoute == RootlyRoute.Home,
             onClick = {
                 navController.navigate(RootlyRoute.Home.route) {
@@ -49,7 +55,12 @@ fun BottomBar(navController: NavHostController, currentRoute: RootlyRoute) {
                     Icon(Icons.Outlined.Person, contentDescription = "Profile")
                 }
             },
-            label = { Text("Profile") },
+            label = {
+                Text(
+                    text = "Profile",
+                    style = MaterialTheme.typography.labelMedium
+                )
+            },
             selected = currentRoute == RootlyRoute.UserProfile,
             onClick = {
                 navController.navigate(RootlyRoute.UserProfile.route) {
@@ -68,7 +79,12 @@ fun BottomBar(navController: NavHostController, currentRoute: RootlyRoute) {
                     Icon(Icons.Outlined.Settings, contentDescription = "Settings")
                 }
             },
-            label = { Text("Settings") },
+            label = {
+                Text(
+                    text = "Settings",
+                    style = MaterialTheme.typography.labelMedium
+                )
+            },
             selected = currentRoute == RootlyRoute.Settings,
             onClick = {
                 navController.navigate(RootlyRoute.Settings.route) {
