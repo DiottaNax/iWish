@@ -1,10 +1,10 @@
 package com.unibo.rootly.ui.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,13 +27,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.data.database.Plant
-import com.unibo.rootly.data.database.User
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.TopBar
 import com.unibo.rootly.viewmodel.PlantViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @Composable
@@ -74,45 +71,81 @@ fun AddPlantScreen(
                 modifier = Modifier.fillMaxWidth(),
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("Name") }
+                label = {
+                    Text(
+                        text = "Name",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             )
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = type,
                 onValueChange = { type = it },
-                label = { Text("Type") }
+                label = {
+                    Text(
+                        text = "Type",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             )
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = waterDate,
                 onValueChange = { waterDate = it },
-                label = { Text("Date (Water)") },
+                label = {
+                    Text(
+                        text = "Date (water)",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                },
                 placeholder = { Text("dd/mm/yyyy") }
             )
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = fertilizerDate,
                 onValueChange = { fertilizerDate = it },
-                label = { Text("Date (Fertilizer)") },
+                label = {
+                    Text(
+                        text = "Date (fertilizer)",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                },
                 placeholder = { Text("dd/mm/yyyy") }
             )
-
-            Button(
-                onClick = {
-                          plantViewModel.insertPlant(Plant(
-                              userId = 1,
-                              plantName = name,
-                              birthday = LocalDate.now(), //todo non va
-                              scientificName = type,
-                              isDead = false,
-                          ))
-                        navController.navigateUp()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.padding(top = 16.dp)
             ) {
-                Text("Add")
+                OutlinedButton(
+                    onClick = { /* TODO */ },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = "Add image",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+                Button(
+                    onClick = {
+                        plantViewModel.insertPlant(
+                            Plant(
+                                userId = 1,
+                                plantName = name,
+                                birthday = LocalDate.now(), //todo non va
+                                scientificName = type,
+                                isDead = false,
+                            )
+                        )
+                        navController.navigateUp()
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = "Add plant",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             }
         }
     }
