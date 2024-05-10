@@ -89,21 +89,4 @@ object InitialData {
         }
         return fertilizers
     }
-
-    fun getInitialPlantLogs(): List<PlantLog> {
-        val plantLogs = mutableListOf<PlantLog>()
-        for (i in 1..10) {
-            plantLogs.add(
-                PlantLog(
-                    plantId = i,
-                    date = LocalDate.of(2024, 1, i + 5),
-                    description = "Log for Plant $i",
-                    picture = "path_to_picture_$i",
-                    height = 15.0f // Adjust the height according to your needs
-                )
-            )
-        }
-        return plantLogs
-    }
-
 }

@@ -53,7 +53,6 @@ import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.viewmodel.FertilizerViewModel
-import com.unibo.rootly.viewmodel.PlantLogViewModel
 import com.unibo.rootly.viewmodel.PlantViewModel
 import com.unibo.rootly.viewmodel.WaterViewModel
 
@@ -71,17 +70,14 @@ fun HomeScreen(
     navController: NavHostController,
     waterViewModel: WaterViewModel,
     fertilizerViewModel: FertilizerViewModel,
-    plantLogViewModel: PlantLogViewModel,
     plantViewModel: PlantViewModel
 ) {
     val userId = 1 //todo make real and check filters
     val soonWater = waterViewModel.getSoonWater(userId).collectAsState(initial = listOf()).value
     val soonFertilizer = fertilizerViewModel.getSoonFertilizer(userId).collectAsState(initial = listOf()).value
-    val soonLog = plantLogViewModel.getSoonPlantLog(userId).collectAsState(initial = listOf()).value
 
     val todayWater = waterViewModel.getTodayWater(userId).collectAsState(initial = listOf()).value
     val todayFertilizer = fertilizerViewModel.getTodayFertilizer(userId).collectAsState(initial = listOf()).value
-    val todayLog = plantLogViewModel.getTodayPlantLog(userId).collectAsState(initial = listOf()).value
 
 
     Scaffold (
@@ -160,22 +156,6 @@ fun HomeScreen(
                     }
                 )
             }
-            items(todayLog) { plant ->
-                ActivityItem(
-                    plant,
-                    "update",
-                    "today",
-                    onClick = {
-                        plantViewModel.selectPlant(plant)
-                        navController.navigate(
-                            RootlyRoute.PlantDetails.buildRoute(
-                                plant.plantId.toString(),
-                                plant.plantName
-                            )
-                        )
-                    }
-                )
-            }
 
             items(soonWater) { plant ->
                 ActivityItem(
@@ -197,22 +177,6 @@ fun HomeScreen(
                 ActivityItem(
                     plant,
                     "fertilize",
-                    "Next 2 days",
-                    onClick = {
-                        plantViewModel.selectPlant(plant)
-                        navController.navigate(
-                            RootlyRoute.PlantDetails.buildRoute(
-                                plant.plantId.toString(),
-                                plant.plantName
-                            )
-                        )
-                    }
-                )
-            }
-            items(soonLog) { plant ->
-                ActivityItem(
-                    plant,
-                    "update",
                     "Next 2 days",
                     onClick = {
                         plantViewModel.selectPlant(plant)

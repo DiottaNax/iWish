@@ -20,7 +20,6 @@ import com.unibo.rootly.ui.screens.ThemeState
 import com.unibo.rootly.ui.screens.UserProfileScreen
 import com.unibo.rootly.viewmodel.FertilizerViewModel
 import com.unibo.rootly.viewmodel.LikesViewModel
-import com.unibo.rootly.viewmodel.PlantLogViewModel
 import com.unibo.rootly.viewmodel.PlantViewModel
 import com.unibo.rootly.viewmodel.ReceivedViewModel
 import com.unibo.rootly.viewmodel.SpeciesViewModel
@@ -71,7 +70,6 @@ fun RootlyNavGraph(
 ) {
     val  fertilizerViewModel = hiltViewModel<FertilizerViewModel>()
     val  likesViewModel = hiltViewModel<LikesViewModel>()
-    val  plantLogViewModel= hiltViewModel<PlantLogViewModel>()
     val  plantViewModel = hiltViewModel<PlantViewModel>()
     val  receivedViewModel= hiltViewModel<ReceivedViewModel>()
     val  speciesViewModel= hiltViewModel<SpeciesViewModel>()
@@ -99,7 +97,6 @@ fun RootlyNavGraph(
                     navController,
                     waterViewModel,
                     fertilizerViewModel,
-                    plantLogViewModel,
                     plantViewModel
                 )
             }
@@ -115,7 +112,6 @@ fun RootlyNavGraph(
             composable(route) { backStackEntry ->
                 PlantDetailsScreen(navController,
                     plantViewModel,
-                    plantLogViewModel,
                     backStackEntry.arguments?.getString("plantId") ?: "")
             }
         }

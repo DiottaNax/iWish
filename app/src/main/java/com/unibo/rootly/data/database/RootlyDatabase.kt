@@ -11,7 +11,6 @@ import com.unibo.rootly.data.database.daos.BadgeTypeDao
 import com.unibo.rootly.data.database.daos.FertilizerDao
 import com.unibo.rootly.data.database.daos.LikesDao
 import com.unibo.rootly.data.database.daos.PlantDao
-import com.unibo.rootly.data.database.daos.PlantLogDao
 import com.unibo.rootly.data.database.daos.ReceivedDao
 import com.unibo.rootly.data.database.daos.SpeciesDao
 import com.unibo.rootly.data.database.daos.UserDao
@@ -29,7 +28,6 @@ import java.time.LocalDate
         Plant::class,
         Received::class,
         Species::class,
-        PlantLog::class,
         User::class,
         Water::class
     ],
@@ -45,7 +43,6 @@ abstract class RootlyDatabase : RoomDatabase() {
     abstract fun plantDao(): PlantDao
     abstract fun receivedDao(): ReceivedDao
     abstract fun speciesDao(): SpeciesDao
-    abstract fun plantLogDao(): PlantLogDao
     abstract fun userDao(): UserDao
     abstract fun waterDao(): WaterDao
 
@@ -71,7 +68,6 @@ abstract class RootlyDatabase : RoomDatabase() {
                                 database.plantDao().insertAllPlants(InitialData.getInitialPlants())
                                 database.waterDao().insertAllWater(InitialData.getInitialWaters())
                                 database.fertilizerDao().insertAllFertilizer(InitialData.getInitialFertilizers())
-                                database.plantLogDao().insertAllPlantLogs(InitialData.getInitialPlantLogs())
                             }
                         }
                     }

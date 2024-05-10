@@ -50,16 +50,6 @@ data class Species(
     @ColumnInfo(name = "tem_max") val maxTemperature: Float,
     @ColumnInfo(name = "tem_min") val minTemperature: Float
 )
-
-@Entity(tableName = "Plant_log", primaryKeys = ["plant_id", "date"])
-data class PlantLog(
-    @ColumnInfo(name = "plant_id") val plantId: Int,
-    @ColumnInfo(name = "date") val date: LocalDate,
-    @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "picture") val picture: String,
-    @ColumnInfo(name = "height") val height: Float
-)
-
 @Entity(tableName = "Users")
 data class User(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "user_id") val userId: Int = 0,

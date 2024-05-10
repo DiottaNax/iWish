@@ -7,7 +7,6 @@ import com.unibo.rootly.data.database.daos.BadgeTypeDao
 import com.unibo.rootly.data.database.daos.FertilizerDao
 import com.unibo.rootly.data.database.daos.LikesDao
 import com.unibo.rootly.data.database.daos.PlantDao
-import com.unibo.rootly.data.database.daos.PlantLogDao
 import com.unibo.rootly.data.database.daos.ReceivedDao
 import com.unibo.rootly.data.database.daos.SpeciesDao
 import com.unibo.rootly.data.database.daos.UserDao
@@ -47,10 +46,6 @@ object DataModule {
     @Provides
     fun providePlantDao(database: RootlyDatabase): PlantDao {
         return database.plantDao()
-    }
-    @Provides
-    fun providePlantLogDao(database: RootlyDatabase): PlantLogDao {
-        return database.plantLogDao()
     }
     @Provides
     fun provideReceivedDao(database: RootlyDatabase): ReceivedDao {
