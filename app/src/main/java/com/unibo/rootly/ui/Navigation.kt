@@ -38,12 +38,14 @@ sealed class RootlyRoute(
     data object Settings : RootlyRoute("settings", "Settings")
     data object AddPlant : RootlyRoute("add","Add a plant")
     data object PlantDetails: RootlyRoute(
-        "plants/{plantId}",
+        "plants/{plantId}/{plantName}", // Include plantName in the route
         "{plantName}",
-        listOf(navArgument("plantId") { type = NavType.StringType },
-            navArgument("plantName") { type = NavType.StringType })
-    ){
-        fun buildRoute(plantId: String) = "plants/$plantId"
+        listOf(
+            navArgument("plantId") { type = NavType.StringType },
+            navArgument("plantName") { type = NavType.StringType }
+        )
+    ) {
+        fun buildRoute(plantId: String, plantName: String) = "plants/$plantId/$plantName"
     }
 
     data object UserProfile : RootlyRoute(
@@ -93,10 +95,13 @@ fun RootlyNavGraph(
         }
         with(RootlyRoute.Home) {
             composable(route) {
-                HomeScreen(navController,
+                HomeScreen(
+                    navController,
                     waterViewModel,
                     fertilizerViewModel,
-                    plantLogViewModel)
+                    plantLogViewModel,
+                    plantViewModel
+                )
             }
         }
         with(RootlyRoute.UserProfile) {
@@ -108,7 +113,9 @@ fun RootlyNavGraph(
         }
         with(RootlyRoute.PlantDetails) {
             composable(route) { backStackEntry ->
-                PlantDetailsScreen(navController,backStackEntry.arguments?.getString("plantId") ?: "")
+                PlantDetailsScreen(navController,
+                    plantViewModel,
+                    backStackEntry.arguments?.getString("plantId") ?: "")
             }
         }
         with(RootlyRoute.AddPlant) {

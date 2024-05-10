@@ -54,6 +54,7 @@ import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.viewmodel.FertilizerViewModel
 import com.unibo.rootly.viewmodel.PlantLogViewModel
+import com.unibo.rootly.viewmodel.PlantViewModel
 import com.unibo.rootly.viewmodel.WaterViewModel
 
 enum class Filter(
@@ -70,7 +71,8 @@ fun HomeScreen(
     navController: NavHostController,
     waterViewModel: WaterViewModel,
     fertilizerViewModel: FertilizerViewModel,
-    plantLogViewModel: PlantLogViewModel
+    plantLogViewModel: PlantLogViewModel,
+    plantViewModel: PlantViewModel
 ) {
     val userId = 1 //todo make real and check filters
     val soonWater = waterViewModel.getSoonWater(userId).collectAsState(initial = listOf()).value
@@ -131,7 +133,15 @@ fun HomeScreen(
                     plant,
                     "water",
                     "today",
-                    onClick = { navController.navigate(RootlyRoute.PlantDetails.route) }
+                    onClick = {
+                        plantViewModel.selectPlant(plant)
+                        navController.navigate(
+                            RootlyRoute.PlantDetails.buildRoute(
+                                plant.plantId.toString(),
+                                plant.plantName
+                            )
+                        )
+                    }
                 )
             }
             items(todayFertilizer) { plant ->
@@ -139,7 +149,15 @@ fun HomeScreen(
                     plant,
                     "fertilize",
                     "today",
-                    onClick = { navController.navigate(RootlyRoute.PlantDetails.route) }
+                    onClick = {
+                        plantViewModel.selectPlant(plant)
+                        navController.navigate(
+                            RootlyRoute.PlantDetails.buildRoute(
+                                plant.plantId.toString(),
+                                plant.plantName
+                            )
+                        )
+                    }
                 )
             }
             items(todayLog) { plant ->
@@ -147,7 +165,15 @@ fun HomeScreen(
                     plant,
                     "update",
                     "today",
-                    onClick = { navController.navigate(RootlyRoute.PlantDetails.route) }
+                    onClick = {
+                        plantViewModel.selectPlant(plant)
+                        navController.navigate(
+                            RootlyRoute.PlantDetails.buildRoute(
+                                plant.plantId.toString(),
+                                plant.plantName
+                            )
+                        )
+                    }
                 )
             }
 
@@ -156,7 +182,15 @@ fun HomeScreen(
                     plant,
                     "water",
                     "Next 2 days",
-                    onClick = { navController.navigate(RootlyRoute.PlantDetails.route) }
+                    onClick = {
+                        plantViewModel.selectPlant(plant)
+                        navController.navigate(
+                            RootlyRoute.PlantDetails.buildRoute(
+                                plant.plantId.toString(),
+                                plant.plantName
+                            )
+                        )
+                    }
                 )
             }
             items(soonFertilizer) { plant ->
@@ -164,7 +198,15 @@ fun HomeScreen(
                     plant,
                     "fertilize",
                     "Next 2 days",
-                    onClick = { navController.navigate(RootlyRoute.PlantDetails.route) }
+                    onClick = {
+                        plantViewModel.selectPlant(plant)
+                        navController.navigate(
+                            RootlyRoute.PlantDetails.buildRoute(
+                                plant.plantId.toString(),
+                                plant.plantName
+                            )
+                        )
+                    }
                 )
             }
             items(soonLog) { plant ->
@@ -172,7 +214,15 @@ fun HomeScreen(
                     plant,
                     "update",
                     "Next 2 days",
-                    onClick = { navController.navigate(RootlyRoute.PlantDetails.route) }
+                    onClick = {
+                        plantViewModel.selectPlant(plant)
+                        navController.navigate(
+                            RootlyRoute.PlantDetails.buildRoute(
+                                plant.plantId.toString(),
+                                plant.plantName
+                            )
+                        )
+                    }
                 )
             }
         }

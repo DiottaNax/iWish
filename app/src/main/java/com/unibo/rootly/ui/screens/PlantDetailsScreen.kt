@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.TopBar
 import com.unibo.rootly.viewmodel.PlantViewModel
@@ -27,8 +28,10 @@ import com.unibo.rootly.viewmodel.PlantViewModel
 @Composable
 fun PlantDetailsScreen(
     navController: NavHostController,
-    plantId: String
+    plantViewModel: PlantViewModel,
+    s: String,
 ) {
+    val plant : Plant = plantViewModel.plantSelected!!
     Scaffold(
         topBar = {
             TopBar(
@@ -46,11 +49,11 @@ fun PlantDetailsScreen(
                 .fillMaxWidth()
         ) {
             Text(
-                text = "Monstera Deliciosa",
+                text = plant.scientificName,
                 modifier = Modifier.fillMaxWidth()
             )
             Image(
-                Icons.Outlined.Image,
+                Icons.Outlined.Image, //todo metti l'img
                 contentDescription = "Plant photo",
                 modifier = Modifier
                     .clip(RoundedCornerShape(28.dp))
