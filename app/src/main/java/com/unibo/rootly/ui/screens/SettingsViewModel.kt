@@ -1,28 +1,17 @@
 package com.unibo.rootly.ui.screens
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-data class SettingsState(val username: String)
+enum class Theme { Light, Dark, System }
+data class ThemeState(val theme: Theme)
 
-class SettingsViewModel (
-//    private val repository: SettingsRepository
-) : ViewModel() {
-    var state by mutableStateOf(SettingsState(""))
-        private set
+class SettingsViewModel () : ViewModel() {
+    private val _state = MutableStateFlow(ThemeState(Theme.System))
+    val state = _state.asStateFlow()
 
-    fun setUsername(value: String) {
-        state = SettingsState(value)
-//        viewModelScope.launch { repository.setUsername(value) }
-    }
-
-    init {
-        viewModelScope.launch {
-//            state = SettingsState(repository.username.first())
-        }
+    fun changeTheme(theme: Theme) {
+        _state.value = ThemeState(theme)
     }
 }
