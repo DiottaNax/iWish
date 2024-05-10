@@ -11,13 +11,11 @@ import com.unibo.rootly.data.database.daos.ReceivedDao
 import com.unibo.rootly.data.database.daos.SpeciesDao
 import com.unibo.rootly.data.database.daos.UserDao
 import com.unibo.rootly.data.database.daos.WaterDao
-import com.unibo.rootly.data.repositories.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -63,8 +61,4 @@ object DataModule {
     fun provideWaterDao(database: RootlyDatabase): WaterDao {
         return database.waterDao()
     }
-
-    @Singleton
-    @Provides
-    fun provideSettingsRepository(@ApplicationContext context: Context) = SettingsRepository(context)
 }

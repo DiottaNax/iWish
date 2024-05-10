@@ -11,8 +11,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.unibo.rootly.ui.RootlyNavGraph
@@ -21,16 +19,16 @@ import com.unibo.rootly.ui.screens.SettingsViewModel
 import com.unibo.rootly.ui.screens.Theme
 import com.unibo.rootly.ui.theme.RootlyTheme
 import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.compose.koinViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val settingsVM = viewModel<SettingsViewModel>()
-            val state by settingsVM.state.collectAsStateWithLifecycle()
+            val settingsVM = koinViewModel<SettingsViewModel>()
             RootlyTheme(
-                darkTheme = when (state.theme) {
+                darkTheme = when (settingsVM.state.theme) {
                     Theme.Light -> false
                     Theme.Dark -> true
                     Theme.System -> isSystemInDarkTheme()
@@ -49,7 +47,7 @@ class MainActivity : ComponentActivity() {
                             } ?: RootlyRoute.Registration
                         }
                     }
-                    RootlyNavGraph(navController, settingsVM, state)
+                    RootlyNavGraph(navController, settingsVM)
                 }
             }
         }

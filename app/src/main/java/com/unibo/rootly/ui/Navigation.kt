@@ -16,7 +16,6 @@ import com.unibo.rootly.ui.screens.PlantDetailsScreen
 import com.unibo.rootly.ui.screens.RegistrationScreen
 import com.unibo.rootly.ui.screens.SettingsScreen
 import com.unibo.rootly.ui.screens.SettingsViewModel
-import com.unibo.rootly.ui.screens.ThemeState
 import com.unibo.rootly.ui.screens.UserProfileScreen
 import com.unibo.rootly.viewmodel.FertilizerViewModel
 import com.unibo.rootly.viewmodel.LikesViewModel
@@ -65,7 +64,6 @@ sealed class RootlyRoute(
 fun RootlyNavGraph(
     navController: NavHostController,
     settingsVM: SettingsViewModel,
-    state: ThemeState,
     modifier: Modifier = Modifier
 ) {
     val  fertilizerViewModel = hiltViewModel<FertilizerViewModel>()
@@ -122,7 +120,7 @@ fun RootlyNavGraph(
         }
         with(RootlyRoute.Settings) {
             composable(route) {
-                SettingsScreen(navController, settingsVM, state)
+                SettingsScreen(navController, settingsVM, settingsVM.state)
             }
         }
     }

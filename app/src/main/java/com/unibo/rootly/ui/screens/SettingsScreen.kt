@@ -53,7 +53,7 @@ fun SettingsScreen(
                 val selected = (theme == state.theme)
 
                 FilterChip(
-                    onClick = { vm.changeTheme(theme) },
+                    onClick = { vm.setTheme(theme) },
                     label = {
                         Text(theme.toString())
                     },

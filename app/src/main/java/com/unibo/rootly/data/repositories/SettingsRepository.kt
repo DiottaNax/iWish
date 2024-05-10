@@ -1,47 +1,25 @@
 package com.unibo.rootly.data.repositories
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
-import com.unibo.rootly.R
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
+import com.unibo.rootly.ui.screens.Theme
 import kotlinx.coroutines.flow.map
-import java.io.IOException
 
-/**
- * Repository that stores the user's preferences for the ui theme
- */
-class SettingsRepository(
-    private val context: Context
-) {
-
-    //object declaration inside a class
+class SettingsRepository(private val dataStore: DataStore<Preferences>) {
     companion object {
-        private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings_preferences")
-        private val UI_THEME = stringPreferencesKey("ui_theme")
+        private val THEME_KEY = stringPreferencesKey("theme")
     }
 
-    val preferenceFlow: Flow<String> = context.dataStore.data
-        .catch {
-            if (it is IOException) {
-                it.printStackTrace()
-                emit(emptyPreferences())
-            } else {
-                throw it
-            }
-        }
+    val theme = dataStore.data
         .map { preferences ->
-            preferences[UI_THEME]?:"light"
-        }
-
-    suspend fun saveToDataStore(theme: String) {
-        context.dataStore.edit { preferences ->
-            preferences[UI_THEME] = theme
-        }
+            try {
+                Theme.valueOf(preferences[THEME_KEY] ?: "System")
+            } catch (_: Exception) {
+                Theme.System
+            }
     }
+
+    suspend fun setTheme(theme: Theme) = dataStore.edit { it[THEME_KEY] = theme.toString() }
 }
