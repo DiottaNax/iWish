@@ -58,8 +58,8 @@ fun UserProfileScreen(
         ) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(1),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 item {
                     Column {
@@ -98,7 +98,7 @@ fun UserProfileScreen(
                         body = badge.description
                     )
                 }
-                item {
+                item {  //TODO: example
                     DefaultCard(title = "Titolo", body = "Desc")
                 }
                 item {
