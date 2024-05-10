@@ -20,12 +20,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.ui.RootlyRoute
 
@@ -43,9 +41,8 @@ fun LoginScreen(navController: NavHostController) {
 
         Text(
             text = RootlyRoute.Login.title,
-            style = TextStyle(
+            style = MaterialTheme.typography.displayMedium.copy(
                 fontFamily = FontFamily.Serif,
-                fontSize = 50.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
@@ -57,14 +54,24 @@ fun LoginScreen(navController: NavHostController) {
             modifier = Modifier.fillMaxWidth(),
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") },
+            label = {
+                Text(
+                    text = "Email",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         )
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = pw,
             onValueChange = { pw = it },
-            label = { Text("Password") },
+            label = {
+                Text(
+                    text = "Password",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -73,14 +80,19 @@ fun LoginScreen(navController: NavHostController) {
             onClick = { navController.navigate(RootlyRoute.Home.route) },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Login")
+            Text(
+                text = "Login"
+            )
         }
 
         Row(modifier = Modifier.padding(top = 10.dp)) {
-            Text(text = "Aren't you signed in? ")
+            Text(
+                text = "Aren't you signed in? ",
+                style = MaterialTheme.typography.bodyMedium
+            )
             Text(
                 text = "Create an account",
-                style = TextStyle(fontWeight = FontWeight.Bold),
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable { navController.navigateUp() }
             )
