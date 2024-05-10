@@ -34,6 +34,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,14 +50,30 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.BottomBar
-
-@OptIn(ExperimentalMaterial3Api::class)
+import com.unibo.rootly.viewmodel.FertilizerViewModel
+import com.unibo.rootly.viewmodel.PlantLogViewModel
+import com.unibo.rootly.viewmodel.WaterViewModel
+import kotlin.math.log
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
-    val toDo = (1..10).map { "Plant n°$it" } //TODO: add real plants from db
+fun HomeScreen(
+    navController: NavHostController,
+    waterViewModel: WaterViewModel,
+    fertilizerViewModel: FertilizerViewModel,
+    plantLogViewModel: PlantLogViewModel
+) {
+    val userId = 1 //todo make real and check filters
+    val soonWater = waterViewModel.getSoonWater(userId).collectAsState(initial = listOf()).value
+    val soonFertilizer = fertilizerViewModel.getSoonFertilizer(userId).collectAsState(initial = listOf()).value
+    val soonLog = plantLogViewModel.getSoonPlantLog(userId).collectAsState(initial = listOf()).value
+
+    val todayWater = waterViewModel.getTodayWater(userId).collectAsState(initial = listOf()).value
+    val todayFertilizer = fertilizerViewModel.getTodayFertilizer(userId).collectAsState(initial = listOf()).value
+    val todayLog = plantLogViewModel.getTodayPlantLog(userId).collectAsState(initial = listOf()).value
+
 
     Scaffold (
         floatingActionButton = {
@@ -103,9 +120,52 @@ fun HomeScreen(navController: NavHostController) {
                     FilterSelector()
                 }
             }
-            items(toDo) { item ->
+            items(todayWater) { plant ->
                 ActivityItem(
-                    item,
+                    plant,
+                    "water",
+                    "today",
+                    onClick = { navController.navigate(RootlyRoute.PlantDetails.route) }
+                )
+            }
+            items(todayFertilizer) { plant ->
+                ActivityItem(
+                    plant,
+                    "fertilize",
+                    "today",
+                    onClick = { navController.navigate(RootlyRoute.PlantDetails.route) }
+                )
+            }
+            items(todayLog) { plant ->
+                ActivityItem(
+                    plant,
+                    "update",
+                    "today",
+                    onClick = { navController.navigate(RootlyRoute.PlantDetails.route) }
+                )
+            }
+
+            items(soonWater) { plant ->
+                ActivityItem(
+                    plant,
+                    "water",
+                    "Next 2 days",
+                    onClick = { navController.navigate(RootlyRoute.PlantDetails.route) }
+                )
+            }
+            items(soonFertilizer) { plant ->
+                ActivityItem(
+                    plant,
+                    "fertilize",
+                    "Next 2 days",
+                    onClick = { navController.navigate(RootlyRoute.PlantDetails.route) }
+                )
+            }
+            items(soonLog) { plant ->
+                ActivityItem(
+                    plant,
+                    "update",
+                    "Next 2 days",
                     onClick = { navController.navigate(RootlyRoute.PlantDetails.route) }
                 )
             }
@@ -113,9 +173,12 @@ fun HomeScreen(navController: NavHostController) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ActivityItem(item: String, onClick: () -> Unit) {
+fun ActivityItem(
+    plant: Plant,
+    activity: String,
+    date: String,
+    onClick: () -> Unit) {
     Card(
         onClick = onClick,
         modifier = Modifier
@@ -135,19 +198,23 @@ fun ActivityItem(item: String, onClick: () -> Unit) {
                 modifier = Modifier.padding(start = 16.dp)
             ) {
                 Text(
-                    text = item,
+                    text = plant.plantName,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                     style = TextStyle(fontWeight = FontWeight.Bold)
                 )
                 Text(
-                    text = "Plant type",
+                    text = plant.scientificName,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Water",
+                    text = activity,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                     style = TextStyle(fontWeight = FontWeight.Bold)
+                )
+                Text(
+                    text = date,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
             }
             Box(
@@ -167,7 +234,6 @@ fun ActivityItem(item: String, onClick: () -> Unit) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterSelector() {
     var selected by remember { mutableStateOf(false) }

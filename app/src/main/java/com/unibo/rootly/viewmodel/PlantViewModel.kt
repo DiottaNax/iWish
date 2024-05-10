@@ -18,8 +18,6 @@ class PlantViewModel  @Inject constructor(
         repository.insert(plant)
     }
 
-    fun getPlantsByUser(user: User) = viewModelScope.launch {
-        repository.getByUser(user.userId)
-    }
+    fun getPlantsByUser(userId: Int) = repository.getByUser(userId)
 
 }

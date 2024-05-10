@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,13 +37,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.BottomBar
+import com.unibo.rootly.viewmodel.PlantViewModel
 
 @Composable
 fun UserProfileScreen(
     navController: NavHostController,
+    plantViewModel: PlantViewModel,
     userId: String
 ) {
-    val items = (1..20).map { "Item n°$it" }
+    val plants = plantViewModel.getPlantsByUser(1).collectAsState(initial = listOf()).value
+    //todo real id
 
     Scaffold(
         bottomBar = {
@@ -95,8 +99,8 @@ fun UserProfileScreen(
                         )
                     }
                 }
-                items(items) { item ->
-                    BadgeCard()
+                items(plants) { plant ->
+                    BadgeCard(plant.plantName)
                 }
             }
         }
@@ -105,7 +109,7 @@ fun UserProfileScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BadgeCard() {
+fun BadgeCard(plantName: String) {
     Card(
         modifier = Modifier
             .size(150.dp)
@@ -134,7 +138,7 @@ fun BadgeCard() {
             )
             Spacer(Modifier.size(8.dp))
             Text(
-                "item",
+                plantName,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
