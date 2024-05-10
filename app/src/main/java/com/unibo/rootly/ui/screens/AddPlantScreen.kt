@@ -1,5 +1,6 @@
 package com.unibo.rootly.ui.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,12 +25,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.unibo.rootly.data.database.Plant
+import com.unibo.rootly.data.database.User
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.TopBar
+import com.unibo.rootly.viewmodel.PlantViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 @Composable
 fun AddPlantScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    plantViewModel: PlantViewModel
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var type by rememberSaveable { mutableStateOf("") }
@@ -89,7 +98,16 @@ fun AddPlantScreen(
             )
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                          plantViewModel.insertPlant(Plant(
+                              userId = 1,
+                              plantName = name,
+                              birthday = LocalDate.now(), //todo non va
+                              scientificName = type,
+                              isDead = false,
+                          ))
+                        navController.navigateUp()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp)

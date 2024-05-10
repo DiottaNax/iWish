@@ -12,9 +12,8 @@ data class BadgeType(
     @ColumnInfo(name = "description") val description: String
 )
 
-@Entity(tableName = "Fertilizer", primaryKeys = ["user_id", "plant_id", "date"])
+@Entity(tableName = "Fertilizer", primaryKeys = [ "plant_id", "date"])
 data class Fertilizer(
-    @ColumnInfo(name = "user_id") val userId: Int,
     @ColumnInfo(name = "plant_id") val plantId: Int,
     @ColumnInfo(name = "date") val date: LocalDate
 )
@@ -25,15 +24,15 @@ data class Likes(
     @ColumnInfo(name = "plant_id") val plantId: Int
 )
 
-@Entity(tableName = "Plant", primaryKeys = ["user_id", "plant_id"])
+@Entity(tableName = "Plant")
 data class Plant(
     @ColumnInfo(name = "user_id") val userId: Int,
-    @ColumnInfo(name = "plant_id") val plantId: Int,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "plant_id") val plantId: Int = 0,
     @ColumnInfo(name = "plant_name") val plantName: String,
     @ColumnInfo(name = "dead") val isDead: Boolean,
     @ColumnInfo(name = "birthday") val birthday: LocalDate,
     @ColumnInfo(name = "scientific_name") val scientificName: String,
-    @ColumnInfo(name = "img") val img: String?
+    @ColumnInfo(name = "img") val img: String? = null
 )
 
 @Entity(tableName = "Received", primaryKeys = ["name", "user_id"])
@@ -52,9 +51,8 @@ data class Species(
     @ColumnInfo(name = "tem_min") val minTemperature: Float
 )
 
-@Entity(tableName = "Plant_log", primaryKeys = ["user_id", "plant_id", "date"])
+@Entity(tableName = "Plant_log", primaryKeys = ["plant_id", "date"])
 data class PlantLog(
-    @ColumnInfo(name = "user_id") val userId: Int,
     @ColumnInfo(name = "plant_id") val plantId: Int,
     @ColumnInfo(name = "date") val date: LocalDate,
     @ColumnInfo(name = "description") val description: String,
@@ -64,16 +62,14 @@ data class PlantLog(
 
 @Entity(tableName = "Users")
 data class User(
-    @PrimaryKey @ColumnInfo(name = "user_id") val userId: Int,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "user_id") val userId: Int = 0,
     @ColumnInfo(name = "username") val username: String,
-    @ColumnInfo(name = "location") val location: String,
-    @ColumnInfo(name = "profile_img") val profileImg: String,
-    @ColumnInfo(name = "n_plants") val numberOfPlants: Int
+    @ColumnInfo(name = "location") val location: String? = null,
+    @ColumnInfo(name = "profile_img") val profileImg: String? = null,
 )
 
-@Entity(tableName = "Water", primaryKeys = ["user_id", "plant_id", "date"])
+@Entity(tableName = "Water", primaryKeys = ["plant_id", "date"])
 data class Water(
-    @ColumnInfo(name = "user_id") val userId: Int,
     @ColumnInfo(name = "plant_id") val plantId: Int,
     @ColumnInfo(name = "date") val date: LocalDate
 )

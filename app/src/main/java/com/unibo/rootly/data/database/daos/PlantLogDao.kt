@@ -15,21 +15,21 @@ interface PlantLogDao {
     suspend fun insertPlantLog(plantLog: PlantLog)
     suspend fun insertAllPlantLogs(logs : List<PlantLog>) = logs.forEach { log ->  insertPlantLog(log)}
 
-    @Query("SELECT * FROM Plant_log WHERE user_id = :userId AND plant_id = :plantId")
-    fun getPlantLogsByPlant(userId: Int, plantId: Int): Flow<List<PlantLog>>
+    @Query("SELECT * FROM Plant_log WHERE plant_id = :plantId")
+    fun getPlantLogsByPlant(plantId: Int): Flow<List<PlantLog>>
 
     @Query("SELECT p.* " +
             "FROM Plant p " +
-            "left outer JOIN (SELECT user_id, plant_id, MAX(date) AS last_log_date FROM Plant_log GROUP BY user_id, plant_id) l " +
-            "ON p.user_id = l.user_id AND p.plant_id = l.plant_id " +
+            "left outer JOIN (SELECT  plant_id, MAX(date) AS last_log_date FROM Plant_log GROUP by plant_id) l " +
+            "ON p.plant_id = l.plant_id " +
             "WHERE p.user_id = :userId AND 15 <= " +
             "   Cast ((julianday('now') - julianday(l.last_log_date)) As Integer)")
     fun getTodayLogs(userId: Int): Flow<List<Plant>>
 
     @Query("SELECT p.* " +
             "FROM Plant p " +
-            "left outer JOIN (SELECT user_id, plant_id, MAX(date) AS last_log_date FROM Plant_log GROUP BY user_id, plant_id) l " +
-            "ON p.user_id = l.user_id AND p.plant_id = l.plant_id " +
+            "left outer JOIN (SELECT plant_id, MAX(date) AS last_log_date FROM Plant_log GROUP BY plant_id) l " +
+            "ON p.plant_id = l.plant_id " +
             "WHERE p.user_id = :userId AND 14 >" +
             "   Cast ((julianday('now') - julianday(l.last_log_date)) As Integer)" +
             "AND 12 <= Cast ((julianday('now') - julianday(l.last_log_date)) As Integer)")

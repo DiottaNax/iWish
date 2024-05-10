@@ -16,4 +16,5 @@ interface PlantDao {
 
     @Query("SELECT * FROM Plant WHERE user_id = :userId")
     fun getPlantsByUser(userId: Int): Flow<List<Plant>>
+
 }

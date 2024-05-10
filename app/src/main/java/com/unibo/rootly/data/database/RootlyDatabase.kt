@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.unibo.rootly.data.database.daos.BadgeTypeDao
 import com.unibo.rootly.data.database.daos.FertilizerDao
@@ -68,6 +67,11 @@ abstract class RootlyDatabase : RoomDatabase() {
                             CoroutineScope(Dispatchers.IO).launch {
                                 database.badgeTypeDao().insertAll(InitialData.getInitialBadgeTypes())
                                 database.speciesDao().insertAll(InitialData.getInitialSpecies())
+                                database.userDao().insertUser(InitialData.getInitialUser())
+                                database.plantDao().insertAllPlants(InitialData.getInitialPlants())
+                                database.waterDao().insertAllWater(InitialData.getInitialWaters())
+                                database.fertilizerDao().insertAllFertilizer(InitialData.getInitialFertilizers())
+                                database.plantLogDao().insertAllPlantLogs(InitialData.getInitialPlantLogs())
                             }
                         }
                     }

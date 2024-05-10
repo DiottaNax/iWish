@@ -22,12 +22,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.TopBar
+import com.unibo.rootly.viewmodel.PlantViewModel
 
 @Composable
 fun PlantDetailsScreen(
     navController: NavHostController,
     plantId: String
-    ) {
+) {
     Scaffold(
         topBar = {
             TopBar(

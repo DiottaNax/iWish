@@ -15,7 +15,7 @@ object InitialData {
             Species("Rubber Plant", 2, 2, 2, 25.0f, 10.0f),
             Species("Fiddle Leaf Fig", 2, 3, 3, 25.0f, 15.0f),
             Species("Aloe Vera", 4, 2, 4, 35.0f, 10.0f),
-            Species("Snake Plant", 4, 2, 2, 30.0f, 15.0f),
+            Species("Random Plant", 4, 2, 2, 30.0f, 15.0f),
             Species("English Ivy", 3, 1, 3, 25.0f, 15.0f),
             Species("Chinese Evergreen", 2, 1, 3, 25.0f, 15.0f),
             Species("Parlor Palm", 2, 1, 3, 25.0f, 15.0f),
@@ -47,7 +47,7 @@ object InitialData {
     }
 
     fun getInitialUser(): User {
-        return User(userId = 1, username = "user1", location = "Location 1", profileImg = "path_to_profile_image", numberOfPlants = 10)
+        return User( username = "user1")
     }
 
     fun getInitialPlants(): List<Plant> {
@@ -61,7 +61,6 @@ object InitialData {
             plants.add(
                 Plant(
                     userId = 1,
-                    plantId = i,
                     plantName = "Plant $i",
                     isDead = false,
                     birthday = LocalDate.of(2022, 1, 1), // Adjust the birthday according to your needs
@@ -78,7 +77,7 @@ object InitialData {
     fun getInitialWaters(): List<Water> {
         val waters = mutableListOf<Water>()
         for (i in 1..10) {
-            waters.add(Water(userId = 1, plantId = i, date = LocalDate.of(2024, 1, i + 5)))
+            waters.add(Water(plantId = i, date = LocalDate.of(2024, 1, i + 5)))
         }
         return waters
     }
@@ -86,7 +85,7 @@ object InitialData {
     fun getInitialFertilizers(): List<Fertilizer> {
         val fertilizers = mutableListOf<Fertilizer>()
         for (i in 1..10) {
-            fertilizers.add(Fertilizer(userId = 1, plantId = i, date = LocalDate.of(2024, 1, i + 5)))
+            fertilizers.add(Fertilizer(plantId = i, date = LocalDate.of(2024, 1, i + 5)))
         }
         return fertilizers
     }
@@ -96,7 +95,6 @@ object InitialData {
         for (i in 1..10) {
             plantLogs.add(
                 PlantLog(
-                    userId = 1,
                     plantId = i,
                     date = LocalDate.of(2024, 1, i + 5),
                     description = "Log for Plant $i",

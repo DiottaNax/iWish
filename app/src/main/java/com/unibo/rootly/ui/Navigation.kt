@@ -9,6 +9,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.unibo.rootly.data.database.User
 import com.unibo.rootly.ui.screens.AddPlantScreen
 import com.unibo.rootly.ui.screens.HomeScreen
 import com.unibo.rootly.ui.screens.LoginScreen
@@ -108,12 +109,12 @@ fun RootlyNavGraph(
         }
         with(RootlyRoute.PlantDetails) {
             composable(route) { backStackEntry ->
-                PlantDetailsScreen(navController, backStackEntry.arguments?.getString("plantId") ?: "")
+                PlantDetailsScreen(navController,backStackEntry.arguments?.getString("plantId") ?: "")
             }
         }
         with(RootlyRoute.AddPlant) {
             composable(route) {
-                AddPlantScreen(navController =  navController)
+                AddPlantScreen(navController =  navController,plantViewModel,)
             }
         }
         with(RootlyRoute.Settings) {

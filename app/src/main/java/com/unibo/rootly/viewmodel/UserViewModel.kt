@@ -17,8 +17,6 @@ class UserViewModel @Inject constructor(
         repository.insert(user)
     }
 
-    fun getUserByName(name: String) = viewModelScope.launch {
-        repository.getUserByUsername(name)
-    }
+    fun getUserByName(name: String) = repository.getUserByUsername(name)
 
 }

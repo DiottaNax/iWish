@@ -18,8 +18,8 @@ interface WaterDao {
 
     @Query("SELECT p.* " +
             "FROM Plant p " +
-            "left outer JOIN (SELECT user_id, plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY user_id, plant_id) w " +
-            "ON p.user_id = w.user_id AND p.plant_id = w.plant_id " +
+            "left outer JOIN (SELECT  plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY plant_id) w " +
+            "ON p.plant_id = w.plant_id " +
             "JOIN Specie s ON s.scientific_name = p.scientific_name " +
             "WHERE p.user_id = :userId AND s.water_frequency <=" +
             "   Cast ((julianday('now') - julianday(w.last_watered_date)) As Integer)")
@@ -27,8 +27,8 @@ interface WaterDao {
 
     @Query("SELECT p.* " +
             "FROM Plant p " +
-            "left outer JOIN (SELECT user_id, plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY user_id, plant_id) w " +
-            "ON p.user_id = w.user_id AND p.plant_id = w.plant_id " +
+            "left outer JOIN (SELECT  plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY plant_id) w " +
+            "ON p.plant_id = w.plant_id " +
             "JOIN Specie s ON s.scientific_name = p.scientific_name " +
             "WHERE p.user_id = :userId " +
             "AND s.water_frequency > " +

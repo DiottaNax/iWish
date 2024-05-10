@@ -11,5 +11,5 @@ class UserRepository @Inject constructor(
     @WorkerThread
     suspend fun insert(user: User) = userDao.insertUser(user)
     @WorkerThread
-    suspend fun getUserByUsername(username: String) = userDao.getUserByUsername(username)
+    fun getUserByUsername(username: String) = userDao.getUserByUsername(username)
 }
