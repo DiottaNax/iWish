@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -26,7 +25,6 @@ import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -74,15 +72,13 @@ fun HomeScreen(
     plantViewModel: PlantViewModel
 ) {
     val userId = 1 //todo make real and check filters
+
     val soonWater = waterViewModel.getSoonWater(userId).collectAsState(initial = listOf()).value
     val soonFertilizer = fertilizerViewModel.getSoonFertilizer(userId).collectAsState(initial = listOf()).value
-
     val todayWater = waterViewModel.getTodayWater(userId).collectAsState(initial = listOf()).value
     val todayFertilizer = fertilizerViewModel.getTodayFertilizer(userId).collectAsState(initial = listOf()).value
 
-    var selectedFilters by remember { mutableStateOf(setOf(Filter.Today, Filter.ThisWeek, Filter.Water, Filter.Fertilize)) }
-
-
+    var selectedFilters by remember { mutableStateOf(emptyList<Filter>()) }
 
     Scaffold (
         floatingActionButton = {
@@ -138,8 +134,23 @@ fun HomeScreen(
                     }
                 }
             }
-            if(selectedFilters.contains(Filter.Today)) {
-                if(selectedFilters.contains(Filter.Water)){
+
+            val toShow = selectedFilters.toMutableList()
+
+            if (!toShow.contains(Filter.ThisWeek)
+                && !toShow.contains(Filter.Today)){
+                toShow += Filter.Today
+                toShow += Filter.ThisWeek
+            }
+
+            if (!toShow.contains(Filter.Water)
+                && !toShow.contains(Filter.Fertilize)){
+                toShow += Filter.Water
+                toShow += Filter.Fertilize
+            }
+
+            if(toShow.contains(Filter.Today)) {
+                if(toShow.contains(Filter.Water)){
                     items(todayWater.size) {
                         AddTasks(
                             plants = todayWater,
@@ -150,7 +161,7 @@ fun HomeScreen(
                         )
                     }
                 }
-                if(selectedFilters.contains(Filter.Fertilize)){
+                if(toShow.contains(Filter.Fertilize)){
                     items(todayFertilizer.size) {
                         AddTasks(
                             plants = todayFertilizer,
@@ -163,8 +174,8 @@ fun HomeScreen(
                 }
             }
 
-            if (selectedFilters.contains(Filter.ThisWeek)){
-                if(selectedFilters.contains(Filter.Water)){
+            if (toShow.contains(Filter.ThisWeek)){
+                if(toShow.contains(Filter.Water)){
                     items(soonWater.size) {
                         AddTasks(plants = soonWater,
                             activity = "water",
@@ -175,7 +186,7 @@ fun HomeScreen(
                     }
                 }
 
-                if(selectedFilters.contains(Filter.Fertilize)){
+                if(toShow.contains(Filter.Fertilize)){
                     items(soonFertilizer.size) {
                         AddTasks(plants = soonFertilizer,
                             activity = "fertilize",
