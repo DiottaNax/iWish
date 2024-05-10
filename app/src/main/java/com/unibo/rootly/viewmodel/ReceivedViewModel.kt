@@ -14,8 +14,6 @@ class ReceivedViewModel @Inject constructor(
     private val repository: ReceivedRepository
 ): ViewModel() {
 
-    fun getReceivedBadgesByUser(user: User) = viewModelScope.launch {
-        repository.getByUser(user.userId)
-    }
+    fun getReceivedBadgesByUser(userId: Int) = repository.getByUser(userId)
 
 }

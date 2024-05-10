@@ -13,5 +13,5 @@ class ReceivedRepository @Inject constructor(
     suspend fun insert(received: Received) = receivedDao.insertReceived(received)
 
     @WorkerThread
-    suspend fun getByUser(userId: Int) = receivedDao.getReceivedByUser(userId)
+    fun getByUser(userId: Int) = receivedDao.getReceivedByUser(userId)
 }

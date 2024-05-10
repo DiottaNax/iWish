@@ -30,15 +30,15 @@ import androidx.navigation.NavHostController
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.ui.composables.DefaultCard
-import com.unibo.rootly.viewmodel.PlantViewModel
+import com.unibo.rootly.viewmodel.ReceivedViewModel
 
 @Composable
 fun UserProfileScreen(
     navController: NavHostController,
-    plantViewModel: PlantViewModel,
+    receivedViewModel: ReceivedViewModel,
     userId: String
 ) {
-    val plants = plantViewModel.getPlantsByUser(1).collectAsState(initial = listOf()).value
+    val badgesReceived = receivedViewModel.getReceivedBadgesByUser(1).collectAsState(initial = listOf()).value
     //todo real id
 
     Scaffold(
@@ -92,15 +92,10 @@ fun UserProfileScreen(
                         )
                     }
                 }
-                items(plants) { plant ->
+                items(badgesReceived) { badge ->
                     DefaultCard(
-                        title = plant.plantName,
-                        body = plant.scientificName)
-                }
-                item {  //TODO: remove the example
-                    DefaultCard(
-                        title = "Title",
-                        body = "Description"
+                        title = badge.name,
+                        body = badge.description
                     )
                 }
             }
