@@ -73,12 +73,30 @@ fun HomeScreen(
 ) {
     val userId = 1 //todo make real and check filters
 
-    val soonWater = waterViewModel.getSoonWater(userId).collectAsState(initial = listOf()).value
-    val soonFertilizer = fertilizerViewModel.getSoonFertilizer(userId).collectAsState(initial = listOf()).value
-    val todayWater = waterViewModel.getTodayWater(userId).collectAsState(initial = listOf()).value
-    val todayFertilizer = fertilizerViewModel.getTodayFertilizer(userId).collectAsState(initial = listOf()).value
-
     var selectedFilters by remember { mutableStateOf(emptyList<Filter>()) }
+    var soonWater = emptyList<Plant>()
+    var soonFertilizer = emptyList<Plant>()
+    var todayWater = emptyList<Plant>()
+    var todayFertilizer = emptyList<Plant>()
+
+    if (selectedFilters.contains(Filter.Favourites)){
+        soonWater =
+            waterViewModel.getFavoritesSoonWater(userId).collectAsState(initial = listOf()).value
+        soonFertilizer =
+            fertilizerViewModel.getFavoritesSoonFertilizer(userId).collectAsState(initial = listOf()).value
+        todayWater =
+            waterViewModel.getFavoritesTodayWater(userId).collectAsState(initial = listOf()).value
+        todayFertilizer =
+            fertilizerViewModel.getFavoritesTodayFertilizer(userId).collectAsState(initial = listOf()).value
+    }else{
+        soonWater = waterViewModel.getSoonWater(userId).collectAsState(initial = listOf()).value
+        soonFertilizer =
+            fertilizerViewModel.getSoonFertilizer(userId).collectAsState(initial = listOf()).value
+        todayWater =
+            waterViewModel.getTodayWater(userId).collectAsState(initial = listOf()).value
+        todayFertilizer =
+            fertilizerViewModel.getTodayFertilizer(userId).collectAsState(initial = listOf()).value
+    }
 
     Scaffold (
         floatingActionButton = {
