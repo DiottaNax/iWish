@@ -30,9 +30,10 @@ data class Plant(
     @ColumnInfo(name = "user_id") val userId: Int,
     @ColumnInfo(name = "plant_id") val plantId: Int,
     @ColumnInfo(name = "plant_name") val plantName: String,
-    @ColumnInfo(name = "dead") val isDead: Char,
+    @ColumnInfo(name = "dead") val isDead: Boolean,
     @ColumnInfo(name = "birthday") val birthday: LocalDate,
-    @ColumnInfo(name = "scientific_name") val scientificName: String
+    @ColumnInfo(name = "scientific_name") val scientificName: String,
+    @ColumnInfo(name = "img") val img: String?
 )
 
 @Entity(tableName = "Received", primaryKeys = ["name", "user_id"])
