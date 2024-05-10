@@ -98,6 +98,18 @@ fun UserProfileScreen(
                         body = badge.description
                     )
                 }
+                item {
+                    DefaultCard(title = "Titolo", body = "Desc")
+                }
+                item {
+                    DefaultCard(title = "Titolo", body = "Desc")
+                }
+                item {
+                    DefaultCard(title = "Titolo", body = "Desc")
+                }
+                item {
+                    DefaultCard(title = "Titolo", body = "Desc")
+                }
             }
         }
     }

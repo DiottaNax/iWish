@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -88,6 +87,7 @@ fun AddPlantScreen(
                 .padding(16.dp, 0.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+            // Image section
             if (cameraLauncher.capturedImageUri.path?.isNotEmpty() == true) {
                 AsyncImage(
                     ImageRequest.Builder(ctx)
@@ -95,7 +95,9 @@ fun AddPlantScreen(
                         .crossfade(true)
                         .build(),
                     "Plant image",
-                    Modifier.clip(RoundedCornerShape(28.dp))
+                    Modifier
+                        .clip(RoundedCornerShape(28.dp))
+                        .height(256.dp)
                 )
             } else {
                 Image(
@@ -104,7 +106,7 @@ fun AddPlantScreen(
                     modifier = Modifier
                         .clip(RoundedCornerShape(28.dp))
                         .background(MaterialTheme.colorScheme.secondaryContainer)
-                        .padding(128.dp)
+                        .height(256.dp)
                         .fillMaxWidth()
                 )
             }
@@ -131,30 +133,6 @@ fun AddPlantScreen(
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
-            )
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = waterDate,
-                onValueChange = { waterDate = it },
-                label = {
-                    Text(
-                        text = "Date (water)",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                },
-                placeholder = { Text("dd/mm/yyyy") }
-            )
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = fertilizerDate,
-                onValueChange = { fertilizerDate = it },
-                label = {
-                    Text(
-                        text = "Date (fertilizer)",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                },
-                placeholder = { Text("dd/mm/yyyy") }
             )
             Row(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
