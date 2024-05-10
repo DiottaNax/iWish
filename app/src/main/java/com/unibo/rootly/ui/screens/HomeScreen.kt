@@ -51,9 +51,7 @@ import androidx.navigation.NavHostController
 import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.BottomBar
-import com.unibo.rootly.viewmodel.FertilizerViewModel
 import com.unibo.rootly.viewmodel.PlantViewModel
-import com.unibo.rootly.viewmodel.WaterViewModel
 
 enum class Filter(
     val displayedName: String   //TODO: add the filter function
@@ -68,8 +66,6 @@ enum class Filter(
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    waterViewModel: WaterViewModel,
-    fertilizerViewModel: FertilizerViewModel,
     plantViewModel: PlantViewModel
 ) {
     val userId = 1 //todo make real and check filters
@@ -82,21 +78,21 @@ fun HomeScreen(
 
     if (selectedFilters.contains(Filter.Favourites)){
         soonWater =
-            waterViewModel.getFavoritesSoonWater(userId).collectAsState(initial = listOf()).value
+            plantViewModel.getFavoritesSoonWater(userId).collectAsState(initial = listOf()).value
         soonFertilizer =
-            fertilizerViewModel.getFavoritesSoonFertilizer(userId).collectAsState(initial = listOf()).value
+            plantViewModel.getFavoritesSoonFertilizer(userId).collectAsState(initial = listOf()).value
         todayWater =
-            waterViewModel.getFavoritesTodayWater(userId).collectAsState(initial = listOf()).value
+            plantViewModel.getFavoritesTodayWater(userId).collectAsState(initial = listOf()).value
         todayFertilizer =
-            fertilizerViewModel.getFavoritesTodayFertilizer(userId).collectAsState(initial = listOf()).value
+            plantViewModel.getFavoritesTodayFertilizer(userId).collectAsState(initial = listOf()).value
     }else{
-        soonWater = waterViewModel.getSoonWater(userId).collectAsState(initial = listOf()).value
+        soonWater = plantViewModel.getSoonWater(userId).collectAsState(initial = listOf()).value
         soonFertilizer =
-            fertilizerViewModel.getSoonFertilizer(userId).collectAsState(initial = listOf()).value
+            plantViewModel.getSoonFertilizer(userId).collectAsState(initial = listOf()).value
         todayWater =
-            waterViewModel.getTodayWater(userId).collectAsState(initial = listOf()).value
+            plantViewModel.getTodayWater(userId).collectAsState(initial = listOf()).value
         todayFertilizer =
-            fertilizerViewModel.getTodayFertilizer(userId).collectAsState(initial = listOf()).value
+            plantViewModel.getTodayFertilizer(userId).collectAsState(initial = listOf()).value
     }
 
     Scaffold (

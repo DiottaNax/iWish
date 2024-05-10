@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PlantDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertPlant(plant: Plant)
+    suspend fun insertPlant(plant: Plant) : Long
 
     suspend fun insertAllPlants(plants : List<Plant>) = plants.forEach { plant ->  insertPlant(plant)}
 

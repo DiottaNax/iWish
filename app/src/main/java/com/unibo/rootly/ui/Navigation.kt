@@ -17,13 +17,11 @@ import com.unibo.rootly.ui.screens.RegistrationScreen
 import com.unibo.rootly.ui.screens.SettingsScreen
 import com.unibo.rootly.ui.screens.SettingsViewModel
 import com.unibo.rootly.ui.screens.UserProfileScreen
-import com.unibo.rootly.viewmodel.FertilizerViewModel
 import com.unibo.rootly.viewmodel.LikesViewModel
 import com.unibo.rootly.viewmodel.PlantViewModel
 import com.unibo.rootly.viewmodel.ReceivedViewModel
 import com.unibo.rootly.viewmodel.SpeciesViewModel
 import com.unibo.rootly.viewmodel.UserViewModel
-import com.unibo.rootly.viewmodel.WaterViewModel
 
 sealed class RootlyRoute(
     val route: String,
@@ -66,13 +64,11 @@ fun RootlyNavGraph(
     settingsVM: SettingsViewModel,
     modifier: Modifier = Modifier
 ) {
-    val  fertilizerViewModel = hiltViewModel<FertilizerViewModel>()
     val  likesViewModel = hiltViewModel<LikesViewModel>()
     val  plantViewModel = hiltViewModel<PlantViewModel>()
     val  receivedViewModel= hiltViewModel<ReceivedViewModel>()
     val  speciesViewModel= hiltViewModel<SpeciesViewModel>()
     val  userViewModel = hiltViewModel<UserViewModel>()
-    val  waterViewModel = hiltViewModel<WaterViewModel>()
 
     NavHost(
         navController = navController,
@@ -93,8 +89,6 @@ fun RootlyNavGraph(
             composable(route) {
                 HomeScreen(
                     navController,
-                    waterViewModel,
-                    fertilizerViewModel,
                     plantViewModel
                 )
             }
@@ -115,7 +109,8 @@ fun RootlyNavGraph(
         }
         with(RootlyRoute.AddPlant) {
             composable(route) {
-                AddPlantScreen(navController =  navController,plantViewModel,)
+                AddPlantScreen(navController =  navController,
+                    plantViewModel,)
             }
         }
         with(RootlyRoute.Settings) {
