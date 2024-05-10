@@ -14,20 +14,18 @@ import com.unibo.rootly.ui.screens.LoginScreen
 import com.unibo.rootly.ui.screens.PlantDetailsScreen
 import com.unibo.rootly.ui.screens.RegistrationScreen
 import com.unibo.rootly.ui.screens.SettingsScreen
-import com.unibo.rootly.ui.screens.SettingsViewModel
 import com.unibo.rootly.ui.screens.UserProfileScreen
-import org.koin.androidx.compose.koinViewModel
 
 sealed class RootlyRoute(
     val route: String,
     val title: String,
     val arguments: List<NamedNavArgument> = emptyList()
 ){
-    data object Registration : RootlyRoute("registration", "Welcome to rootly!")
+    data object Registration : RootlyRoute("registration", "Welcome to rootly")
     data object Login : RootlyRoute("login", "Nice to see you again!")
-    data object Home : RootlyRoute("plants" , "Today's to-do")
-    data object Settings : RootlyRoute("profile/settings", "Settings")
-    data object AddPlant : RootlyRoute("plants/add","Add a new plant")
+    data object Home : RootlyRoute("plants" , "To-do")
+    data object Settings : RootlyRoute("settings", "Settings")
+    data object AddPlant : RootlyRoute("add","Add a plant")
     data object PlantDetails: RootlyRoute(
         "plants/{plantId}",
         "{plantName}",

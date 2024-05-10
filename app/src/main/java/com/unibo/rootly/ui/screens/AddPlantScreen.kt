@@ -48,8 +48,7 @@ fun AddPlantScreen(
             verticalArrangement = Arrangement.spacedBy(6.dp),
             modifier = Modifier
                 .padding(contentPadding)
-                .padding(36.dp)
-                .fillMaxWidth()
+                .padding(16.dp, 0.dp)
         ) {
             Image(
                 Icons.Outlined.Image,
