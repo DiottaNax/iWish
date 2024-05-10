@@ -20,12 +20,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.ui.RootlyRoute
 
@@ -44,12 +42,10 @@ fun RegistrationScreen(navController: NavHostController) {
 
         Text(
             text = RootlyRoute.Registration.title,
-            style = TextStyle(
+            style = MaterialTheme.typography.displayMedium.copy(
                 fontFamily = FontFamily.Serif,
-                fontSize = 50.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onBackground
             )
         )
 
@@ -59,21 +55,36 @@ fun RegistrationScreen(navController: NavHostController) {
             modifier = Modifier.fillMaxWidth(),
             value = name,
             onValueChange = { name = it },
-            label = { Text("Name") }
+            label = {
+                Text(
+                    text = "Name",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         )
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") },
+            label = {
+                Text(
+                    text = "Email",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         )
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = pw,
             onValueChange = { pw = it },
-            label = { Text("Password") },
+            label = {
+                Text(
+                    text = "Password",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -82,14 +93,20 @@ fun RegistrationScreen(navController: NavHostController) {
             onClick = { navController.navigate(RootlyRoute.Home.route) },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Sign up")
+            Text(
+                text = "Sign up",
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
 
         Row(modifier = Modifier.padding(top = 10.dp)) {
-            Text(text = "Already have an account? ")
+            Text(
+                text = "Already have an account? ",
+                style = MaterialTheme.typography.bodyMedium
+            )
             Text(
                 text = "Login",
-                style = TextStyle(fontWeight = FontWeight.Bold),
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable { navController.navigate(RootlyRoute.Login.route) }
             )
