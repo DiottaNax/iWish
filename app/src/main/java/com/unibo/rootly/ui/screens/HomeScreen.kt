@@ -25,7 +25,6 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -56,7 +55,15 @@ import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.viewmodel.FertilizerViewModel
 import com.unibo.rootly.viewmodel.PlantLogViewModel
 import com.unibo.rootly.viewmodel.WaterViewModel
-import kotlin.math.log
+
+enum class Filter(
+    val displayedName: String   //TODO: add the filter function
+) {
+    Favourites("Favourites"),
+    Today("Today"),
+    ThisWeek("This week")
+
+}
 
 @Composable
 fun HomeScreen(
@@ -114,10 +121,9 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.horizontalScroll(rememberScrollState())
                 ) {
-                    FilterSelector()    //TODO: fix chips
-                    FilterSelector()
-                    FilterSelector()
-                    FilterSelector()
+                    Filter.entries.forEach { filter ->
+                        FilterSelector(filter.displayedName)
+                    }
                 }
             }
             items(todayWater) { plant ->
@@ -235,12 +241,14 @@ fun ActivityItem(
 }
 
 @Composable
-fun FilterSelector() {
+fun FilterSelector(
+    name: String
+) {
     var selected by remember { mutableStateOf(false) }
     FilterChip(
         onClick = { selected = !selected },
         label = {
-            Text("Filter chip")
+            Text(name)
         },
         selected = selected,
         leadingIcon = if (selected) {
