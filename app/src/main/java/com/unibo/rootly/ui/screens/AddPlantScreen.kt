@@ -107,6 +107,7 @@ fun AddPlantScreen(
                         .clip(RoundedCornerShape(28.dp))
                         .background(MaterialTheme.colorScheme.secondaryContainer)
                         .height(256.dp)
+                        .padding(110.dp)
                         .fillMaxWidth()
                 )
             }
