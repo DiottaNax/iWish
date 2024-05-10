@@ -23,4 +23,9 @@ class FertilizerViewModel @Inject constructor(
     fun getTodayFertilizer(userId: Int) = repository.getToday(userId)
 
 
+    fun getFavoritesSoonFertilizer(userId: Int) = repository.getFavoritesSoon(userId)
+
+    fun getFavoritesTodayFertilizer(userId: Int) = repository.getFavoritesToday(userId)
+
+
 }

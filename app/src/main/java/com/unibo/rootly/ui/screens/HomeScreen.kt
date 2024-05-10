@@ -61,8 +61,9 @@ enum class Filter(
 ) {
     Favourites("Favourites"),
     Today("Today"),
-    ThisWeek("This week")
-
+    ThisWeek("This week"),
+    Water("Water"),
+    Fertilize("Fertilize")
 }
 
 @Composable
@@ -78,6 +79,9 @@ fun HomeScreen(
 
     val todayWater = waterViewModel.getTodayWater(userId).collectAsState(initial = listOf()).value
     val todayFertilizer = fertilizerViewModel.getTodayFertilizer(userId).collectAsState(initial = listOf()).value
+
+    var selectedFilters by remember { mutableStateOf(setOf(Filter.Today, Filter.ThisWeek, Filter.Water, Filter.Fertilize)) }
+
 
 
     Scaffold (
@@ -120,76 +124,96 @@ fun HomeScreen(
                     modifier = Modifier.horizontalScroll(rememberScrollState())
                 ) {
                     Filter.entries.forEach { filter ->
-                        FilterSelector(filter.displayedName)
+                        FilterSelector(
+                            name = filter.displayedName,
+                            selected = filter in selectedFilters,
+                            onFilterSelected = {
+                                selectedFilters = if (filter in selectedFilters) {
+                                    selectedFilters - filter
+                                } else {
+                                    selectedFilters + filter
+                                }
+                            }
+                        )
                     }
                 }
             }
-            items(todayWater) { plant ->
-                ActivityItem(
-                    plant,
-                    "water",
-                    "today",
-                    onClick = {
-                        plantViewModel.selectPlant(plant)
-                        navController.navigate(
-                            RootlyRoute.PlantDetails.buildRoute(
-                                plant.plantId.toString(),
-                                plant.plantName
-                            )
+            if(selectedFilters.contains(Filter.Today)) {
+                if(selectedFilters.contains(Filter.Water)){
+                    items(todayWater.size) {
+                        AddTasks(
+                            plants = todayWater,
+                            activity = "water",
+                            date = "today",
+                            plantViewModel = plantViewModel,
+                            navController = navController
                         )
                     }
-                )
-            }
-            items(todayFertilizer) { plant ->
-                ActivityItem(
-                    plant,
-                    "fertilize",
-                    "today",
-                    onClick = {
-                        plantViewModel.selectPlant(plant)
-                        navController.navigate(
-                            RootlyRoute.PlantDetails.buildRoute(
-                                plant.plantId.toString(),
-                                plant.plantName
-                            )
+                }
+                if(selectedFilters.contains(Filter.Fertilize)){
+                    items(todayFertilizer.size) {
+                        AddTasks(
+                            plants = todayFertilizer,
+                            activity = "fertilize",
+                            date = "today",
+                            plantViewModel = plantViewModel,
+                            navController = navController
                         )
                     }
-                )
+                }
             }
 
-            items(soonWater) { plant ->
-                ActivityItem(
-                    plant,
-                    "water",
-                    "Next 2 days",
-                    onClick = {
-                        plantViewModel.selectPlant(plant)
-                        navController.navigate(
-                            RootlyRoute.PlantDetails.buildRoute(
-                                plant.plantId.toString(),
-                                plant.plantName
-                            )
+            if (selectedFilters.contains(Filter.ThisWeek)){
+                if(selectedFilters.contains(Filter.Water)){
+                    items(soonWater.size) {
+                        AddTasks(plants = soonWater,
+                            activity = "water",
+                            date = "next 2 days",
+                            plantViewModel = plantViewModel,
+                            navController = navController
                         )
                     }
-                )
-            }
-            items(soonFertilizer) { plant ->
-                ActivityItem(
-                    plant,
-                    "fertilize",
-                    "Next 2 days",
-                    onClick = {
-                        plantViewModel.selectPlant(plant)
-                        navController.navigate(
-                            RootlyRoute.PlantDetails.buildRoute(
-                                plant.plantId.toString(),
-                                plant.plantName
-                            )
+                }
+
+                if(selectedFilters.contains(Filter.Fertilize)){
+                    items(soonFertilizer.size) {
+                        AddTasks(plants = soonFertilizer,
+                            activity = "fertilize",
+                            date = "next 2 days",
+                            plantViewModel = plantViewModel,
+                            navController = navController
                         )
                     }
-                )
+                }
             }
         }
+    }
+}
+
+
+@Composable
+fun AddTasks(
+    plants: List<Plant>,
+    activity: String,
+    date: String,
+    plantViewModel: PlantViewModel,
+    navController: NavHostController
+) {
+    plants.forEach { plant ->
+        ActivityItem(
+            plant,
+            activity,
+            date,
+            onClick = {
+                plantViewModel.selectPlant(plant)
+                navController.navigate(
+                    RootlyRoute.PlantDetails.buildRoute(
+                        plant.plantId.toString(),
+                        plant.plantName
+                    )
+                )
+            }
+        )
     }
 }
 
@@ -256,25 +280,18 @@ fun ActivityItem(
 
 @Composable
 fun FilterSelector(
-    name: String
+    name: String,
+    selected: Boolean,
+    onFilterSelected: () -> Unit
 ) {
-    var selected by remember { mutableStateOf(false) }
     FilterChip(
-        onClick = { selected = !selected },
-        label = {
-            Text(name)
-        },
+        onClick = onFilterSelected,
+        label = { Text(name) },
         selected = selected,
         leadingIcon = if (selected) {
-            {
-                Icon(
-                    imageVector = Icons.Filled.Done,
-                    contentDescription = "Done icon",
-                    modifier = Modifier.size(FilterChipDefaults.IconSize)
-                )
-            }
+            { Icon(Icons.Filled.Done, "Done") }
         } else {
             null
-        },
+        }
     )
 }

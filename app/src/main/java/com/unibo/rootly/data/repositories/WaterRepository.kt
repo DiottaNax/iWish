@@ -17,4 +17,10 @@ class WaterRepository @Inject constructor(
     @WorkerThread
     fun getToday(userId: Int) = waterDao.getTodayWater(userId)
 
+    @WorkerThread
+    fun getFavoritesSoon(userId: Int) = waterDao.getSoonFavoriteWater(userId)
+
+    @WorkerThread
+    fun getFavoritesToday(userId: Int) = waterDao.getTodayFavoriteWater(userId)
+
 }

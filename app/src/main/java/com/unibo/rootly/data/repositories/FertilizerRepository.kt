@@ -16,4 +16,10 @@ class FertilizerRepository @Inject constructor(
 
     @WorkerThread
     fun getToday(userId: Int) = fertilizerDao.getTodayFertilizer(userId)
+
+    @WorkerThread
+    fun getFavoritesSoon(userId: Int) = fertilizerDao.getFavoriteSoonFertilizer(userId)
+
+    @WorkerThread
+    fun getFavoritesToday(userId: Int) = fertilizerDao.getFavoriteTodayFertilizer(userId)
 }

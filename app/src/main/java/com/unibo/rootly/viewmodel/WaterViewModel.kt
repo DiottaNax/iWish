@@ -20,4 +20,8 @@ class WaterViewModel @Inject constructor(
     fun getSoonWater(userId: Int) = repository.getSoon(userId)
 
     fun getTodayWater(userId: Int) = repository.getToday(userId)
+
+    fun getFavoritesSoonWater(userId: Int) = repository.getFavoritesSoon(userId)
+
+    fun getFavoritesTodayWater(userId: Int) = repository.getFavoritesToday(userId)
 }
