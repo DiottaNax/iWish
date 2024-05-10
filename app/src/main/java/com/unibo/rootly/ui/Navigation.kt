@@ -115,6 +115,7 @@ fun RootlyNavGraph(
             composable(route) { backStackEntry ->
                 PlantDetailsScreen(navController,
                     plantViewModel,
+                    plantLogViewModel,
                     backStackEntry.arguments?.getString("plantId") ?: "")
             }
         }
