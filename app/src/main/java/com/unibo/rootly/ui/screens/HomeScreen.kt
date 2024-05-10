@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -169,24 +170,38 @@ fun HomeScreen(
 
             if(toShow.contains(Filter.Today)) {
                 if(toShow.contains(Filter.Water)){
-                    items(todayWater.size) {
-                        AddTasks(
-                            plants = todayWater,
-                            activity = "water",
-                            date = "today",
-                            plantViewModel = plantViewModel,
-                            navController = navController
+                    items(todayWater) { plant ->
+                        ActivityItem(
+                            plant,
+                            "water",
+                            "today",
+                            onClick = {
+                                plantViewModel.selectPlant(plant)
+                                navController.navigate(
+                                    RootlyRoute.PlantDetails.buildRoute(
+                                        plant.plantId.toString(),
+                                        plant.plantName
+                                    )
+                                )
+                            }
                         )
                     }
                 }
                 if(toShow.contains(Filter.Fertilize)){
-                    items(todayFertilizer.size) {
-                        AddTasks(
-                            plants = todayFertilizer,
-                            activity = "fertilize",
-                            date = "today",
-                            plantViewModel = plantViewModel,
-                            navController = navController
+                    items(todayFertilizer) { plant ->
+                        ActivityItem(
+                            plant,
+                            "fertilize",
+                            "today",
+                            onClick = {
+                                plantViewModel.selectPlant(plant)
+                                navController.navigate(
+                                    RootlyRoute.PlantDetails.buildRoute(
+                                        plant.plantId.toString(),
+                                        plant.plantName
+                                    )
+                                )
+                            }
                         )
                     }
                 }
@@ -194,55 +209,44 @@ fun HomeScreen(
 
             if (toShow.contains(Filter.ThisWeek)){
                 if(toShow.contains(Filter.Water)){
-                    items(soonWater.size) {
-                        AddTasks(plants = soonWater,
-                            activity = "water",
-                            date = "next 2 days",
-                            plantViewModel = plantViewModel,
-                            navController = navController
+                    items(soonWater) { plant ->
+                        ActivityItem(
+                            plant,
+                            "water",
+                            "in the next few days",
+                            onClick = {
+                                plantViewModel.selectPlant(plant)
+                                navController.navigate(
+                                    RootlyRoute.PlantDetails.buildRoute(
+                                        plant.plantId.toString(),
+                                        plant.plantName
+                                    )
+                                )
+                            }
                         )
                     }
                 }
 
                 if(toShow.contains(Filter.Fertilize)){
-                    items(soonFertilizer.size) {
-                        AddTasks(plants = soonFertilizer,
-                            activity = "fertilize",
-                            date = "next 2 days",
-                            plantViewModel = plantViewModel,
-                            navController = navController
+                    items(soonFertilizer) { plant ->
+                        ActivityItem(
+                            plant,
+                            "fertilize",
+                            "in the next few days",
+                            onClick = {
+                                plantViewModel.selectPlant(plant)
+                                navController.navigate(
+                                    RootlyRoute.PlantDetails.buildRoute(
+                                        plant.plantId.toString(),
+                                        plant.plantName
+                                    )
+                                )
+                            }
                         )
                     }
                 }
             }
         }
-    }
-}
-
-
-@Composable
-fun AddTasks(
-    plants: List<Plant>,
-    activity: String,
-    date: String,
-    plantViewModel: PlantViewModel,
-    navController: NavHostController
-) {
-    plants.forEach { plant ->
-        ActivityItem(
-            plant,
-            activity,
-            date,
-            onClick = {
-                plantViewModel.selectPlant(plant)
-                navController.navigate(
-                    RootlyRoute.PlantDetails.buildRoute(
-                        plant.plantId.toString(),
-                        plant.plantName
-                    )
-                )
-            }
-        )
     }
 }
 
