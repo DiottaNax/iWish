@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.ui.RootlyRoute
-import com.unibo.rootly.ui.composables.ActivityItem
+import com.unibo.rootly.ui.composables.ActivityCard
 import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.viewmodel.PlantViewModel
 import kotlinx.coroutines.delay
@@ -160,10 +160,12 @@ fun HomeScreen(
                 items = list,
                 key = {it}
             ) { item ->
-                ActivityItem(
-                    plant = Plant(1,  1, item, false, LocalDate.now(), "Monstera", null),
-                    activity = "AW",
-                    date = "SAD",
+                val plant = Plant(1,  1, item, false, LocalDate.now(), "Monstera", null)
+                ActivityCard(
+                    title = plant.plantName,
+                    subTitle = plant.scientificName,
+                    activity = "Water",
+                    date = "Today",
                     onClick = {  },
                     onCompleted = {
                         scope.launch {

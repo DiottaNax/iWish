@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -30,15 +29,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.unibo.rootly.data.database.Plant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ActivityItem(
-    plant: Plant,
+fun ActivityCard(
+    title: String,
+    subTitle: String,
     activity: String,
     date: String,
     onClick: () -> Unit,
@@ -96,24 +94,29 @@ fun ActivityItem(
                     modifier = Modifier.padding(start = 16.dp)
                 ) {
                     Text(
-                        text = plant.plantName,
+                        text = title,
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        style = TextStyle(fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                     )
                     Text(
-                        text = plant.scientificName,
+                        text = subTitle,
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        style = MaterialTheme.typography.bodyMedium
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = activity,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        style = TextStyle(fontWeight = FontWeight.Bold)
-                    )
-                    Text(
-                        text = date,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-                    )
+                    Row(
+                        modifier = Modifier.padding(top = 10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = activity,
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+
+                        )
+                        Text(
+                            text = date,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                 }
 
                 // Image section
