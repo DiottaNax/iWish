@@ -1,20 +1,12 @@
 package com.unibo.rootly.ui.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -22,25 +14,25 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -50,8 +42,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.ui.RootlyRoute
+import com.unibo.rootly.ui.composables.ActivityItem
 import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.viewmodel.PlantViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import kotlin.time.Duration.Companion.milliseconds
 
 enum class Filter(
     val displayedName: String   //TODO: add the filter function
@@ -63,11 +60,18 @@ enum class Filter(
     Fertilize("Fertilize")
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
     plantViewModel: PlantViewModel
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    val list = remember {   //TODO: remove example
+        mutableStateListOf("Food", "Book", "Laptop")
+    }
     val userId = 1 //todo make real and check filters
 
     var selectedFilters by remember { mutableStateOf(emptyList<Filter>()) }
@@ -104,6 +108,7 @@ fun HomeScreen(
                 Icon(Icons.Outlined.Add, "Add plant")
             }
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
             BottomBar(
                 navController = navController,
@@ -149,6 +154,36 @@ fun HomeScreen(
                     }
                 }
             }
+
+            //TODO: remove example
+            items(
+                items = list,
+                key = {it}
+            ) { item ->
+                ActivityItem(
+                    plant = Plant(1,  1, item, false, LocalDate.now(), "Monstera", null),
+                    activity = "AW",
+                    date = "SAD",
+                    onClick = {  },
+                    onCompleted = {
+                        scope.launch {
+                            delay(100.milliseconds)
+                            list.remove(item)
+                            val snackbarResult = snackbarHostState.showSnackbar(
+                                message = "You have completed an activity",
+                                actionLabel = "Undo",
+                                duration = SnackbarDuration.Short
+                            )
+                            when (snackbarResult) {
+                                SnackbarResult.Dismissed -> null
+                                SnackbarResult.ActionPerformed -> list.add(item)
+                            }
+                        }
+                    },
+                    modifier = Modifier.animateItemPlacement(tween(100))
+                )
+            }
+            /*
 
             val toShow = selectedFilters.toMutableList()
 
@@ -242,67 +277,8 @@ fun HomeScreen(
                     }
                 }
             }
-        }
-    }
-}
 
-@Composable
-fun ActivityItem(
-    plant: Plant,
-    activity: String,
-    date: String,
-    onClick: () -> Unit) {
-    Card(
-        onClick = onClick,
-        modifier = Modifier
-            .size(110.dp)
-            .fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
-        )
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxSize(),
-        ) {
-            Column(
-                modifier = Modifier.padding(start = 16.dp)
-            ) {
-                Text(
-                    text = plant.plantName,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                    style = TextStyle(fontWeight = FontWeight.Bold)
-                )
-                Text(
-                    text = plant.scientificName,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = activity,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                    style = TextStyle(fontWeight = FontWeight.Bold)
-                )
-                Text(
-                    text = date,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                )
-            }
-            Box(
-                modifier = Modifier.aspectRatio(0.75f)
-            ) {
-                Image(
-                    Icons.Outlined.Image,
-                    "Travel picture",
-                    contentScale = ContentScale.None,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.secondary)
-                )
-            }
+             */
         }
     }
 }
