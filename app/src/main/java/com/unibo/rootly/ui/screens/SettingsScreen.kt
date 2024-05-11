@@ -19,6 +19,9 @@ import androidx.navigation.NavHostController
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.ui.composables.TopBar
+import com.unibo.rootly.viewmodel.SettingsViewModel
+import com.unibo.rootly.viewmodel.Theme
+import com.unibo.rootly.viewmodel.ThemeState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

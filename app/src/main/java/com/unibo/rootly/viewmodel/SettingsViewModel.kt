@@ -1,4 +1,4 @@
-package com.unibo.rootly.ui.screens
+package com.unibo.rootly.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

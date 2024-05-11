@@ -15,8 +15,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.unibo.rootly.ui.RootlyNavGraph
 import com.unibo.rootly.ui.RootlyRoute
-import com.unibo.rootly.ui.screens.SettingsViewModel
-import com.unibo.rootly.ui.screens.Theme
+import com.unibo.rootly.viewmodel.SettingsViewModel
+import com.unibo.rootly.viewmodel.Theme
 import com.unibo.rootly.ui.theme.RootlyTheme
 import dagger.hilt.android.AndroidEntryPoint
 import org.koin.androidx.compose.koinViewModel

@@ -3,7 +3,7 @@ package com.unibo.rootly
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
 import com.unibo.rootly.data.repositories.SettingsRepository
-import com.unibo.rootly.ui.screens.SettingsViewModel
+import com.unibo.rootly.viewmodel.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

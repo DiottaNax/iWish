@@ -15,7 +15,7 @@ import com.unibo.rootly.ui.screens.LoginScreen
 import com.unibo.rootly.ui.screens.PlantDetailsScreen
 import com.unibo.rootly.ui.screens.RegistrationScreen
 import com.unibo.rootly.ui.screens.SettingsScreen
-import com.unibo.rootly.ui.screens.SettingsViewModel
+import com.unibo.rootly.viewmodel.SettingsViewModel
 import com.unibo.rootly.ui.screens.UserProfileScreen
 import com.unibo.rootly.viewmodel.LikesViewModel
 import com.unibo.rootly.viewmodel.PlantViewModel
