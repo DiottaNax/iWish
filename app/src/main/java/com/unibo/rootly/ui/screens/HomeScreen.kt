@@ -166,7 +166,14 @@ fun HomeScreen(
                     subTitle = plant.scientificName,
                     activity = "Water",
                     date = "Today",
-                    onClick = {  },
+                    onClick = {
+                        navController.navigate(
+                            RootlyRoute.PlantDetails.buildRoute(
+                                name = plant.plantName,
+                                id = plant.plantId.toString()
+                            )
+                        )
+                    },
                     onCompleted = {
                         scope.launch {
                             delay(100.milliseconds)

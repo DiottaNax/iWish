@@ -15,11 +15,11 @@ import com.unibo.rootly.ui.screens.LoginScreen
 import com.unibo.rootly.ui.screens.PlantDetailsScreen
 import com.unibo.rootly.ui.screens.RegistrationScreen
 import com.unibo.rootly.ui.screens.SettingsScreen
-import com.unibo.rootly.viewmodel.SettingsViewModel
 import com.unibo.rootly.ui.screens.UserProfileScreen
 import com.unibo.rootly.viewmodel.LikesViewModel
 import com.unibo.rootly.viewmodel.PlantViewModel
 import com.unibo.rootly.viewmodel.ReceivedViewModel
+import com.unibo.rootly.viewmodel.SettingsViewModel
 import com.unibo.rootly.viewmodel.SpeciesViewModel
 import com.unibo.rootly.viewmodel.UserViewModel
 
@@ -34,23 +34,22 @@ sealed class RootlyRoute(
     data object Settings : RootlyRoute("settings", "Settings")
     data object AddPlant : RootlyRoute("add","Add a plant")
     data object PlantDetails: RootlyRoute(
-        "plants/{plantId}/{plantName}", // Include plantName in the route
-        "{plantName}",
+        "plants/{plantName}-{plantId}",
+        "Plant details",
         listOf(
             navArgument("plantId") { type = NavType.StringType },
             navArgument("plantName") { type = NavType.StringType }
         )
     ) {
-        fun buildRoute(plantId: String, plantName: String) = "plants/$plantId/$plantName"
+        fun buildRoute(name: String, id: String) = "plants/$name-$id"
     }
 
     data object UserProfile : RootlyRoute(
         "user/{userId}",
-        "{username}",
-        listOf(navArgument("userId") { type = NavType.StringType },
-            navArgument("username") { type = NavType.StringType })
+        "Profile",
+        listOf(navArgument("userId") { type = NavType.StringType } )
     ){
-        fun buildRoute(userId: String) = "User/$userId" // TODO route?
+        fun buildRoute(userId: String) = "User/$userId"
     }
 
     companion object {
@@ -101,10 +100,11 @@ fun RootlyNavGraph(
             }
         }
         with(RootlyRoute.PlantDetails) {
-            composable(route) { backStackEntry ->
-                PlantDetailsScreen(navController,
-                    plantViewModel,
-                    backStackEntry.arguments?.getString("plantId") ?: "")
+            composable(route, arguments) { backStackEntry ->
+                PlantDetailsScreen(
+                    navController,
+                    backStackEntry.arguments?.getString("travelId") ?: ""
+                )
             }
         }
         with(RootlyRoute.AddPlant) {
