@@ -17,6 +17,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +41,7 @@ fun UserProfileScreen(
     userId: String
 ) {
     val badgesReceived = receivedViewModel.getReceivedBadgesByUser(1).collectAsState(initial = listOf()).value
+    val list = remember { mutableStateListOf("Food", "Book", "Laptop", "Ananas", "Carote", "Magliette", "Maglia") } //TODO: remove example
     //todo real id
 
     Scaffold(
@@ -56,59 +59,48 @@ fun UserProfileScreen(
                 .padding(contentPadding)
                 .padding(16.dp)
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(1),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                item {
-                    Column {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Image(
-                                Icons.Outlined.Image,
-                                "Profile Icon",
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondaryContainer),
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.secondaryContainer)
-                                    .padding(90.dp)
-                            )
-                            Text(
-                                text = "Giorgio",
-                                style = TextStyle(
-                                    fontFamily = FontFamily.Serif,
-                                    fontSize = 22.sp,
-                                    fontWeight = FontWeight.Bold,
-                                ),
-                                modifier = Modifier.padding(top = 16.dp)
-                            )
-                        }
-                        Text(
-                            text = "Your badges",
-                            fontWeight = FontWeight.Bold
+            Column {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Image(
+                        Icons.Outlined.Image,
+                        "Profile Icon",
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondaryContainer),
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .padding(90.dp)
+                    )
+                    Text(
+                        text = "Giorgio",
+                        style = TextStyle(
+                            fontFamily = FontFamily.Serif,
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
                         )
-                    }
-                }
-                items(badgesReceived) { badge ->
-                    DefaultCard(
-                        title = badge.name,
-                        body = badge.description
                     )
                 }
-                item {  //TODO: example
-                    DefaultCard(title = "Titolo", body = "Desc")
-                }
-                item {
-                    DefaultCard(title = "Titolo", body = "Desc")
-                }
-                item {
-                    DefaultCard(title = "Titolo", body = "Desc")
-                }
-                item {
-                    DefaultCard(title = "Titolo", body = "Desc")
+                Text(
+                    text = "Your badges:",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(vertical = 16.dp)
+                )
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    items(badgesReceived) { badge ->
+                        DefaultCard(
+                            title = badge.name,
+                            body = badge.description
+                        )
+                    }
+                    items(list) { item ->  //TODO: remove example
+                        DefaultCard(title = item, body = "Desc")
+                    }
                 }
             }
         }
