@@ -12,8 +12,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.ui.RootlyRoute
@@ -30,11 +33,14 @@ fun SettingsScreen(
     vm: SettingsViewModel,
     state: ThemeState
 ) {
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+
     Scaffold(
         topBar = {
             TopBar(
                 navController = navController,
-                currentRoute = RootlyRoute.Settings
+                currentRoute = RootlyRoute.Settings,
+                scrollBehavior = scrollBehavior
             )
         },
         bottomBar = {
@@ -42,7 +48,8 @@ fun SettingsScreen(
                 navController = navController,
                 currentRoute = RootlyRoute.Settings
             )
-        }
+        },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { contentPadding ->
         Column(
             modifier = Modifier

@@ -16,11 +16,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -42,6 +46,7 @@ import com.unibo.rootly.utils.rememberPermission
 import com.unibo.rootly.viewmodel.PlantViewModel
 import java.time.LocalDate
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddPlantScreen(
     navController: NavHostController,
@@ -49,13 +54,9 @@ fun AddPlantScreen(
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var type by rememberSaveable { mutableStateOf("") }
-    var waterDate by rememberSaveable { mutableStateOf("") }
-    var fertilizerDate by rememberSaveable { mutableStateOf("") }
-
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val ctx = LocalContext.current
-
     val cameraLauncher = rememberCameraLauncher()
-
     val cameraPermission = rememberPermission(Manifest.permission.CAMERA) { status ->
         if (status.isGranted) {
             cameraLauncher.captureImage()
@@ -71,20 +72,22 @@ fun AddPlantScreen(
             cameraPermission.launchPermissionRequest()
         }
 
-
     Scaffold(
-        topBar = { TopBar(
-            navController = navController,
-            currentRoute = RootlyRoute.AddPlant
+        topBar = {
+            TopBar(
+                navController = navController,
+                currentRoute = RootlyRoute.AddPlant,
+                scrollBehavior = scrollBehavior
             )
-        }
+        },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { contentPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(6.dp),
             modifier = Modifier
                 .padding(contentPadding)
-                .padding(16.dp, 0.dp)
+                .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             // Image section
@@ -95,9 +98,7 @@ fun AddPlantScreen(
                         .crossfade(true)
                         .build(),
                     "Plant image",
-                    Modifier
-                        .clip(RoundedCornerShape(28.dp))
-                        .height(256.dp)
+                    Modifier.clip(RoundedCornerShape(28.dp))
                 )
             } else {
                 Image(

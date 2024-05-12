@@ -4,6 +4,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -24,6 +26,8 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,17 +37,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.ActivityCard
 import com.unibo.rootly.ui.composables.BottomBar
+import com.unibo.rootly.ui.composables.TopBar
 import com.unibo.rootly.viewmodel.PlantViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -60,17 +61,18 @@ enum class Filter(
     Fertilize("Fertilize")
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    plantViewModel: PlantViewModel
+    plantViewModel: PlantViewModel,
+    modifier: Modifier = Modifier
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
     val list = remember {   //TODO: remove example
-        mutableStateListOf("Food", "Book", "Laptop")
+        mutableStateListOf("Food", "Book", "Laptop", "Chair", "Dog", "Coffee", "Tree", "Phone", "Car", "Music", "Sun", "Water", "Shoes", "Pen", "Cloud" )
     }
     val userId = 1 //todo make real and check filters
 
@@ -98,6 +100,7 @@ fun HomeScreen(
         todayFertilizer =
             plantViewModel.getTodayFertilizer(userId).collectAsState(initial = listOf()).value
     }
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold (
         floatingActionButton = {
@@ -109,35 +112,18 @@ fun HomeScreen(
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        bottomBar = {
-            BottomBar(
-                navController = navController,
-                currentRoute = RootlyRoute.Home
-            )
-        }
-    ) { contentPadding ->
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(1),
-            verticalArrangement = Arrangement.spacedBy(15.dp),
-            contentPadding = PaddingValues(16.dp, 16.dp),
-            modifier = Modifier.padding(contentPadding)
-        ) {
-            item {
-                Text(
-                    text = RootlyRoute.Home.title,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = TextStyle(
-                        fontFamily = FontFamily.Serif,
-                        fontSize = 40.sp,
-                        fontWeight = FontWeight.Bold,
-                    )
+        topBar = {
+            Column {
+                TopBar(
+                    navController = navController,
+                    currentRoute = RootlyRoute.Home,
+                    scrollBehavior = scrollBehavior
                 )
-            }
-            item {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.horizontalScroll(rememberScrollState())
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .horizontalScroll(rememberScrollState())
                 ) {
                     Filter.entries.forEach { filter ->
                         FilterSelector(
@@ -154,7 +140,21 @@ fun HomeScreen(
                     }
                 }
             }
-
+        },
+        bottomBar = {
+            BottomBar(
+                navController = navController,
+                currentRoute = RootlyRoute.Home
+            )
+        },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+    ) { contentPadding ->
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(1),
+            verticalArrangement = Arrangement.spacedBy(15.dp),
+            contentPadding = PaddingValues(16.dp, 16.dp),
+            modifier = Modifier.padding(contentPadding)
+        ) {
             //TODO: remove example
             items(
                 items = list,
@@ -296,7 +296,8 @@ fun HomeScreen(
 fun FilterSelector(
     name: String,
     selected: Boolean,
-    onFilterSelected: () -> Unit
+    onFilterSelected: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     FilterChip(
         onClick = onFilterSelected,
@@ -306,6 +307,7 @@ fun FilterSelector(
             { Icon(Icons.Filled.Done, "Done") }
         } else {
             null
-        }
+        },
+        modifier = modifier
     )
 }
