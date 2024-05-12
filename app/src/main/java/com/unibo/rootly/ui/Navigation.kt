@@ -34,24 +34,17 @@ sealed class RootlyRoute(
     data object Settings : RootlyRoute("settings", "Settings")
     data object AddPlant : RootlyRoute("add","Add a plant")
     data object PlantDetails: RootlyRoute(
-        "plants/{plantName}-{plantId}",
+        "plants/{plantId}",
         "Plant details",
-        listOf(
-            navArgument("plantId") { type = NavType.StringType },
-            navArgument("plantName") { type = NavType.StringType }
-        )
+        listOf( navArgument("plantId") { type = NavType.StringType } )
     ) {
         fun buildRoute(name: String, id: String) = "plants/$name-$id"
     }
-
     data object UserProfile : RootlyRoute(
         "user/{userId}",
         "Profile",
         listOf(navArgument("userId") { type = NavType.StringType } )
-    ){
-        fun buildRoute(userId: String) = "User/$userId"
-    }
-
+    )
     companion object {
         val routes = setOf(Login, Registration, Home, Settings, PlantDetails, UserProfile, AddPlant)
     }
@@ -71,7 +64,7 @@ fun RootlyNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = RootlyRoute.Registration.route,
+        startDestination = RootlyRoute.Home.route,
         modifier = modifier
     ) {
         with(RootlyRoute.Registration) {
@@ -93,24 +86,24 @@ fun RootlyNavGraph(
             }
         }
         with(RootlyRoute.UserProfile) {
-            composable(route) { backStackEntry ->
-                UserProfileScreen(navController,
+            composable(route, arguments) { backStackEntry ->
+                UserProfileScreen(
+                    navController,
                     receivedViewModel,
-                    backStackEntry.arguments?.getString("userId") ?: "")
+                    userId = backStackEntry.arguments?.getString("userId") ?: "")
             }
         }
         with(RootlyRoute.PlantDetails) {
             composable(route, arguments) { backStackEntry ->
                 PlantDetailsScreen(
                     navController,
-                    backStackEntry.arguments?.getString("travelId") ?: ""
+                    name = backStackEntry.arguments?.getString("travelId") ?: ""
                 )
             }
         }
         with(RootlyRoute.AddPlant) {
             composable(route) {
-                AddPlantScreen(navController =  navController,
-                    plantViewModel,)
+                AddPlantScreen(navController, plantViewModel)
             }
         }
         with(RootlyRoute.Settings) {
