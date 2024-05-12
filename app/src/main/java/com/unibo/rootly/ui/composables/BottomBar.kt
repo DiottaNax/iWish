@@ -13,85 +13,47 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.unibo.rootly.ui.RootlyRoute
 
+enum class NavBarItem(
+    val icon: ImageVector,
+    val iconOnSelect: ImageVector,
+    val route: RootlyRoute
+) {
+    Home(Icons.Outlined.Today, Icons.Filled.Today, RootlyRoute.Home),
+    Profile(Icons.Outlined.Person, Icons.Filled.Person, RootlyRoute.UserProfile),
+    Settings(Icons.Outlined.Settings, Icons.Filled.Settings, RootlyRoute.Settings)
+}
 @Composable
 fun BottomBar(navController: NavHostController, currentRoute: RootlyRoute) {
     NavigationBar {
-
-        //Home
-        NavigationBarItem(
-            icon = {
-                if(currentRoute == RootlyRoute.Home) {
-                    Icon(Icons.Filled.Today, contentDescription = "Home")
+        NavBarItem.entries.forEach {
+            val isSelected = (currentRoute == it.route)
+            NavigationBarItem(
+                icon = {
+                    if (isSelected) {
+                        Icon(it.iconOnSelect, it.toString())
+                    } else {
+                        Icon(it.icon, it.toString())
+                    }
+                },
+                label = {
+                    Text(
+                        text = it.toString(),
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                },
+                selected = isSelected,
+                onClick = {
+                    navController.navigate(it.route.route) {
+                        popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                    }
                 }
-                else {
-                    Icon(Icons.Outlined.Today, contentDescription = "Home")
-                }
-            },
-            label = {
-                Text(
-                    text = "Home",
-                    style = MaterialTheme.typography.labelMedium
-                )
-            },
-            selected = currentRoute == RootlyRoute.Home,
-            onClick = {
-                navController.navigate(RootlyRoute.Home.route) {
-                    popUpTo(navController.graph.findStartDestination().id)
-                }
-            }
-        )
-
-        //Profile
-        NavigationBarItem(
-            icon = {
-                if(currentRoute == RootlyRoute.UserProfile) {
-                    Icon(Icons.Filled.Person, contentDescription = "Profile")
-                }
-                else {
-                    Icon(Icons.Outlined.Person, contentDescription = "Profile")
-                }
-            },
-            label = {
-                Text(
-                    text = "Profile",
-                    style = MaterialTheme.typography.labelMedium
-                )
-            },
-            selected = currentRoute == RootlyRoute.UserProfile,
-            onClick = {
-                navController.navigate(RootlyRoute.UserProfile.route) {
-                    popUpTo(navController.graph.findStartDestination().id)
-                }
-            }
-        )
-
-        //Settings
-        NavigationBarItem(
-            icon = {
-                if(currentRoute == RootlyRoute.Settings) {
-                    Icon(Icons.Filled.Settings, contentDescription = "Settings")
-                }
-                else {
-                    Icon(Icons.Outlined.Settings, contentDescription = "Settings")
-                }
-            },
-            label = {
-                Text(
-                    text = "Settings",
-                    style = MaterialTheme.typography.labelMedium
-                )
-            },
-            selected = currentRoute == RootlyRoute.Settings,
-            onClick = {
-                navController.navigate(RootlyRoute.Settings.route) {
-                    popUpTo(navController.graph.findStartDestination().id)
-                }
-            }
-        )
+            )
+        }
     }
 }
 
