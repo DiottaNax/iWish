@@ -9,7 +9,9 @@ import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -20,12 +22,15 @@ import com.unibo.rootly.ui.RootlyRoute
 @Composable
 fun TopBar(
     navController: NavHostController,
-    currentRoute: RootlyRoute
+    currentRoute: RootlyRoute,
+    scrollBehavior: TopAppBarScrollBehavior,
+    modifier: Modifier = Modifier
 ) {
     LargeTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,
-            titleContentColor = MaterialTheme.colorScheme.onBackground,
+            scrolledContainerColor = MaterialTheme.colorScheme.background,
+            titleContentColor = MaterialTheme.colorScheme.onBackground
         ),
         title = {
             Text(
@@ -39,8 +44,8 @@ fun TopBar(
             )
         },
         navigationIcon = {
-            if (navController.previousBackStackEntry != null
-                && currentRoute != RootlyRoute.Settings) {
+            if (navController.previousBackStackEntry != null &&
+                NavBarItem.entries.none { it.route == currentRoute}) {
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
@@ -48,6 +53,8 @@ fun TopBar(
                     )
                 }
             }
-        }
+        },
+        scrollBehavior = scrollBehavior,
+        modifier = modifier
     )
 }
