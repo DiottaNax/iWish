@@ -54,7 +54,7 @@ fun AddPlantScreen(
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var type by rememberSaveable { mutableStateOf("") }
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val ctx = LocalContext.current
     val cameraLauncher = rememberCameraLauncher()
     val cameraPermission = rememberPermission(Manifest.permission.CAMERA) { status ->

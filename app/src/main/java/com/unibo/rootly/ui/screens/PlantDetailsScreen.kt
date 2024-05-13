@@ -44,7 +44,7 @@ fun PlantDetailsScreen(
     name: String
 ) {
     val plant = Plant(1,  1, "Carmela", false, LocalDate.now(), "Monstera", null)
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
         topBar = {

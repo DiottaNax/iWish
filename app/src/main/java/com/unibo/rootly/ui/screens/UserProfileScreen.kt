@@ -51,7 +51,7 @@ fun UserProfileScreen(
     receivedViewModel: ReceivedViewModel,
     userId: String
 ) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val badgesReceived = receivedViewModel.getReceivedBadgesByUser(1).collectAsState(initial = listOf()).value
     //todo real id
     var photoUri: Uri? by remember { mutableStateOf(null) }
