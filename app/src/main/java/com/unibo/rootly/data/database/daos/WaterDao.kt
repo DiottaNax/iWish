@@ -62,4 +62,7 @@ interface WaterDao {
     fun getSoonFavoriteWater(userId: Int): Flow<List<Plant>>
     @Query("DELETE FROM Water WHERE plant_id = :plantId AND date = :date")
     suspend fun removeWater(plantId: Int, date: LocalDate)
+
+    @Query("SELECT MAX(date) FROM Water WHERE plant_id = :plantId")
+    fun getLastWateredDate(plantId: Int) :LocalDate
 }

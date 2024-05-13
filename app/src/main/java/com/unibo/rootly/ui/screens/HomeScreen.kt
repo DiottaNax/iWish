@@ -193,12 +193,7 @@ fun HomeScreen(
                     date = plant.date,
                     onClick = {
                         plantViewModel.selectPlant(plant.plant)
-                        navController.navigate(
-                            RootlyRoute.PlantDetails.buildRoute(
-                                name = plant.plant.plantName,
-                                id = plant.plant.plantId.toString()
-                            )
-                        )
+                        navController.navigate(RootlyRoute.PlantDetails.route)
                     },
                     onCompleted = {
                        scope.launch {

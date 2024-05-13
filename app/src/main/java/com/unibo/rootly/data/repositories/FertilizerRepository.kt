@@ -27,4 +27,7 @@ class FertilizerRepository @Inject constructor(
     suspend fun remove(plantId: Int, date: LocalDate) {
         fertilizerDao.removeFertilize(plantId,date)
     }
+
+    @WorkerThread
+    fun getLastFertilizeDate(plantId: Int) = fertilizerDao.getLastFertilizeDate(plantId)
 }

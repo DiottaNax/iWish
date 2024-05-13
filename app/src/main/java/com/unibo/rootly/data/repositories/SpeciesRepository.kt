@@ -11,7 +11,7 @@ class SpeciesRepository @Inject constructor(
     @WorkerThread
     suspend fun insert(species: Species) = speciesDao.insertSpecies(species)
     @WorkerThread
-    suspend fun getByName(name: String) = speciesDao.getSpeciesByName(name)
+    fun getByName(name: String) = speciesDao.getSpeciesByName(name)
 
     @WorkerThread
     fun getAllSpeciesName() = speciesDao.getAllSpeciesName()

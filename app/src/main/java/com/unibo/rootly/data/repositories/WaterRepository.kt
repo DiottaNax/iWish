@@ -28,4 +28,7 @@ class WaterRepository @Inject constructor(
         waterDao.removeWater(plantId,date)
     }
 
+    @WorkerThread
+    fun getLastWaterDate(plantId: Int) = waterDao.getLastWateredDate(plantId)
+
 }

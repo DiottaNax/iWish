@@ -7,6 +7,7 @@ import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.data.database.Water
 import com.unibo.rootly.data.repositories.FertilizerRepository
 import com.unibo.rootly.data.repositories.PlantRepository
+import com.unibo.rootly.data.repositories.SpeciesRepository
 import com.unibo.rootly.data.repositories.WaterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,7 +18,8 @@ import javax.inject.Inject
 class PlantViewModel  @Inject constructor(
     private val plantRepository: PlantRepository,
     private val waterRepository: WaterRepository,
-    private val fertilizerRepository: FertilizerRepository
+    private val fertilizerRepository: FertilizerRepository,
+    private val speciesRepository: SpeciesRepository
 
 ): ViewModel() {
 
@@ -70,6 +72,13 @@ class PlantViewModel  @Inject constructor(
         waterRepository.remove(plantId, date)
     }
 
+    fun getNextWater(plant: Plant) =
+        speciesRepository.getByName(plant.scientificName)?.waterFrequency?.let {
+            waterRepository.getLastWaterDate(plant.plantId).plusDays(
+                it.toLong()
+            )
+        }
+
     //fertilizer
 
     fun insertFertilizer(plantId: Int, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
@@ -90,5 +99,15 @@ class PlantViewModel  @Inject constructor(
         fertilizerRepository.remove(plantId, date)
     }
 
+    fun getNextFertilize(plant: Plant) =
+        speciesRepository.getByName(plant.scientificName)?.fertilizerFrequency?.let {
+            fertilizerRepository.getLastFertilizeDate(plant.plantId).plusDays(
+                it.toLong()
+            )
+        }
+
+    //species
+
+    fun getAllSpeciesName() = speciesRepository.getAllSpeciesName()
 
 }

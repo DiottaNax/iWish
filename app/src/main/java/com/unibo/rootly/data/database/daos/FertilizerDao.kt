@@ -58,6 +58,10 @@ interface FertilizerDao {
             "AND s.fertilizer_frequency <= " +
             "   Cast ((julianday('now') - julianday(f.last_fert_date)) As Integer) +2")
     fun getFavoriteSoonFertilizer(userId: Int): Flow<List<Plant>>
+
     @Query("DELETE FROM Fertilizer WHERE plant_id = :plantId AND date = :date")
     suspend fun removeFertilize(plantId: Int, date: LocalDate)
+
+    @Query("SELECT MAX(date) FROM Fertilizer WHERE plant_id = :plantId")
+    fun getLastFertilizeDate(plantId: Int) :LocalDate
 }

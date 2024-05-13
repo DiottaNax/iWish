@@ -19,7 +19,6 @@ import com.unibo.rootly.ui.screens.UserProfileScreen
 import com.unibo.rootly.viewmodel.PlantViewModel
 import com.unibo.rootly.viewmodel.ReceivedViewModel
 import com.unibo.rootly.viewmodel.SettingsViewModel
-import com.unibo.rootly.viewmodel.SpeciesViewModel
 import com.unibo.rootly.viewmodel.UserViewModel
 
 sealed class RootlyRoute(
@@ -32,13 +31,7 @@ sealed class RootlyRoute(
     data object Home : RootlyRoute("plants" , "To-do")
     data object Settings : RootlyRoute("settings", "Settings")
     data object AddPlant : RootlyRoute("add","Add a plant")
-    data object PlantDetails: RootlyRoute(
-        "plants/{plantId}",
-        "Plant details",
-        listOf( navArgument("plantId") { type = NavType.StringType } )
-    ) {
-        fun buildRoute(name: String, id: String) = "plants/$name-$id"
-    }
+    data object PlantDetails: RootlyRoute("plant","Plant details")
     data object UserProfile : RootlyRoute(
         "user/{userId}",
         "Profile",
@@ -57,7 +50,6 @@ fun RootlyNavGraph(
 ) {
     val  plantViewModel = hiltViewModel<PlantViewModel>()
     val  receivedViewModel= hiltViewModel<ReceivedViewModel>()
-    val  speciesViewModel= hiltViewModel<SpeciesViewModel>()
     val  userViewModel = hiltViewModel<UserViewModel>()
 
     NavHost(
@@ -92,12 +84,12 @@ fun RootlyNavGraph(
             }
         }
         with(RootlyRoute.PlantDetails) {
-            composable(route, arguments) { backStackEntry ->
+            composable(route, arguments) {
                 val plant = plantViewModel.plantSelected
                 if(plant != null) {
                     PlantDetailsScreen(
                         navController,
-                        plant = plant
+                        plantViewModel
                     )
                 }
             }

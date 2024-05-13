@@ -25,6 +25,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,14 +42,31 @@ import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.ImageDisplay
 import com.unibo.rootly.ui.composables.TopBar
+import com.unibo.rootly.viewmodel.PlantViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantDetailsScreen(
     navController: NavHostController,
-    plant: Plant
+    plantViewModel: PlantViewModel
 ) {
+    val plant = plantViewModel.plantSelected!!
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
+
+    var nextWaterDate by remember { mutableStateOf<LocalDate?>(null) }
+    var nextFertilizeDate by remember { mutableStateOf<LocalDate?>(null) }
+
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            nextWaterDate = plantViewModel.getNextWater(plant)
+            nextFertilizeDate = plantViewModel.getNextFertilize(plant)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -89,7 +111,11 @@ fun PlantDetailsScreen(
                 )
                 FilledTonalIconButton(
                     onClick = {
-                        //TODO: add/remove favourite
+                        if(plant.isFavorite) {
+                            plantViewModel.removeLike(plant.plantId)
+                        } else {
+                            plantViewModel.addLike(plant.plantId)
+                        }
                     },
                     modifier = Modifier.padding(4.dp)
                 ) {
@@ -110,12 +136,13 @@ fun PlantDetailsScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Water: Today",
+                    text = "Water: $nextWaterDate",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 AddToCalendarChip(
                     title = "Water ${plant.plantName}",
-                    time = System.currentTimeMillis()   //TODO: set right time
+                    time = nextWaterDate?.atStartOfDay(ZoneId.systemDefault())?.toInstant()
+                        ?.toEpochMilli() ?: System.currentTimeMillis()
                 )
             }
             Row(
@@ -124,12 +151,13 @@ fun PlantDetailsScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Fertilizer: Today",
+                    text = "Fertilizer: $nextFertilizeDate",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 AddToCalendarChip(
                     title = "Fertilizer ${plant.plantName}",
-                    time = System.currentTimeMillis()   //TODO: set right time
+                    time = nextFertilizeDate?.atStartOfDay(ZoneId.systemDefault())?.toInstant()
+                        ?.toEpochMilli() ?: System.currentTimeMillis()
                 )
             }
         }
