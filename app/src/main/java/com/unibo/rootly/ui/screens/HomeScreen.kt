@@ -98,7 +98,7 @@ fun HomeScreen(
         todayFertilizer =
             plantViewModel.getTodayFertilizer(userId).collectAsState(initial = listOf()).value
     }
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     Scaffold (
         floatingActionButton = {

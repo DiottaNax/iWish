@@ -1,18 +1,19 @@
 package com.unibo.rootly.ui.composables
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Today
+import androidx.compose.material.icons.outlined.Checklist
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Today
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -23,12 +24,16 @@ enum class NavBarItem(
     val iconOnSelect: ImageVector,
     val route: RootlyRoute
 ) {
-    Home(Icons.Outlined.Today, Icons.Filled.Today, RootlyRoute.Home),
+    Home(Icons.Outlined.Checklist, Icons.Filled.Checklist, RootlyRoute.Home),
     Profile(Icons.Outlined.Person, Icons.Filled.Person, RootlyRoute.UserProfile),
     Settings(Icons.Outlined.Settings, Icons.Filled.Settings, RootlyRoute.Settings)
 }
 @Composable
-fun BottomBar(navController: NavHostController, currentRoute: RootlyRoute) {
+fun BottomBar(
+    navController: NavHostController,
+    currentRoute: RootlyRoute,
+    modifier: Modifier = Modifier
+) {
     NavigationBar {
         NavBarItem.entries.forEach {
             val isSelected = (currentRoute == it.route)
@@ -51,7 +56,8 @@ fun BottomBar(navController: NavHostController, currentRoute: RootlyRoute) {
                     navController.navigate(it.route.route) {
                         popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                     }
-                }
+                },
+                modifier = modifier
             )
         }
     }

@@ -1,18 +1,25 @@
 package com.unibo.rootly.ui.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Image
+import androidx.compose.material.icons.filled.AddPhotoAlternate
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -20,22 +27,20 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.ui.composables.DefaultCard
+import com.unibo.rootly.ui.composables.ImageDisplay
 import com.unibo.rootly.ui.composables.TopBar
 import com.unibo.rootly.viewmodel.ReceivedViewModel
 
@@ -46,10 +51,12 @@ fun UserProfileScreen(
     receivedViewModel: ReceivedViewModel,
     userId: String
 ) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val badgesReceived = receivedViewModel.getReceivedBadgesByUser(1).collectAsState(initial = listOf()).value
-    val list = remember { mutableStateListOf("Food", "Book", "Laptop", "Ananas", "Carote", "Magliette", "Maglia") } //TODO: remove example
     //todo real id
+    var photoUri: Uri? by remember { mutableStateOf(null) } //TODO: save photo
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.PickVisualMedia()) { uri -> photoUri = uri }
 
     Scaffold(
         topBar = {
@@ -76,33 +83,43 @@ fun UserProfileScreen(
         ) {
             item {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxWidth()
+                    Box(
+                        contentAlignment = Alignment.BottomEnd,
+                        modifier = Modifier.size(160.dp)
                     ) {
-                        Image(
-                            Icons.Outlined.Image,
-                            "Profile Icon",
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondaryContainer),
+                        ImageDisplay(
+                            uri = photoUri, 
+                            contentDescription = "Profile photo",
                             modifier = Modifier
+                                .fillMaxSize()
                                 .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.secondaryContainer)
-                                .padding(90.dp)
                         )
-                        Text(
-                            text = "Giorgio",
-                            style = TextStyle(
-                                fontFamily = FontFamily.Serif,
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        )
+                        FilledTonalIconButton(
+                            onClick = {
+                                launcher.launch(
+                                    PickVisualMediaRequest(
+                                    mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
+                                    )
+                                )
+                            }
+                        ) {
+                            Icon(Icons.Filled.AddPhotoAlternate, "Add a photo")
+                        }
                     }
                     Text(
+                        text = "Giorgio",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
                         text = "Your badges:",
-                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.Start)
                     )
                 }
             }
@@ -112,10 +129,6 @@ fun UserProfileScreen(
                     body = badge.description
                 )
             }
-            items(list) { item ->  //TODO: remove example
-                DefaultCard(title = item, body = "Desc")
-            }
         }
-
     }
 }

@@ -27,10 +27,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun DefaultCard(
     title: String,
-    body: String
+    body: String,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .size(200.dp)   //TODO: check
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
