@@ -44,6 +44,8 @@ import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.ActivityCard
 import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.ui.composables.TopBar
+import com.unibo.rootly.viewmodel.FERTILIZE
+import com.unibo.rootly.viewmodel.PlantCard
 import com.unibo.rootly.viewmodel.PlantViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -72,10 +74,10 @@ fun HomeScreen(
     val userId = 1 //todo make real and check filters
 
     var selectedFilters by remember { mutableStateOf(emptyList<Filter>()) }
-    var soonWater = emptyList<Plant>()
-    var soonFertilizer = emptyList<Plant>()
-    var todayWater = emptyList<Plant>()
-    var todayFertilizer = emptyList<Plant>()
+    var soonWater = emptyList<PlantCard>()
+    var soonFertilizer = emptyList<PlantCard>()
+    var todayWater = emptyList<PlantCard>()
+    var todayFertilizer = emptyList<PlantCard>()
     var plants = emptyList<PlantCard>().toMutableList()
 
     if (selectedFilters.contains(Filter.Favourites)){
@@ -168,20 +170,20 @@ fun HomeScreen(
 
             if(toShow.contains(Filter.Today)) {
                 if(toShow.contains(Filter.Water)){
-                    plants.addAll(todayWater.map { PlantCard(it, WATER, TODAY) })
+                    plants.addAll(todayWater)
                 }
                 if(toShow.contains(Filter.Fertilize)){
-                    plants.addAll(todayFertilizer.map { PlantCard(it, FERTILIZE, TODAY) })
+                    plants.addAll(todayFertilizer)
                 }
             }
 
             if (toShow.contains(Filter.ThisWeek)){
                 if(toShow.contains(Filter.Water)){
-                    plants.addAll(soonWater.map { PlantCard(it, WATER, SOON) })
+                    plants.addAll(soonWater)
                 }
 
                 if(toShow.contains(Filter.Fertilize)){
-                    plants.addAll(soonFertilizer.map { PlantCard(it, FERTILIZE, SOON) })
+                    plants.addAll(soonFertilizer)
                 }
             }
 
@@ -190,7 +192,7 @@ fun HomeScreen(
                     title = plant.plant.plantName,
                     subTitle = plant.plant.scientificName,
                     activity = plant.activity,
-                    date = plant.date,
+                    date = plant.date.toString(),
                     onClick = {
                         plantViewModel.selectPlant(plant.plant)
                         navController.navigate(RootlyRoute.PlantDetails.route)
@@ -250,14 +252,3 @@ fun FilterSelector(
         modifier = modifier
     )
 }
-
-data class PlantCard(
-    val plant: Plant,
-    val activity: String,
-    val date: String
-)
-
-const val WATER = "water"
-const val FERTILIZE = "fertilize"
-const val SOON = "in the next few days"
-const val TODAY = "today"
