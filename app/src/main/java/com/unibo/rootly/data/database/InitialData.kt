@@ -63,6 +63,7 @@ object InitialData {
                     userId = 1,
                     plantName = "Plant $i",
                     isDead = false,
+                    isFavorite = false,
                     birthday = LocalDate.of(2022, 1, 1), // Adjust the birthday according to your needs
                     scientificName = species.scientificName,
                     img = null

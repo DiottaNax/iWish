@@ -18,18 +18,13 @@ data class Fertilizer(
     @ColumnInfo(name = "date") val date: LocalDate
 )
 
-@Entity(tableName = "Likes", primaryKeys = ["user_id", "plant_id"])
-data class Likes(
-    @ColumnInfo(name = "user_id") val userId: Int,
-    @ColumnInfo(name = "plant_id") val plantId: Int
-)
-
 @Entity(tableName = "Plant")
 data class Plant(
     @ColumnInfo(name = "user_id") val userId: Int,
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "plant_id") val plantId: Int = 0,
     @ColumnInfo(name = "plant_name") val plantName: String,
-    @ColumnInfo(name = "dead") val isDead: Boolean,
+    @ColumnInfo(name = "dead") val isDead: Boolean = false,
+    @ColumnInfo(name = "favorite") val isFavorite: Boolean= false,
     @ColumnInfo(name = "birthday") val birthday: LocalDate,
     @ColumnInfo(name = "scientific_name") val scientificName: String,
     @ColumnInfo(name = "img") val img: String? = null

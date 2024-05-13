@@ -5,7 +5,6 @@ import androidx.room.Room
 import com.unibo.rootly.data.database.RootlyDatabase
 import com.unibo.rootly.data.database.daos.BadgeTypeDao
 import com.unibo.rootly.data.database.daos.FertilizerDao
-import com.unibo.rootly.data.database.daos.LikesDao
 import com.unibo.rootly.data.database.daos.PlantDao
 import com.unibo.rootly.data.database.daos.ReceivedDao
 import com.unibo.rootly.data.database.daos.SpeciesDao
@@ -34,11 +33,6 @@ object DataModule {
     @Provides
     fun provideFertilizerDao(database: RootlyDatabase): FertilizerDao {
         return database.fertilizerDao()
-    }
-
-    @Provides
-    fun provideLikesDao(database: RootlyDatabase): LikesDao {
-        return database.likesDao()
     }
 
     @Provides

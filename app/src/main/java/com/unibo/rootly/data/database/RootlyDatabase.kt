@@ -9,7 +9,6 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.unibo.rootly.data.database.daos.BadgeTypeDao
 import com.unibo.rootly.data.database.daos.FertilizerDao
-import com.unibo.rootly.data.database.daos.LikesDao
 import com.unibo.rootly.data.database.daos.PlantDao
 import com.unibo.rootly.data.database.daos.ReceivedDao
 import com.unibo.rootly.data.database.daos.SpeciesDao
@@ -24,7 +23,6 @@ import java.time.LocalDate
     entities = [
         BadgeType::class,
         Fertilizer::class,
-        Likes::class,
         Plant::class,
         Received::class,
         Species::class,
@@ -39,7 +37,6 @@ abstract class RootlyDatabase : RoomDatabase() {
 
     abstract fun badgeTypeDao(): BadgeTypeDao
     abstract fun fertilizerDao(): FertilizerDao
-    abstract fun likesDao(): LikesDao
     abstract fun plantDao(): PlantDao
     abstract fun receivedDao(): ReceivedDao
     abstract fun speciesDao(): SpeciesDao

@@ -43,7 +43,7 @@ fun PlantDetailsScreen(
     navController: NavHostController,
     name: String
 ) {
-    val plant = Plant(1,  1, "Carmela", false, LocalDate.now(), "Monstera", null)
+    val plant = Plant(1,  1, "Carmela", false, false, LocalDate.now(), "Monstera", null)
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(

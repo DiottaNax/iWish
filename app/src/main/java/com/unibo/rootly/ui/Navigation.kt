@@ -16,7 +16,6 @@ import com.unibo.rootly.ui.screens.PlantDetailsScreen
 import com.unibo.rootly.ui.screens.RegistrationScreen
 import com.unibo.rootly.ui.screens.SettingsScreen
 import com.unibo.rootly.ui.screens.UserProfileScreen
-import com.unibo.rootly.viewmodel.LikesViewModel
 import com.unibo.rootly.viewmodel.PlantViewModel
 import com.unibo.rootly.viewmodel.ReceivedViewModel
 import com.unibo.rootly.viewmodel.SettingsViewModel
@@ -56,7 +55,6 @@ fun RootlyNavGraph(
     settingsVM: SettingsViewModel,
     modifier: Modifier = Modifier
 ) {
-    val  likesViewModel = hiltViewModel<LikesViewModel>()
     val  plantViewModel = hiltViewModel<PlantViewModel>()
     val  receivedViewModel= hiltViewModel<ReceivedViewModel>()
     val  speciesViewModel= hiltViewModel<SpeciesViewModel>()

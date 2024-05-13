@@ -37,6 +37,20 @@ class PlantViewModel  @Inject constructor(
 
     fun getPlantsByUser(userId: Int) = plantRepository.getByUser(userId)
 
+    //like
+    fun addLike(plantId : Int) = viewModelScope.launch {
+        plantRepository.insertLike(plantId)
+    }
+
+    fun removeLike(plantId : Int) = viewModelScope.launch {
+        plantRepository.removeLike(plantId)
+    }
+
+    //dead
+
+    fun addDead(plantId : Int) = viewModelScope.launch {
+        plantRepository.insertDead(plantId)
+    }
 
     // Water
 
@@ -51,6 +65,10 @@ class PlantViewModel  @Inject constructor(
     fun getFavoritesSoonWater(userId: Int) = waterRepository.getFavoritesSoon(userId)
 
     fun getFavoritesTodayWater(userId: Int) = waterRepository.getFavoritesToday(userId)
+
+    fun removeWater(plantId: Int, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
+        waterRepository.remove(plantId, date)
+    }
 
     //fertilizer
 
@@ -67,11 +85,10 @@ class PlantViewModel  @Inject constructor(
     fun getFavoritesSoonFertilizer(userId: Int) = fertilizerRepository.getFavoritesSoon(userId)
 
     fun getFavoritesTodayFertilizer(userId: Int) = fertilizerRepository.getFavoritesToday(userId)
-    fun removeWater(plantId: Int, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
-        waterRepository.remove(plantId, date)
-    }
 
     fun removeFertilizer(plantId: Int, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
         fertilizerRepository.remove(plantId, date)
     }
+
+
 }

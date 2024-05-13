@@ -17,4 +17,12 @@ interface PlantDao {
     @Query("SELECT * FROM Plant WHERE user_id = :userId")
     fun getPlantsByUser(userId: Int): Flow<List<Plant>>
 
+    @Query("UPDATE plant SET favorite = 1 WHERE plant_id = :plantId ")
+    suspend fun insertLike(plantId : Int)
+
+    @Query("UPDATE plant SET dead = 1 WHERE plant_id = :plantId ")
+    suspend fun insertDead(plantId : Int)
+    @Query("UPDATE plant SET dead = 0 WHERE plant_id = :plantId ")
+    fun removeLike(plantId: Int)
+
 }
