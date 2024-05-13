@@ -35,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.ui.RootlyRoute
@@ -55,7 +54,7 @@ fun UserProfileScreen(
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val badgesReceived = receivedViewModel.getReceivedBadgesByUser(1).collectAsState(initial = listOf()).value
     //todo real id
-    var photoUri: Uri? by remember { mutableStateOf(null) }
+    var photoUri: Uri? by remember { mutableStateOf(null) } //TODO: save photo
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.PickVisualMedia()) { uri -> photoUri = uri }
 
@@ -113,9 +112,7 @@ fun UserProfileScreen(
                     }
                     Text(
                         text = "Giorgio",
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontFamily = FontFamily.Serif,
-                        )
+                        style = MaterialTheme.typography.titleLarge
                     )
                     Text(
                         text = "Your badges:",
