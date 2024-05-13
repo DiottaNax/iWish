@@ -154,6 +154,7 @@ fun HomeScreen(
             modifier = Modifier.padding(contentPadding)
         ) {
             val toShow = selectedFilters.toMutableList()
+            plants.clear()
 
             if (!toShow.contains(Filter.ThisWeek)
                 && !toShow.contains(Filter.Today)){
@@ -169,30 +170,23 @@ fun HomeScreen(
 
             if(toShow.contains(Filter.Today)) {
                 if(toShow.contains(Filter.Water)){
-                    todayWater.forEach { plant ->
-                        plants += PlantCard(plant,WATER , TODAY)
-                    }
+                    plants.addAll(todayWater.map { PlantCard(it, WATER, TODAY) })
                 }
                 if(toShow.contains(Filter.Fertilize)){
-                    todayFertilizer.forEach { plant ->
-                        plants += PlantCard(plant, FERTILIZE , TODAY)
-                    }
+                    plants.addAll(todayFertilizer.map { PlantCard(it, FERTILIZE, TODAY) })
                 }
             }
 
             if (toShow.contains(Filter.ThisWeek)){
                 if(toShow.contains(Filter.Water)){
-                    soonWater.forEach { plant ->
-                        plants += PlantCard(plant, WATER , SOON)
-                    }
+                    plants.addAll(soonWater.map { PlantCard(it, WATER, SOON) })
                 }
 
                 if(toShow.contains(Filter.Fertilize)){
-                    soonFertilizer.forEach { plant ->
-                        plants += PlantCard(plant, WATER , SOON)
-                    }
+                    plants.addAll(soonFertilizer.map { PlantCard(it, FERTILIZE, SOON) })
                 }
             }
+
             items(plants) { plant ->
                 ActivityCard(
                     title = plant.plant.plantName,
@@ -210,13 +204,13 @@ fun HomeScreen(
                     onCompleted = {
                        scope.launch {
                             delay(100.milliseconds)
-                            plants.remove(plant)
                             if(plant.activity == FERTILIZE){
                                plantViewModel.insertFertilizer(plant.plant.plantId)
                             }else{
                                 plantViewModel.insertWater(plant.plant.plantId)
                             }
-                            val snackbarResult = snackbarHostState.showSnackbar(
+                           plants.remove(plant)
+                           val snackbarResult = snackbarHostState.showSnackbar(
                                 message = "You have completed an activity",
                                 actionLabel = "Undo",
                                 duration = SnackbarDuration.Short
