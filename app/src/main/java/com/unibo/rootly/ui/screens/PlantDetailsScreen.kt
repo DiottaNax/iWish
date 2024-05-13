@@ -2,9 +2,8 @@ package com.unibo.rootly.ui.screens
 
 import android.content.Intent
 import android.provider.CalendarContract
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,11 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Event
-import androidx.compose.material.icons.outlined.Image
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -34,16 +35,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.ui.RootlyRoute
+import com.unibo.rootly.ui.composables.ImageDisplay
 import com.unibo.rootly.ui.composables.TopBar
-import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantDetailsScreen(
     navController: NavHostController,
-    name: String
+    plant: Plant
 ) {
-    val plant = Plant(1,  1, "Carmela", false, false, LocalDate.now(), "Monstera", null)
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -60,29 +60,46 @@ fun PlantDetailsScreen(
             verticalArrangement = Arrangement.spacedBy(6.dp),
             modifier = Modifier
                 .padding(contentPadding)
-                .padding(16.dp, 0.dp)
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth()
         ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    text = name,
-                    fontWeight = FontWeight.SemiBold
+                    text = plant.plantName,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.SemiBold
+                    )
                 )
                 Text(
-                    text = plant.scientificName
+                    text = plant.scientificName,
+                    style = MaterialTheme.typography.titleLarge
                 )
             }
-            Image(
-                Icons.Outlined.Image, //todo metti l'img
-                contentDescription = "Plant photo",
-                modifier = Modifier
-                    .clip(RoundedCornerShape(28.dp))
-                    .background(MaterialTheme.colorScheme.secondaryContainer)
-                    .padding(128.dp)
-                    .fillMaxWidth()
-            )
+            Box(
+                contentAlignment = Alignment.TopEnd
+            ) {
+                ImageDisplay(
+                    uri = null,
+                    contentDescription = "Plant photo",
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(28.dp))
+                        .fillMaxWidth()
+                )
+                FilledTonalIconButton(
+                    onClick = {
+                        //TODO: add/remove favourite
+                    },
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    if(plant.isFavorite) {
+                        Icon(Icons.Filled.Favorite, "Favorite")
+                    } else {
+                        Icon(Icons.Outlined.Favorite, "Favorite")
+                    }
+                }
+            }
             Text(
                 text = "Next activities:",
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
@@ -92,7 +109,10 @@ fun PlantDetailsScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Water: Today")
+                Text(
+                    text = "Water: Today",
+                    style = MaterialTheme.typography.bodyMedium
+                )
                 AddToCalendarChip(
                     title = "Water ${plant.plantName}",
                     time = System.currentTimeMillis()   //TODO: set right time
@@ -103,7 +123,10 @@ fun PlantDetailsScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Fertilizer: Today")
+                Text(
+                    text = "Fertilizer: Today",
+                    style = MaterialTheme.typography.bodyMedium
+                )
                 AddToCalendarChip(
                     title = "Fertilizer ${plant.plantName}",
                     time = System.currentTimeMillis()   //TODO: set right time

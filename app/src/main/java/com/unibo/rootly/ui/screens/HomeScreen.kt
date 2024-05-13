@@ -45,8 +45,6 @@ import com.unibo.rootly.ui.composables.ActivityCard
 import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.ui.composables.TopBar
 import com.unibo.rootly.viewmodel.PlantViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
@@ -194,6 +192,7 @@ fun HomeScreen(
                     activity = plant.activity,
                     date = plant.date,
                     onClick = {
+                        plantViewModel.selectPlant(plant.plant)
                         navController.navigate(
                             RootlyRoute.PlantDetails.buildRoute(
                                 name = plant.plant.plantName,

@@ -93,10 +93,13 @@ fun RootlyNavGraph(
         }
         with(RootlyRoute.PlantDetails) {
             composable(route, arguments) { backStackEntry ->
-                PlantDetailsScreen(
-                    navController,
-                    name = backStackEntry.arguments?.getString("travelId") ?: ""
-                )
+                val plant = plantViewModel.plantSelected
+                if(plant != null) {
+                    PlantDetailsScreen(
+                        navController,
+                        plant = plant
+                    )
+                }
             }
         }
         with(RootlyRoute.AddPlant) {
