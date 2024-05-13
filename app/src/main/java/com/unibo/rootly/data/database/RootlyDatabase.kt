@@ -30,7 +30,6 @@ import java.time.LocalDate
         Water::class
     ],
     version = 1,
-    exportSchema = false //todo maybe true?
 )
 @TypeConverters(Converters::class)
 abstract class RootlyDatabase : RoomDatabase() {
