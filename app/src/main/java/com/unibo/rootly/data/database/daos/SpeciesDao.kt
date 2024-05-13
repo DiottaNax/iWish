@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.unibo.rootly.data.database.Species
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SpeciesDao {
@@ -16,5 +17,8 @@ interface SpeciesDao {
     suspend fun insertAll(species: List<Species>) {
         species.forEach{ s -> insertSpecies(s)}
     }
+
+    @Query("SELECT scientific_name FROM specie")
+    fun getAllSpeciesName() : Flow<List<String>>
 
 }

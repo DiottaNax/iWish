@@ -13,4 +13,6 @@ class SpeciesRepository @Inject constructor(
     @WorkerThread
     suspend fun getByName(name: String) = speciesDao.getSpeciesByName(name)
 
+    @WorkerThread
+    fun getAllSpeciesName() = speciesDao.getAllSpeciesName()
 }

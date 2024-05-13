@@ -21,5 +21,5 @@ class SpeciesViewModel @Inject constructor(
         repository.getByName(name)
     }
 
-
+    fun getAllSpeciesName() = repository.getAllSpeciesName()
 }
