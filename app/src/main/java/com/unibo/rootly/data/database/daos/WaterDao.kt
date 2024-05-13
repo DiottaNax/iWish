@@ -7,6 +7,7 @@ import androidx.room.Query
 import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.data.database.Water
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 @Dao
 interface WaterDao {
@@ -61,4 +62,6 @@ interface WaterDao {
             "AND s.water_frequency <=" +
             "   Cast ((julianday('now') - julianday(w.last_watered_date)) As Integer) + 2")
     fun getSoonFavoriteWater(userId: Int): Flow<List<Plant>>
+    @Query("DELETE FROM Water WHERE plant_id = :plantId AND date = :date")
+    suspend fun removeWater(plantId: Int, date: LocalDate)
 }

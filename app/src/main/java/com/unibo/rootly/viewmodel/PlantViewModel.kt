@@ -67,4 +67,11 @@ class PlantViewModel  @Inject constructor(
     fun getFavoritesSoonFertilizer(userId: Int) = fertilizerRepository.getFavoritesSoon(userId)
 
     fun getFavoritesTodayFertilizer(userId: Int) = fertilizerRepository.getFavoritesToday(userId)
+    fun removeWater(plantId: Int, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
+        waterRepository.remove(plantId, date)
+    }
+
+    fun removeFertilizer(plantId: Int, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
+        fertilizerRepository.remove(plantId, date)
+    }
 }

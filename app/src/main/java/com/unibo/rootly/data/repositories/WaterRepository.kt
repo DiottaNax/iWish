@@ -3,6 +3,7 @@ package com.unibo.rootly.data.repositories
 import androidx.annotation.WorkerThread
 import com.unibo.rootly.data.database.Water
 import com.unibo.rootly.data.database.daos.WaterDao
+import java.time.LocalDate
 import javax.inject.Inject
 
 class WaterRepository @Inject constructor(
@@ -22,5 +23,9 @@ class WaterRepository @Inject constructor(
 
     @WorkerThread
     fun getFavoritesToday(userId: Int) = waterDao.getTodayFavoriteWater(userId)
+    @WorkerThread
+    suspend fun remove(plantId: Int, date: LocalDate) {
+        waterDao.removeWater(plantId,date)
+    }
 
 }

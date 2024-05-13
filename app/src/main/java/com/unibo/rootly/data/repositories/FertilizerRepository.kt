@@ -3,6 +3,7 @@ package com.unibo.rootly.data.repositories
 import androidx.annotation.WorkerThread
 import com.unibo.rootly.data.database.Fertilizer
 import com.unibo.rootly.data.database.daos.FertilizerDao
+import java.time.LocalDate
 import javax.inject.Inject
 
 class FertilizerRepository @Inject constructor(
@@ -22,4 +23,8 @@ class FertilizerRepository @Inject constructor(
 
     @WorkerThread
     fun getFavoritesToday(userId: Int) = fertilizerDao.getFavoriteTodayFertilizer(userId)
+    @WorkerThread
+    suspend fun remove(plantId: Int, date: LocalDate) {
+        fertilizerDao.removeFertilize(plantId,date)
+    }
 }

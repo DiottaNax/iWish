@@ -78,7 +78,7 @@ fun HomeScreen(
     var soonFertilizer = emptyList<Plant>()
     var todayWater = emptyList<Plant>()
     var todayFertilizer = emptyList<Plant>()
-    val plants = emptyList<PlantCard>().toMutableList()
+    var plants = emptyList<PlantCard>().toMutableList()
 
     if (selectedFilters.contains(Filter.Favourites)){
         soonWater =
@@ -208,7 +208,7 @@ fun HomeScreen(
                         )
                     },
                     onCompleted = {
-                        CoroutineScope(Dispatchers.IO).launch {
+                       scope.launch {
                             delay(100.milliseconds)
                             plants.remove(plant)
                             if(plant.activity == FERTILIZE){
@@ -223,8 +223,17 @@ fun HomeScreen(
                             )
                             when (snackbarResult) {
                                 SnackbarResult.Dismissed -> null
-                                SnackbarResult.ActionPerformed -> plants.add(plant)
+                                SnackbarResult.ActionPerformed -> {
+                                    plants.add(plant)
+                                    if(plant.activity == FERTILIZE){
+                                        plantViewModel.removeFertilizer(plant.plant.plantId)
+                                    }else{
+                                        plantViewModel.removeWater(plant.plant.plantId)
+                                    }
+                                }
+
                             }
+
                         }
                     },
                     modifier = Modifier.animateItemPlacement(tween(100))
