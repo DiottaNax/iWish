@@ -16,6 +16,7 @@ import com.unibo.rootly.ui.screens.PlantDetailsScreen
 import com.unibo.rootly.ui.screens.RegistrationScreen
 import com.unibo.rootly.ui.screens.SettingsScreen
 import com.unibo.rootly.ui.screens.UserProfileScreen
+import com.unibo.rootly.utils.LocationService
 import com.unibo.rootly.viewmodel.PlantViewModel
 import com.unibo.rootly.viewmodel.ReceivedViewModel
 import com.unibo.rootly.viewmodel.SettingsViewModel
@@ -46,6 +47,7 @@ sealed class RootlyRoute(
 fun RootlyNavGraph(
     navController: NavHostController,
     settingsVM: SettingsViewModel,
+    locationService: LocationService,
     modifier: Modifier = Modifier
 ) {
     val  plantViewModel = hiltViewModel<PlantViewModel>()
@@ -54,12 +56,12 @@ fun RootlyNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = RootlyRoute.Home.route,
+        startDestination = RootlyRoute.Registration.route,
         modifier = modifier
     ) {
         with(RootlyRoute.Registration) {
             composable(route) {
-                RegistrationScreen(navController)
+                RegistrationScreen(navController, locationService)
             }
         }
         with(RootlyRoute.Login) {
