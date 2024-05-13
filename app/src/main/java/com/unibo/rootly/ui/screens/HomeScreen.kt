@@ -53,7 +53,7 @@ import java.time.LocalDate
 import kotlin.time.Duration.Companion.milliseconds
 
 enum class Filter(
-    val displayedName: String   //TODO: add the filter function
+    val displayedName: String
 ) {
     Favourites("Favourites"),
     Today("Today"),
@@ -72,7 +72,7 @@ fun HomeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    val userId = 1 //todo make real and check filters
+    val userId = 1 //todo make real
 
     var selectedFilters by remember { mutableStateOf(emptyList<Filter>()) }
     var soonWater = emptyList<PlantCard>()

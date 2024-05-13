@@ -155,7 +155,7 @@ fun AddPlantScreen(
                             Plant(
                                 userId = 1,
                                 plantName = name,
-                                birthday = LocalDate.now(), //todo non va
+                                birthday = LocalDate.now(),
                                 scientificName = type,
                                 isDead = false,
                             )

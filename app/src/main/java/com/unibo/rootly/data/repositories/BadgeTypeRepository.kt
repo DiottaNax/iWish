@@ -9,6 +9,5 @@ import javax.inject.Inject
 class BadgeTypeRepository @Inject constructor(
     private val badgeTypeDao: BadgeTypeDao
 ) {
-    @WorkerThread
-    fun getAllTypes() : Flow<List<BadgeType>> = badgeTypeDao.getAllBadgeTypes() //todo propriety not function
+    val badgeTypes : Flow<List<BadgeType>> = badgeTypeDao.getAllBadgeTypes()
 }
