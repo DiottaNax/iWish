@@ -49,6 +49,7 @@ import com.unibo.rootly.viewmodel.PlantCard
 import com.unibo.rootly.viewmodel.PlantViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import kotlin.time.Duration.Companion.milliseconds
 
 enum class Filter(
@@ -187,12 +188,14 @@ fun HomeScreen(
                 }
             }
 
-            items(plants) { plant ->
+            items(plants,
+                key = {"${it.plant.plantId}${it.activity}${it.date}"}
+            ) { plant ->
                 ActivityCard(
                     title = plant.plant.plantName,
                     subTitle = plant.plant.scientificName,
                     activity = plant.activity,
-                    date = plant.date.toString(),
+                    date = if (plant.date!! <= LocalDate.now()) "today" else plant.date.toString(),
                     onClick = {
                         plantViewModel.selectPlant(plant.plant)
                         navController.navigate(RootlyRoute.PlantDetails.route)
@@ -200,12 +203,12 @@ fun HomeScreen(
                     onCompleted = {
                        scope.launch {
                             delay(100.milliseconds)
-                            if(plant.activity == FERTILIZE){
+                           plants.remove(plant)
+                           if(plant.activity == FERTILIZE){
                                plantViewModel.insertFertilizer(plant.plant.plantId)
                             }else{
                                 plantViewModel.insertWater(plant.plant.plantId)
                             }
-                           plants.remove(plant)
                            val snackbarResult = snackbarHostState.showSnackbar(
                                 message = "You have completed an activity",
                                 actionLabel = "Undo",
