@@ -31,7 +31,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,9 +45,10 @@ import com.unibo.rootly.ui.composables.ActivityCard
 import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.ui.composables.TopBar
 import com.unibo.rootly.viewmodel.PlantViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import kotlin.time.Duration.Companion.milliseconds
 
 enum class Filter(
@@ -71,9 +71,6 @@ fun HomeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    val list = remember {   //TODO: remove example
-        mutableStateListOf("Food", "Book", "Laptop", "Chair", "Dog", "Coffee", "Tree", "Phone", "Car", "Music", "Sun", "Water", "Shoes", "Pen", "Cloud" )
-    }
     val userId = 1 //todo make real and check filters
 
     var selectedFilters by remember { mutableStateOf(emptyList<Filter>()) }
@@ -81,6 +78,7 @@ fun HomeScreen(
     var soonFertilizer = emptyList<Plant>()
     var todayWater = emptyList<Plant>()
     var todayFertilizer = emptyList<Plant>()
+    val plants = emptyList<PlantCard>().toMutableList()
 
     if (selectedFilters.contains(Filter.Favourites)){
         soonWater =
@@ -155,45 +153,6 @@ fun HomeScreen(
             contentPadding = PaddingValues(16.dp, 16.dp),
             modifier = Modifier.padding(contentPadding)
         ) {
-            //TODO: remove example
-            items(
-                items = list,
-                key = {it}
-            ) { item ->
-                val plant = Plant(1,  1, item, false, LocalDate.now(), "Monstera", null)
-                ActivityCard(
-                    title = plant.plantName,
-                    subTitle = plant.scientificName,
-                    activity = "Water",
-                    date = "Today",
-                    onClick = {
-                        navController.navigate(
-                            RootlyRoute.PlantDetails.buildRoute(
-                                name = plant.plantName,
-                                id = plant.plantId.toString()
-                            )
-                        )
-                    },
-                    onCompleted = {
-                        scope.launch {
-                            delay(100.milliseconds)
-                            list.remove(item)
-                            val snackbarResult = snackbarHostState.showSnackbar(
-                                message = "You have completed an activity",
-                                actionLabel = "Undo",
-                                duration = SnackbarDuration.Short
-                            )
-                            when (snackbarResult) {
-                                SnackbarResult.Dismissed -> null
-                                SnackbarResult.ActionPerformed -> list.add(item)
-                            }
-                        }
-                    },
-                    modifier = Modifier.animateItemPlacement(tween(100))
-                )
-            }
-            /*
-
             val toShow = selectedFilters.toMutableList()
 
             if (!toShow.contains(Filter.ThisWeek)
@@ -210,84 +169,67 @@ fun HomeScreen(
 
             if(toShow.contains(Filter.Today)) {
                 if(toShow.contains(Filter.Water)){
-                    items(todayWater) { plant ->
-                        ActivityItem(
-                            plant,
-                            "water",
-                            "today",
-                            onClick = {
-                                plantViewModel.selectPlant(plant)
-                                navController.navigate(
-                                    RootlyRoute.PlantDetails.buildRoute(
-                                        plant.plantId.toString(),
-                                        plant.plantName
-                                    )
-                                )
-                            }
-                        )
+                    todayWater.forEach { plant ->
+                        plants += PlantCard(plant,WATER , TODAY)
                     }
                 }
                 if(toShow.contains(Filter.Fertilize)){
-                    items(todayFertilizer) { plant ->
-                        ActivityItem(
-                            plant,
-                            "fertilize",
-                            "today",
-                            onClick = {
-                                plantViewModel.selectPlant(plant)
-                                navController.navigate(
-                                    RootlyRoute.PlantDetails.buildRoute(
-                                        plant.plantId.toString(),
-                                        plant.plantName
-                                    )
-                                )
-                            }
-                        )
+                    todayFertilizer.forEach { plant ->
+                        plants += PlantCard(plant, FERTILIZE , TODAY)
                     }
                 }
             }
 
             if (toShow.contains(Filter.ThisWeek)){
                 if(toShow.contains(Filter.Water)){
-                    items(soonWater) { plant ->
-                        ActivityItem(
-                            plant,
-                            "water",
-                            "in the next few days",
-                            onClick = {
-                                plantViewModel.selectPlant(plant)
-                                navController.navigate(
-                                    RootlyRoute.PlantDetails.buildRoute(
-                                        plant.plantId.toString(),
-                                        plant.plantName
-                                    )
-                                )
-                            }
-                        )
+                    soonWater.forEach { plant ->
+                        plants += PlantCard(plant, WATER , SOON)
                     }
                 }
 
                 if(toShow.contains(Filter.Fertilize)){
-                    items(soonFertilizer) { plant ->
-                        ActivityItem(
-                            plant,
-                            "fertilize",
-                            "in the next few days",
-                            onClick = {
-                                plantViewModel.selectPlant(plant)
-                                navController.navigate(
-                                    RootlyRoute.PlantDetails.buildRoute(
-                                        plant.plantId.toString(),
-                                        plant.plantName
-                                    )
-                                )
-                            }
-                        )
+                    soonFertilizer.forEach { plant ->
+                        plants += PlantCard(plant, WATER , SOON)
                     }
                 }
             }
-
-             */
+            items(plants) { plant ->
+                ActivityCard(
+                    title = plant.plant.plantName,
+                    subTitle = plant.plant.scientificName,
+                    activity = plant.activity,
+                    date = plant.date,
+                    onClick = {
+                        navController.navigate(
+                            RootlyRoute.PlantDetails.buildRoute(
+                                name = plant.plant.plantName,
+                                id = plant.plant.plantId.toString()
+                            )
+                        )
+                    },
+                    onCompleted = {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            delay(100.milliseconds)
+                            plants.remove(plant)
+                            if(plant.activity == FERTILIZE){
+                               plantViewModel.insertFertilizer(plant.plant.plantId)
+                            }else{
+                                plantViewModel.insertWater(plant.plant.plantId)
+                            }
+                            val snackbarResult = snackbarHostState.showSnackbar(
+                                message = "You have completed an activity",
+                                actionLabel = "Undo",
+                                duration = SnackbarDuration.Short
+                            )
+                            when (snackbarResult) {
+                                SnackbarResult.Dismissed -> null
+                                SnackbarResult.ActionPerformed -> plants.add(plant)
+                            }
+                        }
+                    },
+                    modifier = Modifier.animateItemPlacement(tween(100))
+                )
+            }
         }
     }
 }
@@ -311,3 +253,14 @@ fun FilterSelector(
         modifier = modifier
     )
 }
+
+data class PlantCard(
+    val plant: Plant,
+    val activity: String,
+    val date: String
+)
+
+const val WATER = "water"
+const val FERTILIZE = "fertilize"
+const val SOON = "in the next few days"
+const val TODAY = "today"

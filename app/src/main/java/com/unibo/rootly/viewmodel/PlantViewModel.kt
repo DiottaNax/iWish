@@ -1,11 +1,9 @@
 package com.unibo.rootly.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unibo.rootly.data.database.Fertilizer
 import com.unibo.rootly.data.database.Plant
-import com.unibo.rootly.data.database.User
 import com.unibo.rootly.data.database.Water
 import com.unibo.rootly.data.repositories.FertilizerRepository
 import com.unibo.rootly.data.repositories.PlantRepository
@@ -33,8 +31,8 @@ class PlantViewModel  @Inject constructor(
 
     fun insertPlant(plant: Plant) = viewModelScope.launch {
         val plantId = plantRepository.insert(plant)
-        insertWater(Water(plantId.toInt(), LocalDate.now()))
-        insertFertilizer(Fertilizer(plantId.toInt(), LocalDate.now()))
+        insertWater(plantId.toInt())
+        insertFertilizer(plantId.toInt())
     }
 
     fun getPlantsByUser(userId: Int) = plantRepository.getByUser(userId)
@@ -42,8 +40,8 @@ class PlantViewModel  @Inject constructor(
 
     // Water
 
-    fun insertWater(water: Water) = viewModelScope.launch {
-        waterRepository.insert(water)
+    fun insertWater(plantId: Int, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
+        waterRepository.insert(Water(plantId, date))
     }
 
     fun getSoonWater(userId: Int) = waterRepository.getSoon(userId)
@@ -56,8 +54,8 @@ class PlantViewModel  @Inject constructor(
 
     //fertilizer
 
-    fun insertFertilizer(fertilizer: Fertilizer) = viewModelScope.launch {
-        fertilizerRepository.insert(fertilizer)
+    fun insertFertilizer(plantId: Int, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
+        fertilizerRepository.insert(Fertilizer(plantId, date))
     }
 
     fun getSoonFertilizer(userId: Int) = fertilizerRepository.getSoon(userId)
