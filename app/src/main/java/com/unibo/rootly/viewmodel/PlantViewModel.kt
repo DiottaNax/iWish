@@ -11,6 +11,7 @@ import com.unibo.rootly.data.repositories.PlantRepository
 import com.unibo.rootly.data.repositories.ReceivedRepository
 import com.unibo.rootly.data.repositories.SpeciesRepository
 import com.unibo.rootly.data.repositories.WaterRepository
+import com.unibo.rootly.utils.Notifications
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
@@ -54,13 +55,13 @@ class PlantViewModel  @Inject constructor(
         val plantCount = plantRepository.countByUser(plant.userId)!!
 
         if (plantCount == 1) {
-            receivedRepository.insert(Received(userId = plant.userId , name = "First Timer"))
+            insertBadge(userId = plant.userId , name = "First Timer")
         }else if( plantCount >= 100){
-            receivedRepository.insert(Received(userId = plant.userId , name = "Botanical Master"))
+            insertBadge(userId = plant.userId , name = "Botanical Master")
         }else if( plantCount >= 50){
-            receivedRepository.insert(Received(userId = plant.userId , name = "Green Thumb"))
+            insertBadge(userId = plant.userId , name = "Green Thumb")
         }else if( plantCount >= 10){
-            receivedRepository.insert(Received(userId = plant.userId , name = "Sprout Scout"))
+            insertBadge(userId = plant.userId , name = "Sprout Scout")
         }
     }
 
@@ -79,7 +80,7 @@ class PlantViewModel  @Inject constructor(
 
     fun addDead(plant : Plant) = viewModelScope.launch {
         plantRepository.insertDead(plant.plantId)
-        receivedRepository.insert(Received(userId = plant.userId , name = "Heartfelt Mourner"))
+        insertBadge(userId = plant.userId , name = "Heartfelt Mourner")
     }
 
     // Water
@@ -94,7 +95,7 @@ class PlantViewModel  @Inject constructor(
             badgesList.addAll(badges.map { it.name })
 
             if ("Water Warrior" !in badgesList && timesWatered >= 100) {
-                receivedRepository.insert(Received("Water Warrior", plant.userId))
+                insertBadge("Water Warrior", plant.userId)
             }
         }
     }
@@ -161,7 +162,7 @@ class PlantViewModel  @Inject constructor(
             badgesList.addAll(badges.map { it.name })
 
             if ("Zen Gardener" !in badgesList && timesFertilized >= 100) {
-                receivedRepository.insert(Received("Zen Gardener", plant.userId))
+                insertBadge("Zen Gardener", plant.userId)
             }
         }
     }
@@ -221,5 +222,12 @@ class PlantViewModel  @Inject constructor(
     //species
 
     fun getAllSpeciesName() = speciesRepository.getAllSpeciesName()
+
+    //badges
+
+    private suspend fun insertBadge(name: String, userId: Int) {
+        receivedRepository.insert(Received(name, userId))
+        Notifications.sendNotification(name)
+    }
 
 }
