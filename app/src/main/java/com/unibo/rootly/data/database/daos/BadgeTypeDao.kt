@@ -16,5 +16,4 @@ interface BadgeTypeDao {
     fun getAllBadgeTypes(): Flow<List<BadgeType>>
     suspend fun insertAll( badgeTypes: List<BadgeType>) = badgeTypes.forEach{ b -> insertBadge(b)}
 
-
 }

@@ -53,18 +53,20 @@ abstract class RootlyDatabase : RoomDatabase() {
                     RootlyDatabase::class.java,
                     "rootly_database"
                 ).allowMainThreadQueries()
-                .addCallback(object : RoomDatabase.Callback() {
+                .addCallback(object : Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         INSTANCE?.let { database ->
                             //todo not working
                             CoroutineScope(Dispatchers.IO).launch {
-                                database.badgeTypeDao().insertAll(InitialData.getInitialBadgeTypes())
+                                database.badgeTypeDao().insertAll(InitialData.getBadgeTypes())
                                 database.speciesDao().insertAll(InitialData.getInitialSpecies())
                                 database.userDao().insertUser(InitialData.getInitialUser())
                                 database.plantDao().insertAllPlants(InitialData.getInitialPlants())
                                 database.waterDao().insertAllWater(InitialData.getInitialWaters())
                                 database.fertilizerDao().insertAllFertilizer(InitialData.getInitialFertilizers())
+                                database.receivedDao().insertReceived(Received("First Timer",1))
+                                database.receivedDao().insertReceived(Received("Budding Caretaker",1))
                             }
                         }
                     }

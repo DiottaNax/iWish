@@ -22,7 +22,7 @@ object DataModule {
 
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): RootlyDatabase {
-        return Room.databaseBuilder(context, RootlyDatabase::class.java, "rootly_database").build()
+        return RootlyDatabase.getDatabase(context)
     }
 
     @Provides
