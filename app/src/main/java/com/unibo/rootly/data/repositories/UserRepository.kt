@@ -9,7 +9,7 @@ class UserRepository @Inject constructor(
     private val userDao: UserDao
 ) {
     @WorkerThread
-    suspend fun insert(user: User) = userDao.insertUser(user)
+    suspend fun insert(user: User) :Long = userDao.insertUser(user)
     @WorkerThread
     fun getUserByUsername(username: String) = userDao.getUserByUsername(username)
 }

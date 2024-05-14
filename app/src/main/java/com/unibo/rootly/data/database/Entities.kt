@@ -49,6 +49,7 @@ data class Species(
 data class User(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "user_id") val userId: Int = 0,
     @ColumnInfo(name = "username") val username: String,
+    @ColumnInfo(name = "password") val password: String,
     @ColumnInfo(name = "location") val location: String? = null,
     @ColumnInfo(name = "profile_img") val profileImg: String? = null,
 )

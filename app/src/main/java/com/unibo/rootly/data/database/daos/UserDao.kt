@@ -9,7 +9,7 @@ import com.unibo.rootly.data.database.User
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertUser(user: User)
+    suspend fun insertUser(user: User): Long
 
     @Query("SELECT * FROM Users WHERE username = :username")
     fun getUserByUsername(username: String): User?

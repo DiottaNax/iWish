@@ -65,7 +65,7 @@ object InitialData {
     //user example with plants for test reasons
 
     fun getInitialUser(): User {
-        return User( username = "ExampleUser")
+        return User( username = "ExampleUser", password = "password")
     }
 
     fun getInitialPlants(): List<Plant> {
