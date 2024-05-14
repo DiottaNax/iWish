@@ -64,4 +64,10 @@ interface FertilizerDao {
 
     @Query("SELECT MAX(date) FROM Fertilizer WHERE plant_id = :plantId")
     fun getLastFertilizeDate(plantId: Int) :LocalDate
+
+    @Query("SELECT COUNT(*) " +
+            "FROM Fertilizer f join Plant p " +
+            "on p.plant_id = f.plant_id " +
+            "WHERE p.user_id =:userId")
+    fun getTimesFertilized(userId: Int): Int
 }

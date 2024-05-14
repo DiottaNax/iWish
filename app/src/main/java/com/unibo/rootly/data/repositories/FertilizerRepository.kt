@@ -30,4 +30,6 @@ class FertilizerRepository @Inject constructor(
 
     @WorkerThread
     fun getLastFertilizeDate(plantId: Int) = fertilizerDao.getLastFertilizeDate(plantId)
+    @WorkerThread
+    fun getTimesFertilized(userId: Int) = fertilizerDao.getTimesFertilized(userId)
 }

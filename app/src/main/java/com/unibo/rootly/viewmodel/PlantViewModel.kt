@@ -47,9 +47,9 @@ class PlantViewModel  @Inject constructor(
     }
 
     fun insertPlant(plant: Plant) = viewModelScope.launch {
-        val plantId = plantRepository.insert(plant)
-        insertWater(plantId.toInt())
-        insertFertilizer(plantId.toInt())
+        val newPlant = plant.copy(plantId = plantRepository.insert(plant).toInt())
+        insertWater(newPlant)
+        insertFertilizer(newPlant)
 
         val plantCount = plantRepository.countByUser(plant.userId)!!
 
@@ -84,8 +84,19 @@ class PlantViewModel  @Inject constructor(
 
     // Water
 
-    fun insertWater(plantId: Int, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
-        waterRepository.insert(Water(plantId, date))
+    fun insertWater(plant: Plant, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
+        waterRepository.insert(Water(plant.plantId, date))
+
+        val timesWatered = waterRepository.getTimesWatered(plant.userId)
+
+        val badgesList = mutableListOf<String>()
+        receivedRepository.getByUser(plant.userId).collect { badges ->
+            badgesList.addAll(badges.map { it.name })
+
+            if ("Water Warrior" !in badgesList && timesWatered >= 100) {
+                receivedRepository.insert(Received("Water Warrior", plant.userId))
+            }
+        }
     }
 
     fun getSoonWater(userId: Int) = waterRepository.getSoon(userId).map { plants ->
@@ -140,8 +151,19 @@ class PlantViewModel  @Inject constructor(
 
     //fertilizer
 
-    fun insertFertilizer(plantId: Int, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
-        fertilizerRepository.insert(Fertilizer(plantId, date))
+    fun insertFertilizer(plant: Plant, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
+        fertilizerRepository.insert(Fertilizer(plant.plantId, date))
+
+        val timesFertilized = fertilizerRepository.getTimesFertilized(plant.userId)
+
+        val badgesList = mutableListOf<String>()
+        receivedRepository.getByUser(plant.userId).collect { badges ->
+            badgesList.addAll(badges.map { it.name })
+
+            if ("Zen Gardener" !in badgesList && timesFertilized >= 100) {
+                receivedRepository.insert(Received("Zen Gardener", plant.userId))
+            }
+        }
     }
 
     fun getSoonFertilizer(userId: Int) = fertilizerRepository.getSoon(userId).map { plants ->
