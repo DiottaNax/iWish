@@ -227,7 +227,9 @@ class PlantViewModel  @Inject constructor(
 
     private suspend fun insertBadge(name: String, userId: Int) {
         receivedRepository.insert(Received(name, userId))
-        Notifications.sendNotification(name)
+        val badgeNotificationText = "Congratulations, you received a new badge!" +
+                "go to your profile to see it"
+        Notifications.sendNotification(name,badgeNotificationText)
     }
 
 }
