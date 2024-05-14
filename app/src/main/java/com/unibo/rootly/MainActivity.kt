@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                         derivedStateOf {
                             RootlyRoute.routes.find {
                                 it.route == backStackEntry?.destination?.route
-                            } ?: RootlyRoute.Registration
+                            } ?: RootlyRoute.Home
                         }
                     }
                     RootlyNavGraph(navController, settingsVM, locationService)
