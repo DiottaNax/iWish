@@ -76,7 +76,7 @@ object InitialData {
                 Plant(
                     userId = 1,
                     plantName = "Plant $i",
-                    isDead = false,
+                    isDead = i==10,
                     isFavorite = false,
                     birthday = LocalDate.of(2022, 1, 1),
                     scientificName = species.scientificName,

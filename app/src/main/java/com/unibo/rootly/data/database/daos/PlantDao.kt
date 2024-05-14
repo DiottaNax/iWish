@@ -26,7 +26,7 @@ interface PlantDao {
     @Query("UPDATE plant SET dead = 1 WHERE plant_id = :plantId ")
     suspend fun insertDead(plantId : Int)
 
-    @Query("SELECT COUNT(*) FROM Plant WHERE user_id = :userId")
+    @Query("SELECT COUNT(*) FROM Plant WHERE user_id = :userId and dead = 0")
     suspend fun countByUser(userId: Int): Int?
 
 }
