@@ -77,8 +77,9 @@ class PlantViewModel  @Inject constructor(
 
     //dead
 
-    fun addDead(plantId : Int) = viewModelScope.launch {
-        plantRepository.insertDead(plantId)
+    fun addDead(plant : Plant) = viewModelScope.launch {
+        plantRepository.insertDead(plant.plantId)
+        receivedRepository.insert(Received(userId = plant.userId , name = "Heartfelt Mourner"))
     }
 
     // Water

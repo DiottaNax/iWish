@@ -13,7 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Event
-import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -38,7 +39,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.ImageDisplay
 import com.unibo.rootly.ui.composables.TopBar
@@ -120,9 +120,9 @@ fun PlantDetailsScreen(
                     modifier = Modifier.padding(4.dp)
                 ) {
                     if(plant.isFavorite) {
-                        Icon(Icons.Filled.Favorite, "Favorite")
+                        Icon(Icons.Filled.Favorite, "add to Favorites")
                     } else {
-                        Icon(Icons.Outlined.Favorite, "Favorite")
+                        Icon(Icons.Outlined.FavoriteBorder , "remove from Favorites")
                     }
                 }
             }
@@ -159,6 +159,19 @@ fun PlantDetailsScreen(
                     time = nextFertilizeDate?.atStartOfDay(ZoneId.systemDefault())?.toInstant()
                         ?.toEpochMilli() ?: System.currentTimeMillis()
                 )
+            }
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                TextButton(
+                    onClick = {
+                        plantViewModel.addDead(plant)
+                        navController.navigateUp()
+                    }
+                ) {
+                    Text("Mark as dead")
+                }
             }
         }
     }
