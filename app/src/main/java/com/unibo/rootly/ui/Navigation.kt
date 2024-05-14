@@ -69,6 +69,7 @@ fun RootlyNavGraph(
                     navController,
                     userViewModel,
                     sharedPreferences,
+                    locationService,
                     userId = backStackEntry.arguments?.getString("userId") ?: "")
             }
         }

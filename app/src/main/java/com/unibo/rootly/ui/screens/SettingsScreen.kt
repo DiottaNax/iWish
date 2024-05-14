@@ -58,7 +58,8 @@ fun SettingsScreen(
         ) {
             Text(
                 text = "Select your theme:",
-                style = MaterialTheme.typography.bodyMedium)
+                style = MaterialTheme.typography.bodyMedium
+            )
             Theme.entries.forEach { theme ->
                 val selected = (theme == state.theme)
 
