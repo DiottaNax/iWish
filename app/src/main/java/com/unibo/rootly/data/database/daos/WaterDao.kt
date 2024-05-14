@@ -65,4 +65,10 @@ interface WaterDao {
 
     @Query("SELECT MAX(date) FROM Water WHERE plant_id = :plantId")
     fun getLastWateredDate(plantId: Int) :LocalDate
+
+    @Query("SELECT COUNT(*) " +
+            "FROM Water w join Plant p " +
+            "on p.plant_id = w.plant_id " +
+            "WHERE p.user_id =:userId")
+    suspend fun getTimesWatered(userId :Int) :Int
 }
