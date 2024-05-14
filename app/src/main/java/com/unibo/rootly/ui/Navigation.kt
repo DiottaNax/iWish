@@ -18,7 +18,6 @@ import com.unibo.rootly.ui.screens.SettingsScreen
 import com.unibo.rootly.ui.screens.UserProfileScreen
 import com.unibo.rootly.utils.LocationService
 import com.unibo.rootly.viewmodel.PlantViewModel
-import com.unibo.rootly.viewmodel.ReceivedViewModel
 import com.unibo.rootly.viewmodel.SettingsViewModel
 import com.unibo.rootly.viewmodel.UserViewModel
 
@@ -51,7 +50,6 @@ fun RootlyNavGraph(
     modifier: Modifier = Modifier
 ) {
     val  plantViewModel = hiltViewModel<PlantViewModel>()
-    val  receivedViewModel= hiltViewModel<ReceivedViewModel>()
     val  userViewModel = hiltViewModel<UserViewModel>()
 
     NavHost(
@@ -81,7 +79,7 @@ fun RootlyNavGraph(
             composable(route, arguments) { backStackEntry ->
                 UserProfileScreen(
                     navController,
-                    receivedViewModel,
+                    userViewModel,
                     userId = backStackEntry.arguments?.getString("userId") ?: "")
             }
         }

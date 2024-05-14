@@ -42,17 +42,17 @@ import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.ui.composables.DefaultCard
 import com.unibo.rootly.ui.composables.ImageDisplay
 import com.unibo.rootly.ui.composables.TopBar
-import com.unibo.rootly.viewmodel.ReceivedViewModel
+import com.unibo.rootly.viewmodel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserProfileScreen(
     navController: NavHostController,
-    receivedViewModel: ReceivedViewModel,
+    userViewModel: UserViewModel,
     userId: String
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-    val badgesReceived = receivedViewModel.getReceivedBadgesByUser(1).collectAsState(initial = listOf()).value
+    val badgesReceived = userViewModel.getReceivedBadgesByUser(1).collectAsState(initial = listOf()).value
     //todo real id
     var photoUri: Uri? by remember { mutableStateOf(null) } //TODO: save photo
     val launcher = rememberLauncherForActivityResult(
@@ -123,7 +123,7 @@ fun UserProfileScreen(
                     )
                 }
             }
-            items(badgesReceived) { badge ->
+            items(badgesReceived, key = { it.name }){ badge ->
                 DefaultCard(
                     title = badge.name,
                     body = badge.description
