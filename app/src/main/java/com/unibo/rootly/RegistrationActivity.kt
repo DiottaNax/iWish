@@ -23,6 +23,7 @@ class RegistrationActivity: ComponentActivity() {
         setContent {
             val context = LocalContext.current
             val settingsVM = koinViewModel<SettingsViewModel>()
+
             RootlyTheme(
                 darkTheme = when (settingsVM.state.theme) {
                     Theme.Light -> false

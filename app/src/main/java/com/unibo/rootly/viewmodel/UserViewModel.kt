@@ -19,8 +19,9 @@ class UserViewModel @Inject constructor(
         get() = _user
 
     suspend fun register(user: User) :Boolean {
-        return if( userRepository.insert(user) != -1L){
-            _user = user
+        val userId = userRepository.insert(user)
+        return if( userId != -1L){
+            _user = user.copy(userId = userId.toInt())
             true
         }else false
     }

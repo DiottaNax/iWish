@@ -1,5 +1,7 @@
 package com.unibo.rootly
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +13,8 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.unibo.rootly.ui.RootlyNavGraph
@@ -19,6 +23,7 @@ import com.unibo.rootly.ui.theme.RootlyTheme
 import com.unibo.rootly.utils.LocationService
 import com.unibo.rootly.viewmodel.SettingsViewModel
 import com.unibo.rootly.viewmodel.Theme
+import com.unibo.rootly.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import org.koin.androidx.compose.koinViewModel
 
@@ -30,7 +35,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         locationService = LocationService(this)
         setContent {
+            val context = LocalContext.current
             val settingsVM = koinViewModel<SettingsViewModel>()
+            val userVM = hiltViewModel<UserViewModel>()
+
             RootlyTheme(
                 darkTheme = when (settingsVM.state.theme) {
                     Theme.Light -> false
@@ -51,7 +59,12 @@ class MainActivity : ComponentActivity() {
                             } ?: RootlyRoute.Home
                         }
                     }
-                    RootlyNavGraph(navController, settingsVM, locationService)
+                    if (userVM.user != null) {
+                        RootlyNavGraph(navController, settingsVM, locationService)
+                    } else {
+                        context.startActivity(Intent(context, LoginActivity::class.java))
+                        (context as Activity).finish()
+                    }
                 }
             }
         }

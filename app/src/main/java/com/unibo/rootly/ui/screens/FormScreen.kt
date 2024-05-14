@@ -3,6 +3,7 @@ package com.unibo.rootly.ui.screens
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,10 +14,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -25,16 +31,26 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.unibo.rootly.LoginActivity
 import com.unibo.rootly.MainActivity
 import com.unibo.rootly.RegistrationActivity
+import com.unibo.rootly.data.database.User
 import com.unibo.rootly.ui.composables.LoginField
 import com.unibo.rootly.ui.composables.PasswordField
+import com.unibo.rootly.viewmodel.UserViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 sealed class FormScreen(
     val title: String,
     val buttonText: String,
-    val submit: (username: String, password: String, context: Context) -> Unit,
+    val submit: (
+        username: String,
+        password: String,
+        vm: UserViewModel,
+        scope: CoroutineScope,
+        context: Context) -> Unit,
     val switchText: String,
     val switchButtonText: String,
     val onSwitch: (context: Context) -> Unit
@@ -42,7 +58,9 @@ sealed class FormScreen(
     data object Login: FormScreen(
         title ="rootly",
         buttonText = "Login",
-        submit = { username, password, context -> checkCredentials(username, password, context) },
+        submit = { username, password, vm, scope, context ->
+            checkLoginCredentials(username, password, vm, context)
+        },
         switchText = "Aren't you signed yet? ",
         switchButtonText = "Create an account",
         onSwitch = {context ->
@@ -53,7 +71,11 @@ sealed class FormScreen(
     data object Registration: FormScreen(
         title ="Welcome to the rootly family!",
         buttonText = "Sign up",
-        submit = { username, password, context -> /* TODO */ },
+        submit = { username, password, vm, scope, context ->
+            scope.launch {
+                checkRegistrationCredentials(username, password, vm, context)
+            }
+        },
         switchText = "Already have an account? ",
         switchButtonText = "Login",
         onSwitch = {context ->
@@ -68,78 +90,111 @@ fun FormScreen(
     screen: FormScreen,
     context: Context
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        var username by rememberSaveable { mutableStateOf("") }
-        var password by rememberSaveable { mutableStateOf("") }
+    val vm = hiltViewModel<UserViewModel>()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
-        Text(
-            text = screen.title,
-            style = MaterialTheme.typography.displayMedium.copy(
-                fontFamily = FontFamily.Serif,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            ),
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        Column {
-            LoginField(
-                value = username,
-                onChange = { username = it },
-                label = "Username",
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            PasswordField(
-                value = password,
-                onChange = { password = it },
-                submit = { checkCredentials(username, password, context) },
-                label = "Password",
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-
-        Button(
-            onClick = { screen.submit(username, password, context) },
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { innerPadding ->
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
+                .background(MaterialTheme.colorScheme.background)
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp)
         ) {
-            Text(
-                text = screen.buttonText,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-        }
+            var username by rememberSaveable { mutableStateOf("") }
+            var password by rememberSaveable { mutableStateOf("") }
 
-        Row {
             Text(
-                text = screen.switchText,
-                style = MaterialTheme.typography.bodyMedium
+                text = screen.title,
+                style = MaterialTheme.typography.displayMedium.copy(
+                    fontFamily = FontFamily.Serif,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                ),
+                modifier = Modifier.padding(bottom = 16.dp)
             )
-            Text(
-                text = screen.switchButtonText,
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable { screen.onSwitch(context) }
-            )
+
+            Column {
+                LoginField(
+                    value = username,
+                    onChange = { username = it },
+                    label = "Username",
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                PasswordField(
+                    value = password,
+                    onChange = { password = it },
+                    submit = { screen.submit },
+                    label = "Password",
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            Button(
+                onClick = { screen.submit(username, password, vm, scope, context) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            ) {
+                Text(
+                    text = screen.buttonText,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+
+            Row {
+                Text(
+                    text = screen.switchText,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = screen.switchButtonText,
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.clickable { screen.onSwitch(context) }
+                )
+            }
         }
     }
 }
 
-fun checkCredentials(
+fun checkLoginCredentials(
     username: String,
     password: String,
+    vm: UserViewModel,
     context: Context
 ) {
-    //TODO: check if data is correct from db
-    context.startActivity(Intent(context, MainActivity::class.java))
-    (context as Activity).finish()
+    if (vm.login(username, password)) {
+        context.startActivity(Intent(context, MainActivity::class.java))
+        (context as Activity).finish()
+    } else {
+        Toast.makeText(context, "Wrong Credentials", Toast.LENGTH_SHORT).show()
+    }
+}
+
+suspend fun checkRegistrationCredentials(
+    username: String,
+    password: String,
+    vm: UserViewModel,
+    context: Context
+) {
+    if (
+        vm.register(User(
+            username = username,
+            password = password
+            )
+        )
+    ) {
+        context.startActivity(Intent(context, MainActivity::class.java))
+        (context as Activity).finish()
+    } else {
+        Toast.makeText(context, "Wrong Credentials", Toast.LENGTH_SHORT).show()
+    }
 }
