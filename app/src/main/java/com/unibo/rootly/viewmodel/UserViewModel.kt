@@ -2,6 +2,7 @@ package com.unibo.rootly.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unibo.rootly.data.database.Received
 import com.unibo.rootly.data.database.User
 import com.unibo.rootly.data.repositories.ReceivedRepository
 import com.unibo.rootly.data.repositories.UserRepository
@@ -15,12 +16,11 @@ class UserViewModel @Inject constructor(
     private val receivedRepository: ReceivedRepository
 ): ViewModel() {
 
-    fun insertLUser(user: User) = viewModelScope.launch {
+    fun insertUser(user: User) = viewModelScope.launch {
         userRepository.insert(user)
     }
 
     fun getUserByName(name: String) = userRepository.getUserByUsername(name)
 
     fun getReceivedBadgesByUser(userId: Int) = receivedRepository.getByUser(userId)
-
 }

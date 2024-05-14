@@ -41,7 +41,7 @@ object InitialData {
         return listOf(
             BadgeType("First Timer", "",
                 "you added your first plant to rootly !"),
-            BadgeType("Sprout Scout ", "",
+            BadgeType("Sprout Scout", "",
                 "yuo have 10 or more alive plants"),
             BadgeType("Green Thumb", "",
             "yuo have 50 or more alive plants"),

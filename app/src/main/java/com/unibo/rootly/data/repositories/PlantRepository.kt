@@ -22,4 +22,7 @@ class PlantRepository @Inject constructor(
     suspend fun insertLike(plantId: Int) = plantDao.insertLike(plantId)
     @WorkerThread
     suspend fun removeLike(plantId: Int) = plantDao.removeLike(plantId)
+    @WorkerThread
+    suspend fun countByUser(userId: Int): Int? = plantDao.countByUser(userId)
+
 }

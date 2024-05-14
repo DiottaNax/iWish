@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unibo.rootly.data.database.Fertilizer
 import com.unibo.rootly.data.database.Plant
+import com.unibo.rootly.data.database.Received
 import com.unibo.rootly.data.database.Water
 import com.unibo.rootly.data.repositories.FertilizerRepository
 import com.unibo.rootly.data.repositories.PlantRepository
+import com.unibo.rootly.data.repositories.ReceivedRepository
 import com.unibo.rootly.data.repositories.SpeciesRepository
 import com.unibo.rootly.data.repositories.WaterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,7 +32,8 @@ class PlantViewModel  @Inject constructor(
     private val plantRepository: PlantRepository,
     private val waterRepository: WaterRepository,
     private val fertilizerRepository: FertilizerRepository,
-    private val speciesRepository: SpeciesRepository
+    private val speciesRepository: SpeciesRepository,
+    private val receivedRepository: ReceivedRepository
 
 ): ViewModel() {
 
@@ -47,6 +50,18 @@ class PlantViewModel  @Inject constructor(
         val plantId = plantRepository.insert(plant)
         insertWater(plantId.toInt())
         insertFertilizer(plantId.toInt())
+
+        val plantCount = plantRepository.countByUser(plant.userId)!!
+
+        if (plantCount == 1) {
+            receivedRepository.insert(Received(userId = plant.userId , name = "First Timer"))
+        }else if( plantCount >= 100){
+            receivedRepository.insert(Received(userId = plant.userId , name = "Botanical Master"))
+        }else if( plantCount >= 50){
+            receivedRepository.insert(Received(userId = plant.userId , name = "Green Thumb"))
+        }else if( plantCount >= 10){
+            receivedRepository.insert(Received(userId = plant.userId , name = "Sprout Scout"))
+        }
     }
 
     fun getPlantsByUser(userId: Int) = plantRepository.getByUser(userId)
