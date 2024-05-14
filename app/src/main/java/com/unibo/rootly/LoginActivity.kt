@@ -1,5 +1,7 @@
 package com.unibo.rootly
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,6 +25,7 @@ class LoginActivity: ComponentActivity() {
         setContent {
             val context = LocalContext.current
             val settingsVM = koinViewModel<SettingsViewModel>()
+            val sharedPreferences: SharedPreferences = getSharedPreferences("userLogged", Context.MODE_PRIVATE)
 
             RootlyTheme(
                 darkTheme = when (settingsVM.state.theme) {
@@ -35,7 +38,7 @@ class LoginActivity: ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    FormScreen (FormScreen.Login, context)
+                    FormScreen(FormScreen.Login, sharedPreferences, context)
                 }
             }
         }

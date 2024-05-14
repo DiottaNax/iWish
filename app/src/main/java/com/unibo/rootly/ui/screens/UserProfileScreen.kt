@@ -1,5 +1,8 @@
 package com.unibo.rootly.ui.screens
 
+import android.app.Activity
+import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -17,6 +20,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddPhotoAlternate
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
@@ -30,13 +34,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.unibo.rootly.MainActivity
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.ui.composables.DefaultCard
@@ -49,6 +56,7 @@ import com.unibo.rootly.viewmodel.UserViewModel
 fun UserProfileScreen(
     navController: NavHostController,
     userViewModel: UserViewModel,
+    sharedPreferences: SharedPreferences,
     userId: String
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
@@ -57,6 +65,8 @@ fun UserProfileScreen(
     var photoUri: Uri? by remember { mutableStateOf(null) } //TODO: save photo
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.PickVisualMedia()) { uri -> photoUri = uri }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -109,6 +119,17 @@ fun UserProfileScreen(
                         ) {
                             Icon(Icons.Filled.AddPhotoAlternate, "Add a photo")
                         }
+                    }
+                    Button(
+                        onClick = {
+                            val editor: SharedPreferences.Editor = sharedPreferences.edit()
+                            editor.putBoolean("userLogged", false)
+                            editor.apply()
+                            context.startActivity(Intent(context, MainActivity::class.java))
+                            (context as Activity).finish()
+                        }
+                    ) {
+                        Text(text = "Logout")
                     }
                     Text(
                         text = "Giorgio",

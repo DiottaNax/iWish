@@ -3,6 +3,7 @@ package com.unibo.rootly.ui.screens
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,6 +51,7 @@ sealed class FormScreen(
         password: String,
         vm: UserViewModel,
         scope: CoroutineScope,
+        sharedPreferences: SharedPreferences,
         context: Context) -> Unit,
     val switchText: String,
     val switchButtonText: String,
@@ -58,8 +60,8 @@ sealed class FormScreen(
     data object Login: FormScreen(
         title ="rootly",
         buttonText = "Login",
-        submit = { username, password, vm, scope, context ->
-            checkLoginCredentials(username, password, vm, context)
+        submit = { username, password, vm, scope, sharedPreferences, context ->
+            checkLoginCredentials(username, password, vm, sharedPreferences, context)
         },
         switchText = "Aren't you signed yet? ",
         switchButtonText = "Create an account",
@@ -71,9 +73,9 @@ sealed class FormScreen(
     data object Registration: FormScreen(
         title ="Welcome to the rootly family!",
         buttonText = "Sign up",
-        submit = { username, password, vm, scope, context ->
+        submit = { username, password, vm, scope, sharedPreferences, context ->
             scope.launch {
-                checkRegistrationCredentials(username, password, vm, context)
+                checkRegistrationCredentials(username, password, vm, sharedPreferences, context)
             }
         },
         switchText = "Already have an account? ",
@@ -88,6 +90,7 @@ sealed class FormScreen(
 @Composable
 fun FormScreen(
     screen: FormScreen,
+    sharedPreferences: SharedPreferences,
     context: Context
 ) {
     val vm = hiltViewModel<UserViewModel>()
@@ -137,7 +140,7 @@ fun FormScreen(
             }
 
             Button(
-                onClick = { screen.submit(username, password, vm, scope, context) },
+                onClick = { screen.submit(username, password, vm, scope, sharedPreferences, context) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
@@ -169,9 +172,13 @@ fun checkLoginCredentials(
     username: String,
     password: String,
     vm: UserViewModel,
+    sharedPreferences: SharedPreferences,
     context: Context
 ) {
     if (vm.login(username, password)) {
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putBoolean("userLogged", true)
+        editor.apply()
         context.startActivity(Intent(context, MainActivity::class.java))
         (context as Activity).finish()
     } else {
@@ -183,6 +190,7 @@ suspend fun checkRegistrationCredentials(
     username: String,
     password: String,
     vm: UserViewModel,
+    sharedPreferences: SharedPreferences,
     context: Context
 ) {
     if (
@@ -192,6 +200,9 @@ suspend fun checkRegistrationCredentials(
             )
         )
     ) {
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putBoolean("userLogged", true)
+        editor.apply()
         context.startActivity(Intent(context, MainActivity::class.java))
         (context as Activity).finish()
     } else {
