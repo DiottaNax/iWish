@@ -34,7 +34,7 @@
         android:theme="@style/Theme.Rootly"
         tools:targetApi="34">
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.Rootly">
             <intent-filter>
@@ -43,6 +43,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Rootly"/>
+        <activity
+            android:name=".RegistrationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Rootly"/>
         <provider
             android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.provider" android:exported="false" android:grantUriPermissions="true">
             <meta-data

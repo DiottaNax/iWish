@@ -11,9 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.unibo.rootly.ui.screens.AddPlantScreen
 import com.unibo.rootly.ui.screens.HomeScreen
-import com.unibo.rootly.ui.screens.LoginScreen
 import com.unibo.rootly.ui.screens.PlantDetailsScreen
-import com.unibo.rootly.ui.screens.RegistrationScreen
 import com.unibo.rootly.ui.screens.SettingsScreen
 import com.unibo.rootly.ui.screens.UserProfileScreen
 import com.unibo.rootly.utils.LocationService
@@ -26,8 +24,6 @@ sealed class RootlyRoute(
     val title: String,
     val arguments: List<NamedNavArgument> = emptyList()
 ){
-    data object Registration : RootlyRoute("registration", "Welcome to rootly")
-    data object Login : RootlyRoute("login", "Nice to see you again!")
     data object Home : RootlyRoute("plants" , "To-do")
     data object Settings : RootlyRoute("settings", "Settings")
     data object AddPlant : RootlyRoute("add","Add a plant")
@@ -38,7 +34,7 @@ sealed class RootlyRoute(
         listOf(navArgument("userId") { type = NavType.StringType } )
     )
     companion object {
-        val routes = setOf(Login, Registration, Home, Settings, PlantDetails, UserProfile, AddPlant)
+        val routes = setOf(Home, Settings, PlantDetails, UserProfile, AddPlant)
     }
 }
 
@@ -54,19 +50,9 @@ fun RootlyNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = RootlyRoute.Registration.route,
+        startDestination = RootlyRoute.Home.route,
         modifier = modifier
     ) {
-        with(RootlyRoute.Registration) {
-            composable(route) {
-                RegistrationScreen(navController, locationService)
-            }
-        }
-        with(RootlyRoute.Login) {
-            composable(route) {
-                LoginScreen(navController)
-            }
-        }
         with(RootlyRoute.Home) {
             composable(route) {
                 HomeScreen(
