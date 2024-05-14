@@ -57,6 +57,8 @@ fun PlantDetailsScreen(
     val plant = plantViewModel.plantSelected!!
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
+    var isFavorite by remember { mutableStateOf(plant.isFavorite) }
+
 
     var nextWaterDate by remember { mutableStateOf<LocalDate?>(null) }
     var nextFertilizeDate by remember { mutableStateOf<LocalDate?>(null) }
@@ -111,15 +113,16 @@ fun PlantDetailsScreen(
                 )
                 FilledTonalIconButton(
                     onClick = {
-                        if(plant.isFavorite) {
+                        if (isFavorite) {
                             plantViewModel.removeLike(plant.plantId)
                         } else {
                             plantViewModel.addLike(plant.plantId)
                         }
+                        isFavorite = !isFavorite
                     },
                     modifier = Modifier.padding(4.dp)
                 ) {
-                    if(plant.isFavorite) {
+                    if(isFavorite) {
                         Icon(Icons.Filled.Favorite, "add to Favorites")
                     } else {
                         Icon(Icons.Outlined.FavoriteBorder , "remove from Favorites")
