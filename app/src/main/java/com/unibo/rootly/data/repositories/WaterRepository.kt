@@ -4,9 +4,8 @@ import androidx.annotation.WorkerThread
 import com.unibo.rootly.data.database.Water
 import com.unibo.rootly.data.database.daos.WaterDao
 import java.time.LocalDate
-import javax.inject.Inject
 
-class WaterRepository @Inject constructor(
+class WaterRepository(
     private val waterDao: WaterDao
 ) {
     @WorkerThread

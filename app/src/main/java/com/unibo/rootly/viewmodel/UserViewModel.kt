@@ -1,19 +1,16 @@
 package com.unibo.rootly.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.unibo.rootly.data.database.User
 import com.unibo.rootly.data.repositories.ReceivedRepository
 import com.unibo.rootly.data.repositories.UserRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-@HiltViewModel
-class UserViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-    private val receivedRepository: ReceivedRepository
-): ViewModel() {
+
+class UserViewModel : ViewModel(), KoinComponent {
+    private val userRepository: UserRepository by inject()
+    private val receivedRepository: ReceivedRepository by inject()
 
     private var _user: User? = null
 

@@ -12,13 +12,13 @@ import com.unibo.rootly.data.repositories.ReceivedRepository
 import com.unibo.rootly.data.repositories.SpeciesRepository
 import com.unibo.rootly.data.repositories.WaterRepository
 import com.unibo.rootly.utils.Notifications
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.time.LocalDate
-import javax.inject.Inject
 
 data class PlantCard(
     val plant: Plant,
@@ -28,15 +28,13 @@ data class PlantCard(
 
 const val WATER = "water"
 const val FERTILIZE = "fertilize"
-@HiltViewModel
-class PlantViewModel  @Inject constructor(
-    private val plantRepository: PlantRepository,
-    private val waterRepository: WaterRepository,
-    private val fertilizerRepository: FertilizerRepository,
-    private val speciesRepository: SpeciesRepository,
-    private val receivedRepository: ReceivedRepository
 
-): ViewModel() {
+class PlantViewModel : ViewModel(), KoinComponent {
+    private val plantRepository: PlantRepository by inject()
+    private val waterRepository: WaterRepository by inject()
+    private val fertilizerRepository: FertilizerRepository by inject()
+    private val speciesRepository: SpeciesRepository by inject()
+    private val receivedRepository: ReceivedRepository by inject()
 
     private var _plantSelected: Plant? = null
 

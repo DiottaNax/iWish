@@ -1,58 +1,50 @@
 package com.unibo.rootly.di
 
 import android.content.Context
-import androidx.room.Room
 import com.unibo.rootly.data.database.RootlyDatabase
-import com.unibo.rootly.data.database.daos.BadgeTypeDao
-import com.unibo.rootly.data.database.daos.FertilizerDao
-import com.unibo.rootly.data.database.daos.PlantDao
-import com.unibo.rootly.data.database.daos.ReceivedDao
-import com.unibo.rootly.data.database.daos.SpeciesDao
-import com.unibo.rootly.data.database.daos.UserDao
-import com.unibo.rootly.data.database.daos.WaterDao
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
+import com.unibo.rootly.data.database.daos.*
+import org.koin.android.ext.koin.androidContext
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-object DataModule {
+val databaseModule = module {
+    single { provideDatabase(androidContext()) }
+    single { provideBadgeTypeDao(get()) }
+    single { provideFertilizerDao(get()) }
+    single { providePlantDao(get()) }
+    single { provideReceivedDao(get()) }
+    single { provideSpeciesDao(get()) }
+    single { provideUserDao(get()) }
+    single { provideWaterDao(get()) }
+}
 
-    @Provides
-    fun provideDatabase(@ApplicationContext context: Context): RootlyDatabase {
-        return RootlyDatabase.getDatabase(context)
-    }
+private fun provideDatabase(context: Context): RootlyDatabase {
+    return RootlyDatabase.getDatabase(context)
+}
 
-    @Provides
-    fun provideBadgeTypeDao(database: RootlyDatabase): BadgeTypeDao {
-        return database.badgeTypeDao()
-    }
+private fun provideBadgeTypeDao(database: RootlyDatabase): BadgeTypeDao {
+    return database.badgeTypeDao()
+}
 
-    @Provides
-    fun provideFertilizerDao(database: RootlyDatabase): FertilizerDao {
-        return database.fertilizerDao()
-    }
+private fun provideFertilizerDao(database: RootlyDatabase): FertilizerDao {
+    return database.fertilizerDao()
+}
 
-    @Provides
-    fun providePlantDao(database: RootlyDatabase): PlantDao {
-        return database.plantDao()
-    }
-    @Provides
-    fun provideReceivedDao(database: RootlyDatabase): ReceivedDao {
-        return database.receivedDao()
-    }
-    @Provides
-    fun provideSpeciesDao(database: RootlyDatabase): SpeciesDao {
-        return database.speciesDao()
-    }
-    @Provides
-    fun provideUserDao(database: RootlyDatabase): UserDao {
-        return database.userDao()
-    }
-    @Provides
-    fun provideWaterDao(database: RootlyDatabase): WaterDao {
-        return database.waterDao()
-    }
+private fun providePlantDao(database: RootlyDatabase): PlantDao {
+    return database.plantDao()
+}
+
+private fun provideReceivedDao(database: RootlyDatabase): ReceivedDao {
+    return database.receivedDao()
+}
+
+private fun provideSpeciesDao(database: RootlyDatabase): SpeciesDao {
+    return database.speciesDao()
+}
+
+private fun provideUserDao(database: RootlyDatabase): UserDao {
+    return database.userDao()
+}
+
+private fun provideWaterDao(database: RootlyDatabase): WaterDao {
+    return database.waterDao()
 }

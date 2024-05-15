@@ -1,4 +1,4 @@
-package com.unibo.rootly
+package com.unibo.rootly.di
 
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
@@ -9,7 +9,7 @@ import org.koin.dsl.module
 
 val Context.dataStore by preferencesDataStore("settings")
 
-val appModule = module {
+val settingsModule = module {
     single { get<Context>().dataStore }
 
     single { SettingsRepository(get()) }

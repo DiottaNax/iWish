@@ -3,9 +3,8 @@ package com.unibo.rootly.data.repositories
 import androidx.annotation.WorkerThread
 import com.unibo.rootly.data.database.Species
 import com.unibo.rootly.data.database.daos.SpeciesDao
-import javax.inject.Inject
 
-class SpeciesRepository @Inject constructor(
+class SpeciesRepository(
     private val speciesDao: SpeciesDao
 ) {
     @WorkerThread

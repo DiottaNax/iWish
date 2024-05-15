@@ -3,9 +3,8 @@ package com.unibo.rootly.data.repositories
 import androidx.annotation.WorkerThread
 import com.unibo.rootly.data.database.Received
 import com.unibo.rootly.data.database.daos.ReceivedDao
-import javax.inject.Inject
 
-class ReceivedRepository @Inject constructor(
+class ReceivedRepository (
     private val receivedDao: ReceivedDao
 ) {
 

@@ -2,7 +2,6 @@ package com.unibo.rootly.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -18,6 +17,7 @@ import com.unibo.rootly.utils.LocationService
 import com.unibo.rootly.viewmodel.PlantViewModel
 import com.unibo.rootly.viewmodel.SettingsViewModel
 import com.unibo.rootly.viewmodel.UserViewModel
+import org.koin.androidx.compose.koinViewModel
 
 sealed class RootlyRoute(
     val route: String,
@@ -46,8 +46,8 @@ fun RootlyNavGraph(
     userId: Int,
     modifier: Modifier = Modifier
 ) {
-    val  plantViewModel = hiltViewModel<PlantViewModel>()
-    val  userViewModel = hiltViewModel<UserViewModel>()
+    val  plantViewModel = koinViewModel<PlantViewModel>()
+    val  userViewModel = koinViewModel<UserViewModel>()
     userViewModel.setUser(userId)
 
     NavHost(

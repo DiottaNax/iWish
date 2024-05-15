@@ -15,10 +15,8 @@ import com.unibo.rootly.ui.screens.FormScreen
 import com.unibo.rootly.ui.theme.RootlyTheme
 import com.unibo.rootly.viewmodel.SettingsViewModel
 import com.unibo.rootly.viewmodel.Theme
-import dagger.hilt.android.AndroidEntryPoint
 import org.koin.androidx.compose.koinViewModel
 
-@AndroidEntryPoint
 class RegistrationActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

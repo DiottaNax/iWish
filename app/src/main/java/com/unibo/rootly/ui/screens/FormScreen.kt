@@ -32,7 +32,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.unibo.rootly.LoginActivity
 import com.unibo.rootly.MainActivity
 import com.unibo.rootly.RegistrationActivity
@@ -42,6 +41,7 @@ import com.unibo.rootly.ui.composables.PasswordField
 import com.unibo.rootly.viewmodel.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 sealed class FormScreen(
     val title: String,
@@ -95,7 +95,7 @@ fun FormScreen(
     sharedPreferences: SharedPreferences,
     context: Context
 ) {
-    val vm = hiltViewModel<UserViewModel>()
+    val vm = koinViewModel<UserViewModel>()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 

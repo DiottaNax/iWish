@@ -27,10 +27,8 @@ import com.unibo.rootly.ui.theme.RootlyTheme
 import com.unibo.rootly.utils.LocationService
 import com.unibo.rootly.viewmodel.SettingsViewModel
 import com.unibo.rootly.viewmodel.Theme
-import dagger.hilt.android.AndroidEntryPoint
 import org.koin.androidx.compose.koinViewModel
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private lateinit var locationService: LocationService
 

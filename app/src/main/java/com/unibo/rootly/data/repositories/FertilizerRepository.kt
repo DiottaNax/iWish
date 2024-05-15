@@ -4,9 +4,8 @@ import androidx.annotation.WorkerThread
 import com.unibo.rootly.data.database.Fertilizer
 import com.unibo.rootly.data.database.daos.FertilizerDao
 import java.time.LocalDate
-import javax.inject.Inject
 
-class FertilizerRepository @Inject constructor(
+class FertilizerRepository(
     private val fertilizerDao: FertilizerDao
 ) {
     @WorkerThread
