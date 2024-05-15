@@ -19,7 +19,7 @@ interface CameraLauncher {
 }
 
 @Composable
-fun rememberCameraLauncher(): CameraLauncher {
+fun rememberCameraLauncher(onPictureTaken: (imageUri: Uri) -> Unit = {}): CameraLauncher {
     val ctx = LocalContext.current
     val imageUri = remember {
         val imageFile = File.createTempFile("tmp_image", ".jpg", ctx.externalCacheDir)
@@ -30,7 +30,7 @@ fun rememberCameraLauncher(): CameraLauncher {
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { pictureTaken ->
             if (pictureTaken) {
                 capturedImageUri = imageUri
-                saveImageToStorage(capturedImageUri, ctx.applicationContext.contentResolver)
+                onPictureTaken(capturedImageUri)
             }
         }
 

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
@@ -18,7 +19,8 @@ import coil.compose.AsyncImage
 fun ImageDisplay(
     uri: Uri?,
     contentDescription: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    defaultHigh: Dp = 40.dp
 ) {
     if (uri != null) {
         AsyncImage(
@@ -35,7 +37,7 @@ fun ImageDisplay(
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
             modifier = modifier
                 .background(MaterialTheme.colorScheme.secondary)
-                .padding(60.dp)
+                .padding(defaultHigh/2)
         )
     }
 }

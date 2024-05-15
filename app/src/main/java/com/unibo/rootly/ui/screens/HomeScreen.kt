@@ -186,6 +186,7 @@ fun HomeScreen(
                         }
                         res
                     },
+                    img = plant.plant.img,
                     modifier = Modifier.animateItemPlacement(tween(100))
                 )
             }

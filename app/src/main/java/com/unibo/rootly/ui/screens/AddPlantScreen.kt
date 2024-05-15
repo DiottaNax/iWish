@@ -1,6 +1,7 @@
 package com.unibo.rootly.ui.screens
 
 import android.Manifest
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,12 +53,16 @@ fun AddPlantScreen(
     plantViewModel: PlantViewModel,
     userViewModel: UserViewModel
 ) {
-    var name by rememberSaveable { mutableStateOf("") }
     val possiblePlantTypes = plantViewModel.getAllSpeciesNames()
         .collectAsState(initial = listOf()).value
+    var name by rememberSaveable { mutableStateOf("") }
     var type by rememberSaveable { mutableStateOf("") }
+    var uri: Uri? by remember { mutableStateOf(null) }
     val ctx = LocalContext.current
-    val cameraLauncher = rememberCameraLauncher()
+
+    // Camera
+    val cameraLauncher = rememberCameraLauncher { uri = it }
+
     val cameraPermission = rememberPermission(Manifest.permission.CAMERA) { status ->
         if (status.isGranted) {
             cameraLauncher.captureImage()
@@ -65,12 +71,13 @@ fun AddPlantScreen(
         }
     }
 
-    fun takePicture() =
+    fun takePicture() {
         if (cameraPermission.status.isGranted) {
             cameraLauncher.captureImage()
         } else {
             cameraPermission.launchPermissionRequest()
         }
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -144,6 +151,7 @@ fun AddPlantScreen(
                             birthday = LocalDate.now(),
                             scientificName = type,
                             isDead = false,
+                            img = uri.toString()
                         )
                     )
                     navController.navigateUp()

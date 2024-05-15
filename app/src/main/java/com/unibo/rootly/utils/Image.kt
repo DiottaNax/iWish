@@ -28,7 +28,7 @@ fun saveImageToStorage(
     imageUri: Uri,
     contentResolver: ContentResolver,
     name: String = "IMG_${SystemClock.uptimeMillis()}"
-) {
+): Uri {
     val bitmap = uriToBitmap(imageUri, contentResolver)
 
     val values = ContentValues()
@@ -42,4 +42,6 @@ fun saveImageToStorage(
 
     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
     outputStream.close()
+
+    return savedImageUri
 }
