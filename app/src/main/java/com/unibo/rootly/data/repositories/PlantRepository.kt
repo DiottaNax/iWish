@@ -1,14 +1,29 @@
 package com.unibo.rootly.data.repositories
 
+import android.content.ContentResolver
+import android.net.Uri
 import androidx.annotation.WorkerThread
 import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.data.database.daos.PlantDao
+import com.unibo.rootly.utils.saveImageToStorage
 
 class PlantRepository(
-    private val plantDao: PlantDao
+    private val plantDao: PlantDao,
+    private val contentResolver: ContentResolver
 ) {
     @WorkerThread
-    suspend fun insert(plant: Plant) = plantDao.insertPlant(plant)
+    suspend fun insert(plant: Plant): Long {
+        return if (plant.img?.isNotEmpty() == true) {
+            val imageUri = saveImageToStorage(
+                Uri.parse(plant.img),
+                contentResolver,
+                "TravelDiary_Place${plant.plantId}"
+            )
+            plantDao.insertPlant(plant.copy(img = imageUri.toString()))
+        } else {
+            plantDao.insertPlant(plant)
+        }
+    }
 
     @WorkerThread
     suspend fun insertDead(plantId: Int) = plantDao.insertDead(plantId)
