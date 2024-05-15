@@ -18,11 +18,11 @@ import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -141,18 +141,14 @@ fun PlantDetailsScreen(
                     ?.toEpochMilli() ?: System.currentTimeMillis()
             )
         }
-        Box(
-            contentAlignment = Alignment.Center,
+        Button(
+            onClick = {
+                navController.navigateUp()
+                plantViewModel.addDead(plant)
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
-            TextButton(
-                onClick = {
-                    plantViewModel.addDead(plant)
-                    navController.navigateUp()
-                }
-            ) {
-                Text("Mark as dead")
-            }
+            Text("Mark as dead")
         }
         Spacer(Modifier.height(16.dp))
     }
