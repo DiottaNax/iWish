@@ -200,7 +200,7 @@ class PlantViewModel  @Inject constructor(
         }
 
     fun getAllFertilizerFavorite(userId: Int) =
-        fertilizerRepository.getDuesBeforeDateFavorites(userId).map { plants ->
+        fertilizerRepository.getAllFavorites(userId).map { plants ->
         plants.map { plant ->
             PlantCard(
                 plant = plant,
