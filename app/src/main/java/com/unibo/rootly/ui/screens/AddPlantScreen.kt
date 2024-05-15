@@ -5,20 +5,21 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddAPhoto
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -77,28 +78,37 @@ fun AddPlantScreen(
     ) {
         Spacer(Modifier.height(16.dp))
         // Image section
-        if (cameraLauncher.capturedImageUri.path?.isNotEmpty() == true) {
-            AsyncImage(
-                ImageRequest.Builder(ctx)
-                    .data(cameraLauncher.capturedImageUri)
-                    .crossfade(true)
-                    .build(),
-                "Plant image",
-                Modifier.clip(RoundedCornerShape(28.dp))
-            )
-        } else {
-            Image(
-                Icons.Outlined.Image,
-                contentDescription = "Plant image",
-                modifier = Modifier
-                    .clip(RoundedCornerShape(28.dp))
-                    .background(MaterialTheme.colorScheme.secondaryContainer)
-                    .height(256.dp)
-                    .padding(110.dp)
-                    .fillMaxWidth()
-            )
+        Box(
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            if (cameraLauncher.capturedImageUri.path?.isNotEmpty() == true) {
+                AsyncImage(
+                    ImageRequest.Builder(ctx)
+                        .data(cameraLauncher.capturedImageUri)
+                        .crossfade(true)
+                        .build(),
+                    "Plant image",
+                    Modifier.clip(RoundedCornerShape(28.dp))
+                )
+            } else {
+                Image(
+                    Icons.Outlined.Image,
+                    contentDescription = "Plant image",
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(28.dp))
+                        .background(MaterialTheme.colorScheme.secondary)
+                        .height(256.dp)
+                        .padding(110.dp)
+                        .fillMaxWidth()
+                )
+            }
+            FilledTonalIconButton(
+                onClick = ::takePicture,
+                modifier = Modifier.padding(4.dp)
+            ) {
+                Icon(Icons.Default.AddAPhoto, "Add a photo")
+            }
         }
-
         // Data input fields
         TextField(
             modifier = Modifier.fillMaxWidth(),
@@ -115,43 +125,31 @@ fun AddPlantScreen(
             list = possiblePlantTypes,
             onChange = { type = it }
         )
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.padding(top = 16.dp)
-        ) {
-            OutlinedButton(
-                onClick = ::takePicture,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = "Add image",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-            Button(
-                onClick = {
-                    if (name != "" && type != ""){
-                        plantViewModel.insertPlant(
-                            Plant(
-                                userId = userViewModel.user!!.userId,
-                                plantName = name,
-                                birthday = LocalDate.now(),
-                                scientificName = type,
-                                isDead = false,
-                            )
+        Button(
+            onClick = {
+                if (name != "" && type != ""){
+                    plantViewModel.insertPlant(
+                        Plant(
+                            userId = userViewModel.user!!.userId,
+                            plantName = name,
+                            birthday = LocalDate.now(),
+                            scientificName = type,
+                            isDead = false,
                         )
-                        navController.navigateUp()
-                    } else {
-                        Toast.makeText(ctx, "Fill all the data", Toast.LENGTH_SHORT).show()
-                    }
-                },
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = "Add plant",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
+                    )
+                    navController.navigateUp()
+                } else {
+                    Toast.makeText(ctx, "Fill all the data", Toast.LENGTH_SHORT).show()
+                }
+            },
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Add plant",
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
         Spacer(Modifier.height(16.dp))
     }
