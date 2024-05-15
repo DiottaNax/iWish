@@ -2,9 +2,9 @@ package com.unibo.rootly.ui.screens
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -15,7 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -26,8 +25,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -36,14 +33,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.ActivityCard
 import com.unibo.rootly.ui.composables.BottomBar
-import com.unibo.rootly.ui.composables.TopBar
 import com.unibo.rootly.viewmodel.FERTILIZE
 import com.unibo.rootly.viewmodel.PlantCard
 import com.unibo.rootly.viewmodel.PlantViewModel
@@ -63,13 +57,12 @@ enum class Filter(
     Fertilize("Fertilize")
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
     plantViewModel: PlantViewModel,
     userViewModel: UserViewModel,
-    modifier: Modifier = Modifier
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -101,7 +94,6 @@ fun HomeScreen(
         todayFertilizer =
             plantViewModel.getTodayFertilizer(userId).collectAsState(initial = listOf()).value
     }
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     Scaffold (
         floatingActionButton = {
@@ -114,31 +106,25 @@ fun HomeScreen(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
-            Column {
-                TopBar(
-                    navController = navController,
-                    currentRoute = RootlyRoute.Home,
-                    scrollBehavior = scrollBehavior
-                )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .horizontalScroll(rememberScrollState())
-                ) {
-                    Filter.entries.forEach { filter ->
-                        FilterSelector(
-                            name = filter.displayedName,
-                            selected = filter in selectedFilters,
-                            onFilterSelected = {
-                                selectedFilters = if (filter in selectedFilters) {
-                                    selectedFilters - filter
-                                } else {
-                                    selectedFilters + filter
-                                }
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
+                    .padding(horizontal = 16.dp)
+                    .horizontalScroll(rememberScrollState())
+            ) {
+                Filter.entries.forEach { filter ->
+                    FilterSelector(
+                        name = filter.displayedName,
+                        selected = filter in selectedFilters,
+                        onFilterSelected = {
+                            selectedFilters = if (filter in selectedFilters) {
+                                selectedFilters - filter
+                            } else {
+                                selectedFilters + filter
                             }
-                        )
-                    }
+                        }
+                    )
                 }
             }
         },
@@ -147,12 +133,11 @@ fun HomeScreen(
                 navController = navController,
                 currentRoute = RootlyRoute.Home
             )
-        },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        }
     ) { contentPadding ->
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
-            verticalArrangement = Arrangement.spacedBy(15.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(16.dp, 16.dp),
             modifier = Modifier.padding(contentPadding)
         ) {

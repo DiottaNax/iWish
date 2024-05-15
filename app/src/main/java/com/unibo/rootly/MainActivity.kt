@@ -9,7 +9,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -20,6 +22,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.unibo.rootly.ui.RootlyNavGraph
 import com.unibo.rootly.ui.RootlyRoute
+import com.unibo.rootly.ui.composables.TopBar
 import com.unibo.rootly.ui.theme.RootlyTheme
 import com.unibo.rootly.utils.LocationService
 import com.unibo.rootly.viewmodel.SettingsViewModel
@@ -39,6 +42,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val context = LocalContext.current
             val settingsVM = koinViewModel<SettingsViewModel>()
+
 
             RootlyTheme(
                 darkTheme = when (settingsVM.state.theme) {
@@ -63,7 +67,22 @@ class MainActivity : ComponentActivity() {
 
                     val userId = sharedPreferences.getInt("userId",-1)
                     if ( userId > 0) {
-                        RootlyNavGraph(navController, settingsVM, sharedPreferences, locationService, userId)
+                        Scaffold(
+                            topBar = { TopBar(
+                                navController = navController,
+                                currentRoute = currentRoute,
+                                sharedPreferences = sharedPreferences,
+                                context = context
+                            )}
+                        ) { innerPadding ->
+                            RootlyNavGraph(
+                                navController = navController,
+                                settingsVM = settingsVM,
+                                locationService = locationService,
+                                userId = userId,
+                                modifier = Modifier.padding(innerPadding)
+                            )
+                        }
                     } else {
                         context.startActivity(Intent(context, LoginActivity::class.java))
                         (context as Activity).finish()

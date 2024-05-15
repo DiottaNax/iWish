@@ -4,20 +4,17 @@ import android.Manifest
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -25,7 +22,6 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
@@ -34,22 +30,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.unibo.rootly.data.database.Plant
-import com.unibo.rootly.ui.RootlyRoute
-import com.unibo.rootly.ui.composables.TopBar
-import com.unibo.rootly.utils.Notifications
 import com.unibo.rootly.utils.rememberCameraLauncher
 import com.unibo.rootly.utils.rememberPermission
 import com.unibo.rootly.viewmodel.PlantViewModel
@@ -95,46 +86,34 @@ fun AddPlantScreen(
             cameraPermission.launchPermissionRequest()
         }
 
-    Scaffold(
-        topBar = {
-            TopBar(
-                navController = navController,
-                currentRoute = RootlyRoute.AddPlant,
-                scrollBehavior = scrollBehavior
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        Spacer(Modifier.height(16.dp))
+        // Image section
+        if (cameraLauncher.capturedImageUri.path?.isNotEmpty() == true) {
+            AsyncImage(
+                ImageRequest.Builder(ctx)
+                    .data(cameraLauncher.capturedImageUri)
+                    .crossfade(true)
+                    .build(),
+                "Plant image",
+                Modifier.clip(RoundedCornerShape(28.dp))
             )
-        },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-    ) { contentPadding ->
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(6.dp),
-            modifier = Modifier
-                .padding(contentPadding)
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            // Image section
-            if (cameraLauncher.capturedImageUri.path?.isNotEmpty() == true) {
-                AsyncImage(
-                    ImageRequest.Builder(ctx)
-                        .data(cameraLauncher.capturedImageUri)
-                        .crossfade(true)
-                        .build(),
-                    "Plant image",
-                    Modifier.clip(RoundedCornerShape(28.dp))
-                )
-            } else {
-                Image(
-                    Icons.Outlined.Image,
-                    contentDescription = "Plant image",
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(28.dp))
-                        .background(MaterialTheme.colorScheme.secondaryContainer)
-                        .height(256.dp)
-                        .padding(110.dp)
-                        .fillMaxWidth()
-                )
-            }
+        } else {
+            Image(
+                Icons.Outlined.Image,
+                contentDescription = "Plant image",
+                modifier = Modifier
+                    .clip(RoundedCornerShape(28.dp))
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .height(256.dp)
+                    .padding(110.dp)
+                    .fillMaxWidth()
+            )
+        }
 
             // Data input fields
             OutlinedTextField(
@@ -214,5 +193,6 @@ fun AddPlantScreen(
                 }
             }
         }
+        Spacer(Modifier.height(16.dp))
     }
 }
