@@ -13,19 +13,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -41,13 +35,14 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.unibo.rootly.data.database.Plant
+import com.unibo.rootly.ui.composables.DropDownMenuField
+import com.unibo.rootly.ui.composables.TextField
 import com.unibo.rootly.utils.rememberCameraLauncher
 import com.unibo.rootly.utils.rememberPermission
 import com.unibo.rootly.viewmodel.PlantViewModel
 import com.unibo.rootly.viewmodel.UserViewModel
 import java.time.LocalDate
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddPlantScreen(
     navController: NavHostController,
@@ -57,18 +52,7 @@ fun AddPlantScreen(
     var name by rememberSaveable { mutableStateOf("") }
     val possiblePlantTypes = plantViewModel.getAllSpeciesNames()
         .collectAsState(initial = listOf()).value
-
-    var expanded by rememberSaveable { mutableStateOf(false) }
-
     var type by rememberSaveable { mutableStateOf("") }
-
-    // Function to handle selection of plant type and close menu
-    val onPlantTypeSelected: (String) -> Unit = {
-        type = it
-        expanded = false
-    }
-
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val ctx = LocalContext.current
     val cameraLauncher = rememberCameraLauncher()
     val cameraPermission = rememberPermission(Manifest.permission.CAMERA) { status ->
@@ -115,83 +99,60 @@ fun AddPlantScreen(
             )
         }
 
-            // Data input fields
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = name,
-                onValueChange = { name = it },
-                label = {
-                    Text(
-                        text = "Name",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            )
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = {
-                    expanded = !expanded
-                },
-                modifier = Modifier.fillMaxWidth()
-            ){
-                TextField(
-                    value = type,
-                    onValueChange = {},
-                    readOnly = true,
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                    modifier = Modifier.menuAnchor().fillMaxWidth()
-                )
-
-                ExposedDropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    possiblePlantTypes.forEach { item ->
-                        DropdownMenuItem(
-                            text = { Text(text = item) },
-                            onClick = { onPlantTypeSelected(item) }
-                        )
-                    }
-                }
+        // Data input fields
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = name,
+            onChange = { name = it },
+            label = "Name",
+            leadingIcon = {
+                Icon(Icons.Default.Edit, "Name")
             }
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.padding(top = 16.dp)
+        )
+        DropDownMenuField(
+            value = type,
+            label = "Type",
+            list = possiblePlantTypes,
+            onChange = { type = it }
+        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier.padding(top = 16.dp)
+        ) {
+            OutlinedButton(
+                onClick = ::takePicture,
+                modifier = Modifier.weight(1f)
             ) {
-                OutlinedButton(
-                    onClick = ::takePicture,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = "Add image",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-                Button(
-                    onClick = {
-                              if (name != "" && type != ""){
-                                  plantViewModel.insertPlant(
-                                      Plant(
-                                          userId = userViewModel.user!!.userId,
-                                          plantName = name,
-                                          birthday = LocalDate.now(),
-                                          scientificName = type,
-                                          isDead = false,
-                                      )
-                                  )
-                                  navController.navigateUp()
-                              }else{
-                                  Toast.makeText(ctx, "Fill all the data", Toast.LENGTH_SHORT).show()
-                              }
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = "Add plant",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+                Text(
+                    text = "Add image",
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
+            Button(
+                onClick = {
+                    if (name != "" && type != ""){
+                        plantViewModel.insertPlant(
+                            Plant(
+                                userId = userViewModel.user!!.userId,
+                                plantName = name,
+                                birthday = LocalDate.now(),
+                                scientificName = type,
+                                isDead = false,
+                            )
+                        )
+                        navController.navigateUp()
+                    } else {
+                        Toast.makeText(ctx, "Fill all the data", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = "Add plant",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
         Spacer(Modifier.height(16.dp))
     }
 }
