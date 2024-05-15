@@ -221,7 +221,7 @@ class PlantViewModel  @Inject constructor(
 
     //species
 
-    fun getAllSpeciesName() = speciesRepository.getAllSpeciesName()
+    fun getAllSpeciesNames() = speciesRepository.getAllSpeciesName()
 
     //badges
 
