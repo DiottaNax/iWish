@@ -46,7 +46,7 @@ fun TopBar(
         },
         navigationIcon = {
             if (navController.previousBackStackEntry != null &&
-                NavBarItem.entries.none { it.route == currentRoute}) {
+                navBarItems.none { it.route == currentRoute}) {
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
