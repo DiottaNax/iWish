@@ -19,15 +19,28 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.unibo.rootly.ui.RootlyRoute
 
-enum class NavBarItem(
+sealed class NavBarItem(
     val icon: ImageVector,
     val iconOnSelect: ImageVector,
     val route: RootlyRoute
 ) {
-    Home(Icons.Outlined.Checklist, Icons.Filled.Checklist, RootlyRoute.Home),
-    Profile(Icons.Outlined.Person, Icons.Filled.Person, RootlyRoute.UserProfile),
-    Settings(Icons.Outlined.Settings, Icons.Filled.Settings, RootlyRoute.Settings)
+    data object Home: NavBarItem(
+        Icons.Outlined.Checklist,
+        Icons.Filled.Checklist,
+        RootlyRoute.Home
+    )
+    data object Profile: NavBarItem(
+        Icons.Outlined.Person,
+        Icons.Filled.Person, RootlyRoute.UserProfile
+    )
+    data object Settings: NavBarItem(
+        Icons.Outlined.Settings,
+        Icons.Filled.Settings,
+        RootlyRoute.Settings
+    )
 }
+val navBarItems = listOf(NavBarItem.Home, NavBarItem.Profile, NavBarItem.Settings)
+
 @Composable
 fun BottomBar(
     navController: NavHostController,
@@ -37,7 +50,7 @@ fun BottomBar(
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.surfaceContainer
     ) {
-        NavBarItem.entries.forEach {
+        navBarItems.forEach {
             val isSelected = (currentRoute == it.route)
             NavigationBarItem(
                 icon = {

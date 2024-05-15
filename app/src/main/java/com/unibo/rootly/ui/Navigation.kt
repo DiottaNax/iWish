@@ -91,7 +91,11 @@ fun RootlyNavGraph(
         }
         with(RootlyRoute.Settings) {
             composable(route) {
-                SettingsScreen(navController, settingsVM, settingsVM.state)
+                SettingsScreen(
+                    navController,
+                    settingsVM,
+                    settingsVM.state
+                )
             }
         }
     }

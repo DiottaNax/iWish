@@ -24,16 +24,12 @@ class UserViewModel : ViewModel(), KoinComponent {
     fun getReceivedBadgesByUser(userId: Int) = receivedRepository.getByUser(userId)
 
     fun login(username: String, password: String) : Int{
-        val user = getUserByName(username);
+        val user = getUserByName(username)
         return if(user != null && password == user.password){
             user.userId
         }else{
             -1
         }
-    }
-
-    fun logout(){
-        _user = null
     }
 
     fun setUser(userId: Int) {
