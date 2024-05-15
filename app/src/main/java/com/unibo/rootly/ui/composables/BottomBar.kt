@@ -34,7 +34,9 @@ fun BottomBar(
     currentRoute: RootlyRoute,
     modifier: Modifier = Modifier
 ) {
-    NavigationBar {
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.surfaceContainer
+    ) {
         NavBarItem.entries.forEach {
             val isSelected = (currentRoute == it.route)
             NavigationBarItem(

@@ -1,21 +1,26 @@
 package com.unibo.rootly.ui.composables
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
+import com.unibo.rootly.MainActivity
 import com.unibo.rootly.ui.RootlyRoute
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -23,14 +28,13 @@ import com.unibo.rootly.ui.RootlyRoute
 fun TopBar(
     navController: NavHostController,
     currentRoute: RootlyRoute,
-    scrollBehavior: TopAppBarScrollBehavior,
+    sharedPreferences: SharedPreferences,
+    context: Context,
     modifier: Modifier = Modifier
 ) {
-    LargeTopAppBar(
+    TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background,
-            scrolledContainerColor = MaterialTheme.colorScheme.background,
-            titleContentColor = MaterialTheme.colorScheme.onBackground
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
         title = {
             Text(
@@ -54,7 +58,20 @@ fun TopBar(
                 }
             }
         },
-        scrollBehavior = scrollBehavior,
+
+        actions = {
+            if (currentRoute == RootlyRoute.UserProfile) {
+                IconButton(onClick = {
+                    val editor: SharedPreferences.Editor = sharedPreferences.edit()
+                    editor.putInt("userId", -1)
+                    editor.apply()
+                    context.startActivity(Intent(context, MainActivity::class.java))
+                    (context as Activity).finish()
+                }) {
+                    Icon(Icons.AutoMirrored.Filled.Logout, "Logout")
+                }
+            }
+        },
         modifier = modifier
     )
 }

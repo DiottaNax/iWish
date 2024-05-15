@@ -1,6 +1,5 @@
 package com.unibo.rootly.ui
 
-import android.content.SharedPreferences
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,7 +42,6 @@ sealed class RootlyRoute(
 fun RootlyNavGraph(
     navController: NavHostController,
     settingsVM: SettingsViewModel,
-    sharedPreferences: SharedPreferences,
     locationService: LocationService,
     userId: Int,
     modifier: Modifier = Modifier
@@ -67,13 +65,12 @@ fun RootlyNavGraph(
             }
         }
         with(RootlyRoute.UserProfile) {
-            composable(route, arguments) { backStackEntry ->
+            composable(route, arguments) {
                 UserProfileScreen(
                     navController,
                     userViewModel,
-                    sharedPreferences,
-                    locationService,
-                    userId = backStackEntry.arguments?.getString("userId") ?: "")
+                    locationService
+                )
             }
         }
         with(RootlyRoute.PlantDetails) {

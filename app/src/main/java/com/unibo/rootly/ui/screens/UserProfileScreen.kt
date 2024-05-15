@@ -1,9 +1,7 @@
 package com.unibo.rootly.ui.screens
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.location.Geocoder
 import android.net.Uri
 import android.provider.Settings
@@ -14,6 +12,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,8 +24,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddPhotoAlternate
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,8 +34,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -49,16 +44,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.unibo.rootly.MainActivity
 import com.unibo.rootly.ui.RootlyRoute
 import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.ui.composables.DefaultCard
 import com.unibo.rootly.ui.composables.ImageDisplay
-import com.unibo.rootly.ui.composables.TopBar
 import com.unibo.rootly.utils.LocationService
 import com.unibo.rootly.utils.PermissionStatus
 import com.unibo.rootly.utils.StartMonitoringResult
@@ -66,23 +58,18 @@ import com.unibo.rootly.utils.rememberPermission
 import com.unibo.rootly.viewmodel.UserViewModel
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserProfileScreen(
     navController: NavHostController,
     userViewModel: UserViewModel,
-    sharedPreferences: SharedPreferences,
-    locationService: LocationService,
-    userId: String
+    locationService: LocationService
 ) {
     val user = userViewModel.user!!
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val badgesReceived = userViewModel.getReceivedBadgesByUser(user.userId).collectAsState(initial = listOf()).value
-
     var photoUri: Uri? by remember { mutableStateOf(null) } //TODO: save photo
     val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.PickVisualMedia()) { uri -> photoUri = uri }
-    val context = LocalContext.current
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri -> photoUri = uri }
     val snackbarHostState = remember { SnackbarHostState() }
     var showLocationDisabledAlert by remember { mutableStateOf(false) }
     var showPermissionDeniedAlert by remember { mutableStateOf(false) }
@@ -117,28 +104,19 @@ fun UserProfileScreen(
     }
 
     Scaffold(
-        topBar = {
-            TopBar(
-                navController = navController,
-                currentRoute = RootlyRoute.UserProfile,
-                scrollBehavior = scrollBehavior
-            )
-        },
         bottomBar = {
             BottomBar(
                 navController = navController,
                 currentRoute = RootlyRoute.UserProfile
             )
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
+            contentPadding = PaddingValues(16.dp, 16.dp),
+            modifier = Modifier.padding(innerPadding)
         ) {
             item {
                 Column(
@@ -151,7 +129,7 @@ fun UserProfileScreen(
                         modifier = Modifier.size(160.dp)
                     ) {
                         ImageDisplay(
-                            uri = photoUri, 
+                            uri = photoUri,
                             contentDescription = "Profile photo",
                             modifier = Modifier
                                 .fillMaxSize()
@@ -169,20 +147,8 @@ fun UserProfileScreen(
                             Icon(Icons.Filled.AddPhotoAlternate, "Add a photo")
                         }
                     }
-                    Button(
-                        onClick = {
-                            val editor: SharedPreferences.Editor = sharedPreferences.edit()
-                            editor.putInt("userId", -1)
-                            userViewModel.logout()
-                            editor.apply()
-                            context.startActivity(Intent(context, MainActivity::class.java))
-                            (context as Activity).finish()
-                        }
-                    ) {
-                        Text(text = "Logout")
-                    }
                     Text(
-                        text = user.username,
+                        text = "Giorgio",
                         style = MaterialTheme.typography.titleLarge
                     )
                     Text(
@@ -281,8 +247,8 @@ fun getLocationName(latitude: Double, longitude: Double): String {
     val addresses = geocoder.getFromLocation(latitude, longitude, 1)
     return if (!addresses.isNullOrEmpty()) {
         val city = addresses[0].locality ?: "City not found"
-        val state = addresses[0].adminArea ?: "State not found"
-        "$city, $state"
+        val country = addresses[0].countryName ?: "State not found"
+        "$city, $country"
     } else {
         "Location not found, click to sync"
     }
