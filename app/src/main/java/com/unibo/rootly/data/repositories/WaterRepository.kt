@@ -13,16 +13,16 @@ class WaterRepository @Inject constructor(
     suspend fun insert(water: Water) = waterDao.insertWater(water)
 
     @WorkerThread
-    fun getSoon(userId: Int) = waterDao.getSoonWater(userId)
+    fun getDuesBeforeDate(userId: Int, date :LocalDate = LocalDate.now()) = waterDao.getWaterBeforeDate(userId,date)
 
     @WorkerThread
-    fun getToday(userId: Int) = waterDao.getTodayWater(userId)
+    fun getAll(userId: Int) = waterDao.getAllWater(userId)
 
     @WorkerThread
-    fun getFavoritesSoon(userId: Int) = waterDao.getSoonFavoriteWater(userId)
+    fun getDuesBeforeDateFavorites(userId: Int, date :LocalDate = LocalDate.now()) = waterDao.getWaterBeforeDateFavorites(userId,date)
 
     @WorkerThread
-    fun getFavoritesToday(userId: Int) = waterDao.getTodayFavoriteWater(userId)
+    fun getAllFavorites(userId: Int) = waterDao.getAllWaterFavorites(userId)
     @WorkerThread
     suspend fun remove(plantId: Int, date: LocalDate) {
         waterDao.removeWater(plantId,date)

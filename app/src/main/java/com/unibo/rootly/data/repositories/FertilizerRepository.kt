@@ -13,16 +13,16 @@ class FertilizerRepository @Inject constructor(
     suspend fun insert(fertilizer: Fertilizer) = fertilizerDao.insertFertilizer(fertilizer)
 
     @WorkerThread
-    fun getSoon(userId: Int) = fertilizerDao.getSoonFertilizer(userId)
+    fun getDuesBeforeDateFavorites(userId: Int, date: LocalDate = LocalDate.now()) = fertilizerDao.getFertilizeBeforeDateFavorites(userId,date)
 
     @WorkerThread
-    fun getToday(userId: Int) = fertilizerDao.getTodayFertilizer(userId)
+    fun getAllFavorites(userId: Int) = fertilizerDao.getAllFertilizeFavorites(userId)
 
     @WorkerThread
-    fun getFavoritesSoon(userId: Int) = fertilizerDao.getFavoriteSoonFertilizer(userId)
+    fun getDuesBeforeDate(userId: Int, date: LocalDate = LocalDate.now()) = fertilizerDao.getFertilizeBeforeDate(userId,date)
 
     @WorkerThread
-    fun getFavoritesToday(userId: Int) = fertilizerDao.getFavoriteTodayFertilizer(userId)
+    fun getAll(userId: Int) = fertilizerDao.getAllFertilize(userId)
     @WorkerThread
     suspend fun remove(plantId: Int, date: LocalDate) {
         fertilizerDao.removeFertilize(plantId,date)

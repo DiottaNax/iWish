@@ -13,9 +13,6 @@ class PlantRepository @Inject constructor(
     suspend fun insert(plant: Plant) = plantDao.insertPlant(plant)
 
     @WorkerThread
-    fun getByUser(userId: Int) : Flow<List<Plant>> = plantDao.getPlantsByUser(userId)
-
-    @WorkerThread
     suspend fun insertDead(plantId: Int) = plantDao.insertDead(plantId)
 
     @WorkerThread

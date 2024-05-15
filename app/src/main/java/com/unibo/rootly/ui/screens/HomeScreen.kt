@@ -43,6 +43,7 @@ import com.unibo.rootly.viewmodel.PlantCard
 import com.unibo.rootly.viewmodel.PlantViewModel
 import com.unibo.rootly.viewmodel.UserViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import kotlin.time.Duration.Companion.milliseconds
@@ -70,30 +71,7 @@ fun HomeScreen(
     val userId = userViewModel.user!!.userId
 
     var selectedFilters by remember { mutableStateOf(emptyList<Filter>()) }
-    var soonWater = emptyList<PlantCard>()
-    var soonFertilizer = emptyList<PlantCard>()
-    var todayWater = emptyList<PlantCard>()
-    var todayFertilizer = emptyList<PlantCard>()
-    var plants = emptyList<PlantCard>().toMutableList()
-
-    if (selectedFilters.contains(Filter.Favourites)){
-        soonWater =
-            plantViewModel.getFavoritesSoonWater(userId).collectAsState(initial = listOf()).value
-        soonFertilizer =
-            plantViewModel.getFavoritesSoonFertilizer(userId).collectAsState(initial = listOf()).value
-        todayWater =
-            plantViewModel.getFavoritesTodayWater(userId).collectAsState(initial = listOf()).value
-        todayFertilizer =
-            plantViewModel.getFavoritesTodayFertilizer(userId).collectAsState(initial = listOf()).value
-    }else{
-        soonWater = plantViewModel.getSoonWater(userId).collectAsState(initial = listOf()).value
-        soonFertilizer =
-            plantViewModel.getSoonFertilizer(userId).collectAsState(initial = listOf()).value
-        todayWater =
-            plantViewModel.getTodayWater(userId).collectAsState(initial = listOf()).value
-        todayFertilizer =
-            plantViewModel.getTodayFertilizer(userId).collectAsState(initial = listOf()).value
-    }
+    val plants = emptySet<PlantCard>().toMutableSet()
 
     Scaffold (
         floatingActionButton = {
@@ -135,47 +113,29 @@ fun HomeScreen(
             )
         }
     ) { contentPadding ->
+
+        plants.clear()
+        if(selectedFilters.contains(Filter.Water)){
+            plants.addAll(getDueWater(selectedFilters,plantViewModel,userId)
+                .collectAsState(initial = listOf()).value)
+        }else if(selectedFilters.contains(Filter.Fertilize)){
+            plants.addAll(getDueFertilizer(selectedFilters,plantViewModel,userId)
+                .collectAsState(initial = listOf()).value)
+        }else{
+            plants.addAll(getDueWater(selectedFilters, plantViewModel, userId)
+                .collectAsState(initial = listOf()).value)
+            plants.addAll(getDueFertilizer(selectedFilters, plantViewModel, userId)
+                .collectAsState(initial = listOf()).value)
+        }
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(16.dp, 16.dp),
             modifier = Modifier.padding(contentPadding)
         ) {
-            val toShow = selectedFilters.toMutableList()
-            plants.clear()
 
-            if (!toShow.contains(Filter.ThisWeek)
-                && !toShow.contains(Filter.Today)){
-                toShow += Filter.Today
-                toShow += Filter.ThisWeek
-            }
-
-            if (!toShow.contains(Filter.Water)
-                && !toShow.contains(Filter.Fertilize)){
-                toShow += Filter.Water
-                toShow += Filter.Fertilize
-            }
-
-            if(toShow.contains(Filter.Today)) {
-                if(toShow.contains(Filter.Water)){
-                    plants.addAll(todayWater)
-                }
-                if(toShow.contains(Filter.Fertilize)){
-                    plants.addAll(todayFertilizer)
-                }
-            }
-
-            if (toShow.contains(Filter.ThisWeek)){
-                if(toShow.contains(Filter.Water)){
-                    plants.addAll(soonWater)
-                }
-
-                if(toShow.contains(Filter.Fertilize)){
-                    plants.addAll(soonFertilizer)
-                }
-            }
-
-            items(plants,
+            items(plants.toMutableList().sortedBy { it.date },
                 key = {"${it.plant.plantId}${it.activity}${it.date}"}
             ) { plant ->
                 ActivityCard(
@@ -219,6 +179,52 @@ fun HomeScreen(
                     modifier = Modifier.animateItemPlacement(tween(100))
                 )
             }
+        }
+    }
+}
+
+fun getDueFertilizer(selectedFilters: List<Filter>, plantViewModel: PlantViewModel, userId: Int)
+        :Flow<List<PlantCard>> {
+    if (selectedFilters.contains(Filter.Today)){
+        return if(selectedFilters.contains(Filter.Favourites)){
+            plantViewModel.getFertilizerBeforeDateFavorite(userId, LocalDate.now())
+        }else{
+            plantViewModel.getFertilizerBeforeDate(userId, LocalDate.now())
+        }
+    }else if(selectedFilters.contains(Filter.ThisWeek)){
+        return if(selectedFilters.contains(Filter.Favourites)){
+            plantViewModel.getFertilizerBeforeDateFavorite(userId, LocalDate.now().plusDays(7L))
+        }else{
+            plantViewModel.getFertilizerBeforeDate(userId, LocalDate.now().plusDays(7L))
+        }
+    }else{
+        return if(selectedFilters.contains(Filter.Favourites)){
+            plantViewModel.getAllFertilizerFavorite(userId)
+        }else{
+            plantViewModel.getAllFertilizer(userId)
+        }
+    }
+}
+
+fun getDueWater(selectedFilters: List<Filter>, plantViewModel: PlantViewModel, userId: Int)
+        :Flow<List<PlantCard>> {
+    if (selectedFilters.contains(Filter.Today)){
+        return if(selectedFilters.contains(Filter.Favourites)){
+            plantViewModel.getWaterBeforeDateFavorite(userId, LocalDate.now())
+        }else{
+            plantViewModel.getWaterBeforeDate(userId, LocalDate.now())
+        }
+    }else if(selectedFilters.contains(Filter.ThisWeek)){
+        return if(selectedFilters.contains(Filter.Favourites)){
+            plantViewModel.getWaterBeforeDateFavorite(userId, LocalDate.now().plusDays(7L))
+        }else{
+            plantViewModel.getWaterBeforeDate(userId, LocalDate.now().plusDays(7L))
+        }
+    }else{
+        return if(selectedFilters.contains(Filter.Favourites)){
+            plantViewModel.getAllWaterFavorite(userId)
+        }else{
+            plantViewModel.getAllWater(userId)
         }
     }
 }

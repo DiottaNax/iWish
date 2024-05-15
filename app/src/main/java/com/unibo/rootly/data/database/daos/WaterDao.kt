@@ -19,52 +19,43 @@ interface WaterDao {
 
     @Query("SELECT p.* " +
             "FROM Plant p " +
-            "left outer JOIN (SELECT  plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY plant_id) w " +
+            "LEFT OUTER JOIN (SELECT plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY plant_id) w " +
             "ON p.plant_id = w.plant_id " +
             "JOIN Specie s ON s.scientific_name = p.scientific_name " +
-            "WHERE p.user_id = :userId and p.dead = 0" +
-            " AND s.water_frequency <=" +
-            "   Cast ((julianday('now') - julianday(w.last_watered_date)) As Integer)")
-    fun getTodayWater(userId: Int): Flow<List<Plant>>
+            "WHERE p.user_id = :userId AND p.dead = 0 " +
+            "AND s.water_frequency <= CAST((julianday(:today) - julianday(w.last_watered_date)) AS INTEGER)")
+    fun getWaterBeforeDate(userId: Int, today: LocalDate): Flow<List<Plant>>
+
 
     @Query("SELECT p.* " +
             "FROM Plant p " +
             "left outer JOIN (SELECT  plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY plant_id) w " +
             "ON p.plant_id = w.plant_id " +
             "JOIN Specie s ON s.scientific_name = p.scientific_name " +
-            "WHERE p.user_id = :userId  and p.dead = 0 " +
-            "AND s.water_frequency > " +
-            "   Cast ((julianday('now') - julianday(w.last_watered_date)) As Integer)" +
-            "AND s.water_frequency <=" +
-            "   Cast ((julianday('now') - julianday(w.last_watered_date)) As Integer) + 2")
-    fun getSoonWater(userId: Int): Flow<List<Plant>>
+            "WHERE p.user_id = :userId  and p.dead = 0 ")
+    fun getAllWater(userId: Int): Flow<List<Plant>>
+
+    @Query("SELECT p.* " +
+            "FROM Plant p " +
+            "LEFT OUTER JOIN (SELECT plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY plant_id) w " +
+            "ON p.plant_id = w.plant_id " +
+            "JOIN Specie s ON s.scientific_name = p.scientific_name " +
+            "WHERE p.user_id = :userId AND p.dead = 0 and p.favorite = 1 " +
+            "AND s.water_frequency <= CAST((julianday(:today) - julianday(w.last_watered_date)) AS INTEGER)")
+    fun getWaterBeforeDateFavorites(userId: Int, today: LocalDate): Flow<List<Plant>>
 
     @Query("SELECT p.* " +
             "FROM Plant p " +
             "left outer JOIN (SELECT  plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY plant_id) w " +
             "ON p.plant_id = w.plant_id " +
             "JOIN Specie s ON s.scientific_name = p.scientific_name " +
-            "WHERE p.user_id = :userId and p.dead = 0 and p.favorite = 1" +
-            " AND s.water_frequency <=" +
-            "   Cast ((julianday('now') - julianday(w.last_watered_date)) As Integer)")
-    fun getTodayFavoriteWater(userId: Int): Flow<List<Plant>>
-
-    @Query("SELECT p.* " +
-            "FROM Plant p " +
-            "left outer JOIN (SELECT  plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY plant_id) w " +
-            "ON p.plant_id = w.plant_id " +
-            "JOIN Specie s ON s.scientific_name = p.scientific_name " +
-            "WHERE p.user_id = :userId  and p.dead = 0  and p.favorite = 1 " +
-            "AND s.water_frequency > " +
-            "   Cast ((julianday('now') - julianday(w.last_watered_date)) As Integer)" +
-            "AND s.water_frequency <=" +
-            "   Cast ((julianday('now') - julianday(w.last_watered_date)) As Integer) + 2")
-    fun getSoonFavoriteWater(userId: Int): Flow<List<Plant>>
+            "WHERE p.user_id = :userId  and p.dead = 0 and p.favorite = 1")
+    fun getAllWaterFavorites(userId: Int): Flow<List<Plant>>
     @Query("DELETE FROM Water WHERE plant_id = :plantId AND date = :date")
     suspend fun removeWater(plantId: Int, date: LocalDate)
 
     @Query("SELECT MAX(date) FROM Water WHERE plant_id = :plantId")
-    fun getLastWateredDate(plantId: Int) :LocalDate
+    fun getLastWateredDate(plantId: Int) :LocalDate?
 
     @Query("SELECT COUNT(*) " +
             "FROM Water w join Plant p " +

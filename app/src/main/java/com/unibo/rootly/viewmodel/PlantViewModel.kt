@@ -65,8 +65,6 @@ class PlantViewModel  @Inject constructor(
         }
     }
 
-    fun getPlantsByUser(userId: Int) = plantRepository.getByUser(userId)
-
     //like
     fun addLike(plantId : Int) = viewModelScope.launch {
         plantRepository.insertLike(plantId)
@@ -100,7 +98,7 @@ class PlantViewModel  @Inject constructor(
         }
     }
 
-    fun getSoonWater(userId: Int) = waterRepository.getSoon(userId).map { plants ->
+    fun getAllWater(userId: Int) = waterRepository.getAll(userId).map { plants ->
         plants.map { plant ->
             PlantCard(
                 plant = plant,
@@ -110,7 +108,8 @@ class PlantViewModel  @Inject constructor(
         }
     }
 
-    fun getTodayWater(userId: Int) = waterRepository.getToday(userId).map { plants ->
+    fun getWaterBeforeDate(userId: Int, date: LocalDate)
+    = waterRepository.getDuesBeforeDate(userId,date).map { plants ->
         plants.map { plant ->
             PlantCard(
                 plant = plant,
@@ -120,7 +119,8 @@ class PlantViewModel  @Inject constructor(
         }
     }
 
-    fun getFavoritesSoonWater(userId: Int) = waterRepository.getFavoritesSoon(userId).map { plants ->
+    fun getWaterBeforeDateFavorite(userId: Int, date: LocalDate) =
+        waterRepository.getDuesBeforeDateFavorites(userId, date).map { plants ->
         plants.map { plant ->
             PlantCard(
                 plant = plant,
@@ -130,7 +130,7 @@ class PlantViewModel  @Inject constructor(
         }
     }
 
-    fun getFavoritesTodayWater(userId: Int) = waterRepository.getFavoritesToday(userId).map { plants ->
+    fun getAllWaterFavorite(userId: Int) = waterRepository.getAllFavorites(userId).map { plants ->
         plants.map { plant ->
             PlantCard(
                 plant = plant,
@@ -145,11 +145,11 @@ class PlantViewModel  @Inject constructor(
     }
 
     suspend fun getNextWater(plant: Plant): LocalDate? = withContext(Dispatchers.IO) {
+        val lastWaterDate = waterRepository.getLastWaterDate(plant.plantId) ?: plant.birthday
         speciesRepository.getByName(plant.scientificName)?.waterFrequency?.let { waterFrequency ->
-            waterRepository.getLastWaterDate(plant.plantId).plusDays(waterFrequency.toLong())
+            lastWaterDate.plusDays(waterFrequency.toLong())
         }
     }
-
     //fertilizer
 
     fun insertFertilizer(plant: Plant, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
@@ -167,7 +167,7 @@ class PlantViewModel  @Inject constructor(
         }
     }
 
-    fun getSoonFertilizer(userId: Int) = fertilizerRepository.getSoon(userId).map { plants ->
+    fun getAllFertilizer(userId: Int) = fertilizerRepository.getAll(userId).map { plants ->
         plants.map { plant ->
             PlantCard(
                 plant = plant,
@@ -177,8 +177,8 @@ class PlantViewModel  @Inject constructor(
         }
     }
 
-
-    fun getTodayFertilizer(userId: Int) = fertilizerRepository.getToday(userId).map { plants ->
+    fun getFertilizerBeforeDate(userId: Int, date: LocalDate)
+            = fertilizerRepository.getDuesBeforeDate(userId,date).map { plants ->
         plants.map { plant ->
             PlantCard(
                 plant = plant,
@@ -188,18 +188,19 @@ class PlantViewModel  @Inject constructor(
         }
     }
 
-
-    fun getFavoritesSoonFertilizer(userId: Int) = fertilizerRepository.getFavoritesSoon(userId).map { plants ->
-        plants.map { plant ->
-            PlantCard(
-                plant = plant,
-                activity = FERTILIZE,
-                date = getNextFertilize(plant)
-            )
+    fun getFertilizerBeforeDateFavorite(userId: Int, date: LocalDate) =
+        fertilizerRepository.getDuesBeforeDateFavorites(userId, date).map { plants ->
+            plants.map { plant ->
+                PlantCard(
+                    plant = plant,
+                    activity = FERTILIZE,
+                    date = getNextFertilize(plant)
+                )
+            }
         }
-    }
 
-    fun getFavoritesTodayFertilizer(userId: Int) = fertilizerRepository.getFavoritesToday(userId).map { plants ->
+    fun getAllFertilizerFavorite(userId: Int) =
+        fertilizerRepository.getDuesBeforeDateFavorites(userId).map { plants ->
         plants.map { plant ->
             PlantCard(
                 plant = plant,
@@ -214,8 +215,9 @@ class PlantViewModel  @Inject constructor(
     }
 
     suspend fun getNextFertilize(plant: Plant): LocalDate? = withContext(Dispatchers.IO) {
+        val lastFertilized = fertilizerRepository.getLastFertilizeDate(plant.plantId) ?: plant.birthday
         speciesRepository.getByName(plant.scientificName)?.fertilizerFrequency?.let { fertilizerFrequency ->
-            fertilizerRepository.getLastFertilizeDate(plant.plantId).plusDays(fertilizerFrequency.toLong())
+            lastFertilized.plusDays(fertilizerFrequency.toLong())
         }
     }
 

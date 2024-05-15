@@ -14,9 +14,6 @@ interface PlantDao {
 
     suspend fun insertAllPlants(plants : List<Plant>) = plants.forEach { plant ->  insertPlant(plant)}
 
-    @Query("SELECT * FROM Plant WHERE user_id = :userId")
-    fun getPlantsByUser(userId: Int): Flow<List<Plant>>
-
     @Query("UPDATE plant SET favorite = 1 WHERE plant_id = :plantId ")
     suspend fun insertLike(plantId : Int)
 
