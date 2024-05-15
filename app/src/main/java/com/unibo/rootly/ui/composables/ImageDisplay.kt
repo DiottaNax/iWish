@@ -20,7 +20,7 @@ fun ImageDisplay(
     uri: Uri?,
     contentDescription: String,
     modifier: Modifier = Modifier,
-    defaultHigh: Dp = 40.dp
+    defaultHigh: Dp = 80.dp
 ) {
     if (uri != null) {
         AsyncImage(
