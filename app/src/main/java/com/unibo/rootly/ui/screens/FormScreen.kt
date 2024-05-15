@@ -37,7 +37,7 @@ import com.unibo.rootly.LoginActivity
 import com.unibo.rootly.MainActivity
 import com.unibo.rootly.RegistrationActivity
 import com.unibo.rootly.data.database.User
-import com.unibo.rootly.ui.composables.LoginField
+import com.unibo.rootly.ui.composables.TextField
 import com.unibo.rootly.ui.composables.PasswordField
 import com.unibo.rootly.viewmodel.UserViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -61,7 +61,9 @@ sealed class FormScreen(
         title ="rootly",
         buttonText = "Login",
         submit = { username, password, vm, scope, sharedPreferences, context ->
-            checkLoginCredentials(username, password, vm, sharedPreferences, context)
+            scope.launch {
+                checkLoginCredentials(username, password, vm, sharedPreferences, context)
+            }
         },
         switchText = "Aren't you signed yet? ",
         switchButtonText = "Create an account",
@@ -123,7 +125,7 @@ fun FormScreen(
             )
 
             Column {
-                LoginField(
+                TextField(
                     value = username,
                     onChange = { username = it },
                     label = "Username",
