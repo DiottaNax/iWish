@@ -148,7 +148,7 @@ fun UserProfileScreen(
                         }
                     }
                     Text(
-                        text = "Giorgio",
+                        text = user.username,
                         style = MaterialTheme.typography.titleLarge
                     )
                     Text(
