@@ -61,9 +61,9 @@ fun ActivityCard(
         backgroundContent = {
             val color by animateColorAsState(   // Define background color
                 when (dismissState.targetValue) {
-                    SwipeToDismissBoxValue.Settled -> MaterialTheme.colorScheme.background
-                    SwipeToDismissBoxValue.StartToEnd -> MaterialTheme.colorScheme.primary
-                    SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.primary
+                    SwipeToDismissBoxValue.Settled -> MaterialTheme.colorScheme.surface
+                    SwipeToDismissBoxValue.StartToEnd -> MaterialTheme.colorScheme.primaryContainer
+                    SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.primaryContainer
                 }, label = "Changing color"
             )
             Box(
@@ -85,8 +85,7 @@ fun ActivityCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize()
             ) {
                 // Data section (Info on the current activity)
                 Column(
@@ -108,30 +107,29 @@ fun ActivityCard(
                     ) {
                         Text(
                             text = activity,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
 
                         )
                         Text(
                             text = date,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 }
 
-                // Image section
-                Box(
-                    modifier = Modifier.aspectRatio(0.75f)
-                ) {
-                    Image(  //TODO: add the right image
-                        Icons.Outlined.Image,
-                        "Plant image",
-                        contentScale = ContentScale.None,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(MaterialTheme.colorScheme.secondary)
-                    )
-                }
+            // Image section
+            Image(  //TODO: add the right image
+                    Icons.Outlined.Image,
+                    "Plant image",
+                    contentScale = ContentScale.None,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
+                    modifier = Modifier
+                        .aspectRatio(0.75f)
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.secondary)
+                )
             }
         }
     }

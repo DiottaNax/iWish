@@ -17,7 +17,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
 import com.unibo.rootly.MainActivity
@@ -41,10 +40,8 @@ fun TopBar(
                 text = currentRoute.title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.headlineLarge.copy(
-                    fontFamily = FontFamily.Serif,
-                    fontWeight = FontWeight.Bold,
-                )
+                style = MaterialTheme.typography.headlineLarge.copy(fontFamily = FontFamily.Serif),
+                color = MaterialTheme.colorScheme.onSurface
             )
         },
         navigationIcon = {
@@ -53,7 +50,8 @@ fun TopBar(
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                        contentDescription = "Back button"
+                        contentDescription = "Back button",
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
@@ -68,7 +66,11 @@ fun TopBar(
                     context.startActivity(Intent(context, MainActivity::class.java))
                     (context as Activity).finish()
                 }) {
-                    Icon(Icons.AutoMirrored.Filled.Logout, "Logout")
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Logout,
+                        contentDescription = "Logout button",
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             }
         },
