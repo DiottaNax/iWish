@@ -1,12 +1,15 @@
 package com.unibo.rootly.utils
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Icon
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.drawable.IconCompat
 import com.unibo.rootly.MainActivity
 import com.unibo.rootly.R
 
@@ -17,7 +20,8 @@ object Notifications {
         applicationContext = context.applicationContext
     }
 
-    fun sendNotification(title: String, text: String? = null) {
+    @SuppressLint("RestrictedApi")
+    fun sendNotification(title: String, text: String? = null, channelName: String) {
         val notificationManager =
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -25,7 +29,7 @@ object Notifications {
 
         val channel = NotificationChannel(
             channelId,
-            "Channel Name",
+            channelName,
             NotificationManager.IMPORTANCE_DEFAULT
         )
         notificationManager.createNotificationChannel(channel)
@@ -38,13 +42,20 @@ object Notifications {
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
+
         val notificationBuilder = NotificationCompat.Builder(applicationContext, channelId)
             .setContentTitle(title)
             .setContentText(text)
-            .setSmallIcon(R.mipmap.logo_round)
+            .setSmallIcon(R.drawable.icon)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setLargeIcon(
+                BitmapFactory.decodeResource(
+                    applicationContext.resources,
+                    R.mipmap.logo
+                )
+            )
 
         notificationManager.notify(0, notificationBuilder.build())
     }

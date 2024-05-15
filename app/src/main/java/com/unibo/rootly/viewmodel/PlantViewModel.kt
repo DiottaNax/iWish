@@ -227,7 +227,7 @@ class PlantViewModel : ViewModel(), KoinComponent {
         receivedRepository.insert(Received(name, userId))
         val badgeNotificationText = "Congratulations, you received a new badge!" +
                 "go to your profile to see it"
-        Notifications.sendNotification(name,badgeNotificationText)
+        Notifications.sendNotification(name,badgeNotificationText,"Badge Received")
     }
 
     fun getLastDate(activity: String, plant: Plant): LocalDate {
