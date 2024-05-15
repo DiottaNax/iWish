@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -94,6 +95,7 @@ fun AddPlantScreen(
                 Image(
                     Icons.Outlined.Image,
                     contentDescription = "Plant image",
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
                     modifier = Modifier
                         .clip(RoundedCornerShape(28.dp))
                         .background(MaterialTheme.colorScheme.secondary)
@@ -106,7 +108,10 @@ fun AddPlantScreen(
                 onClick = ::takePicture,
                 modifier = Modifier.padding(4.dp)
             ) {
-                Icon(Icons.Default.AddAPhoto, "Add a photo")
+                Icon(
+                    Icons.Default.AddAPhoto,
+                    contentDescription = "Add a photo"
+                )
             }
         }
         // Data input fields
@@ -116,7 +121,11 @@ fun AddPlantScreen(
             onChange = { name = it },
             label = "Name",
             leadingIcon = {
-                Icon(Icons.Default.Edit, "Name")
+                Icon(
+                    Icons.Default.Edit,
+                    contentDescription = "Name",
+                    tint = MaterialTheme.colorScheme.secondary
+                )
             }
         )
         DropDownMenuField(

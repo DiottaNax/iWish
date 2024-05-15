@@ -44,7 +44,7 @@ fun TextField(
             Icon(
                 Icons.Default.Person,
                 contentDescription = "",
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.secondary
             )
         }
 ) {
@@ -82,15 +82,15 @@ fun PasswordField(
         Icon(
             Icons.Default.Key,
             contentDescription = "",
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.secondary
         )
     }
     val trailingIcon = @Composable {
         IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
             Icon(
-                if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                if (isPasswordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
                 contentDescription = "",
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.secondary
             )
         }
     }
@@ -128,7 +128,7 @@ fun DropDownMenuField(
             Icon(
                 Icons.AutoMirrored.Filled.List,
                 contentDescription = "",
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.secondary
             )
         }
 ) {
