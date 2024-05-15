@@ -75,9 +75,10 @@ fun UserProfileScreen(
     locationService: LocationService,
     userId: String
 ) {
+    val user = userViewModel.user!!
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-    val badgesReceived = userViewModel.getReceivedBadgesByUser(1).collectAsState(initial = listOf()).value
-    //todo real id
+    val badgesReceived = userViewModel.getReceivedBadgesByUser(user.userId).collectAsState(initial = listOf()).value
+
     var photoUri: Uri? by remember { mutableStateOf(null) } //TODO: save photo
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.PickVisualMedia()) { uri -> photoUri = uri }
@@ -171,7 +172,8 @@ fun UserProfileScreen(
                     Button(
                         onClick = {
                             val editor: SharedPreferences.Editor = sharedPreferences.edit()
-                            editor.putBoolean("userLogged", false)
+                            editor.putInt("userId", -1)
+                            userViewModel.logout()
                             editor.apply()
                             context.startActivity(Intent(context, MainActivity::class.java))
                             (context as Activity).finish()
@@ -180,7 +182,7 @@ fun UserProfileScreen(
                         Text(text = "Logout")
                     }
                     Text(
-                        text = "Giorgio",
+                        text = user.username,
                         style = MaterialTheme.typography.titleLarge
                     )
                     Text(

@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val sharedPreferences: SharedPreferences = getSharedPreferences("userLogged", Context.MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = getSharedPreferences("userId", Context.MODE_PRIVATE)
         locationService = LocationService(this)
 
         setContent {
@@ -61,8 +61,9 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    if (sharedPreferences.getBoolean("userLogged", false)) {
-                        RootlyNavGraph(navController, settingsVM, sharedPreferences, locationService)
+                    val userId = sharedPreferences.getInt("userId",-1)
+                    if ( userId > 0) {
+                        RootlyNavGraph(navController, settingsVM, sharedPreferences, locationService, userId)
                     } else {
                         context.startActivity(Intent(context, LoginActivity::class.java))
                         (context as Activity).finish()

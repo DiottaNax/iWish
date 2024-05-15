@@ -47,6 +47,7 @@ import com.unibo.rootly.ui.composables.TopBar
 import com.unibo.rootly.viewmodel.FERTILIZE
 import com.unibo.rootly.viewmodel.PlantCard
 import com.unibo.rootly.viewmodel.PlantViewModel
+import com.unibo.rootly.viewmodel.UserViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -67,12 +68,13 @@ enum class Filter(
 fun HomeScreen(
     navController: NavHostController,
     plantViewModel: PlantViewModel,
+    userViewModel: UserViewModel,
     modifier: Modifier = Modifier
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    val userId = 1 //todo make real
+    val userId = userViewModel.user!!.userId
 
     var selectedFilters by remember { mutableStateOf(emptyList<Filter>()) }
     var soonWater = emptyList<PlantCard>()

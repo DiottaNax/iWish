@@ -12,4 +12,7 @@ class UserRepository @Inject constructor(
     suspend fun insert(user: User) :Long = userDao.insertUser(user)
     @WorkerThread
     fun getUserByUsername(username: String) = userDao.getUserByUsername(username)
+
+    @WorkerThread
+    fun getUserById(userId: Int): User? = userDao.getUserById(userId)
 }

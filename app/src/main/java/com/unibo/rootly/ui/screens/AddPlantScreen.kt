@@ -44,13 +44,15 @@ import com.unibo.rootly.ui.composables.TopBar
 import com.unibo.rootly.utils.rememberCameraLauncher
 import com.unibo.rootly.utils.rememberPermission
 import com.unibo.rootly.viewmodel.PlantViewModel
+import com.unibo.rootly.viewmodel.UserViewModel
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddPlantScreen(
     navController: NavHostController,
-    plantViewModel: PlantViewModel
+    plantViewModel: PlantViewModel,
+    userViewModel: UserViewModel
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var type by rememberSaveable { mutableStateOf("") }
@@ -153,7 +155,7 @@ fun AddPlantScreen(
                     onClick = {
                         plantViewModel.insertPlant(
                             Plant(
-                                userId = 1,
+                                userId = userViewModel.user!!.userId,
                                 plantName = name,
                                 birthday = LocalDate.now(),
                                 scientificName = type,

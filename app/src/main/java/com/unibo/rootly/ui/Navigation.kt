@@ -45,10 +45,12 @@ fun RootlyNavGraph(
     settingsVM: SettingsViewModel,
     sharedPreferences: SharedPreferences,
     locationService: LocationService,
+    userId: Int,
     modifier: Modifier = Modifier
 ) {
     val  plantViewModel = hiltViewModel<PlantViewModel>()
     val  userViewModel = hiltViewModel<UserViewModel>()
+    userViewModel.setUser(userId)
 
     NavHost(
         navController = navController,
@@ -59,7 +61,8 @@ fun RootlyNavGraph(
             composable(route) {
                 HomeScreen(
                     navController,
-                    plantViewModel
+                    plantViewModel,
+                    userViewModel
                 )
             }
         }
@@ -86,7 +89,7 @@ fun RootlyNavGraph(
         }
         with(RootlyRoute.AddPlant) {
             composable(route) {
-                AddPlantScreen(navController, plantViewModel)
+                AddPlantScreen(navController, plantViewModel, userViewModel)
             }
         }
         with(RootlyRoute.Settings) {

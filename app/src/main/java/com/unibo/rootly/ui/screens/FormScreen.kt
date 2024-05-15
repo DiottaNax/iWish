@@ -175,9 +175,10 @@ fun checkLoginCredentials(
     sharedPreferences: SharedPreferences,
     context: Context
 ) {
-    if (vm.login(username, password)) {
+    val userId = vm.login(username, password)
+    if (userId > 0) {
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
-        editor.putBoolean("userLogged", true)
+        editor.putInt("userId", userId)
         editor.apply()
         context.startActivity(Intent(context, MainActivity::class.java))
         (context as Activity).finish()
@@ -193,15 +194,10 @@ suspend fun checkRegistrationCredentials(
     sharedPreferences: SharedPreferences,
     context: Context
 ) {
-    if (
-        vm.register(User(
-            username = username,
-            password = password
-            )
-        )
-    ) {
+    val userId = vm.register(User( username = username, password = password )).toInt()
+    if (userId > 0) {
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
-        editor.putBoolean("userLogged", true)
+        editor.putInt("userId", userId)
         editor.apply()
         context.startActivity(Intent(context, MainActivity::class.java))
         (context as Activity).finish()

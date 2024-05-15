@@ -57,7 +57,6 @@ abstract class RootlyDatabase : RoomDatabase() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         INSTANCE?.let { database ->
-                            //todo not working
                             CoroutineScope(Dispatchers.IO).launch {
                                 database.badgeTypeDao().insertAll(InitialData.getBadgeTypes())
                                 database.speciesDao().insertAll(InitialData.getInitialSpecies())

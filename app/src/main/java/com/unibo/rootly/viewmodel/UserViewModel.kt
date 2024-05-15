@@ -1,10 +1,12 @@
 package com.unibo.rootly.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.unibo.rootly.data.database.User
 import com.unibo.rootly.data.repositories.ReceivedRepository
 import com.unibo.rootly.data.repositories.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,29 +20,26 @@ class UserViewModel @Inject constructor(
     val user
         get() = _user
 
-    suspend fun register(user: User) :Boolean {
-        val userId = userRepository.insert(user)
-        return if( userId != -1L){
-            _user = user.copy(userId = userId.toInt())
-            true
-        }else false
-    }
+    suspend fun register(user: User) = userRepository.insert(user)
 
-    fun getUserByName(name: String) = userRepository.getUserByUsername(name)
+    private fun getUserByName(name: String) = userRepository.getUserByUsername(name)
 
     fun getReceivedBadgesByUser(userId: Int) = receivedRepository.getByUser(userId)
 
-    fun login(username: String, password: String) : Boolean{
-            val user = getUserByName(username);
+    fun login(username: String, password: String) : Int{
+        val user = getUserByName(username);
         return if(user != null && password == user.password){
-            _user = user
-            true
+            user.userId
         }else{
-            false
+            -1
         }
     }
 
     fun logout(){
         _user = null
+    }
+
+    fun setUser(userId: Int) {
+        _user = userRepository.getUserById(userId)
     }
 }

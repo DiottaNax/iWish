@@ -25,7 +25,7 @@ class RegistrationActivity: ComponentActivity() {
         setContent {
             val context = LocalContext.current
             val settingsVM = koinViewModel<SettingsViewModel>()
-            val sharedPreferences: SharedPreferences = getSharedPreferences("userLogged", Context.MODE_PRIVATE)
+            val sharedPreferences: SharedPreferences = getSharedPreferences("userId", Context.MODE_PRIVATE)
 
             RootlyTheme(
                 darkTheme = when (settingsVM.state.theme) {
