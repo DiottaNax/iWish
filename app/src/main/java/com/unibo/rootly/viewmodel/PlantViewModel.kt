@@ -143,9 +143,8 @@ class PlantViewModel : ViewModel(), KoinComponent {
     }
 
     suspend fun getNextWater(plant: Plant): LocalDate? = withContext(Dispatchers.IO) {
-        val lastWaterDate = waterRepository.getLastWaterDate(plant.plantId) ?: plant.birthday
         speciesRepository.getByName(plant.scientificName)?.waterFrequency?.let { waterFrequency ->
-            lastWaterDate.plusDays(waterFrequency.toLong())
+            getLastDate(WATER,plant).plusDays(waterFrequency.toLong())
         }
     }
     //fertilizer
@@ -213,9 +212,8 @@ class PlantViewModel : ViewModel(), KoinComponent {
     }
 
     suspend fun getNextFertilize(plant: Plant): LocalDate? = withContext(Dispatchers.IO) {
-        val lastFertilized = fertilizerRepository.getLastFertilizeDate(plant.plantId) ?: plant.birthday
         speciesRepository.getByName(plant.scientificName)?.fertilizerFrequency?.let { fertilizerFrequency ->
-            lastFertilized.plusDays(fertilizerFrequency.toLong())
+            getLastDate(FERTILIZE,plant).plusDays(fertilizerFrequency.toLong())
         }
     }
 
@@ -230,6 +228,14 @@ class PlantViewModel : ViewModel(), KoinComponent {
         val badgeNotificationText = "Congratulations, you received a new badge!" +
                 "go to your profile to see it"
         Notifications.sendNotification(name,badgeNotificationText)
+    }
+
+    fun getLastDate(activity: String, plant: Plant): LocalDate {
+        return if(activity == WATER){
+            waterRepository.getLastWaterDate(plant.plantId) ?: plant.birthday
+        }else {
+            fertilizerRepository.getLastFertilizeDate(plant.plantId) ?: plant.birthday
+        }
     }
 
 }

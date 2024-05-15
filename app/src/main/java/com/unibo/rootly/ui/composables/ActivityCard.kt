@@ -40,7 +40,7 @@ fun ActivityCard(
     activity: String,
     date: String,
     onClick: () -> Unit,
-    onCompleted: () -> Unit,
+    onCompleted: () -> Boolean,
     modifier: Modifier = Modifier
 ) {
     // Creates the dismiss state
@@ -50,7 +50,6 @@ fun ActivityCard(
                 state == SwipeToDismissBoxValue.EndToStart
                 ) {   // Activity done
                 onCompleted()
-                true
             } else {
                 false
             }

@@ -1,5 +1,6 @@
 package com.unibo.rootly.ui.screens
 
+import android.widget.Toast
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -33,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.ui.RootlyRoute
@@ -67,6 +69,8 @@ fun HomeScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
+    val context = LocalContext.current
 
     val userId = userViewModel.user!!.userId
 
@@ -136,7 +140,7 @@ fun HomeScreen(
         ) {
 
             items(plants.toMutableList().sortedBy { it.date },
-                key = {"${it.plant.plantId}${it.activity}${it.date}"}
+                key = {"${it.plant.plantId}${it.activity}${it.date}${it.plant.plantName}"}
             ) { plant ->
                 ActivityCard(
                     title = plant.plant.plantName,
@@ -148,33 +152,39 @@ fun HomeScreen(
                         navController.navigate(RootlyRoute.PlantDetails.route)
                     },
                     onCompleted = {
-                       scope.launch {
+                        val res = plantViewModel.getLastDate(plant.activity, plant.plant) != LocalDate.now()
+                        scope.launch {
                             delay(100.milliseconds)
-                           plants.remove(plant)
-                           if(plant.activity == FERTILIZE){
-                               plantViewModel.insertFertilizer(plant.plant)
-                            }else{
-                                plantViewModel.insertWater(plant.plant)
-                            }
-                           val snackbarResult = snackbarHostState.showSnackbar(
-                                message = "You have completed an activity",
-                                actionLabel = "Undo",
-                                duration = SnackbarDuration.Short
-                            )
-                            when (snackbarResult) {
-                                SnackbarResult.Dismissed -> null
-                                SnackbarResult.ActionPerformed -> {
-                                    plants.add(plant)
-                                    if(plant.activity == FERTILIZE){
-                                        plantViewModel.removeFertilizer(plant.plant.plantId)
-                                    }else{
-                                        plantViewModel.removeWater(plant.plant.plantId)
+                            if (res) {
+                                plants.remove(plant)
+                                if (plant.activity == FERTILIZE) {
+                                    plantViewModel.insertFertilizer(plant.plant)
+                                } else {
+                                    plantViewModel.insertWater(plant.plant)
+                                }
+                                val snackbarResult = snackbarHostState.showSnackbar(
+                                    message = "You have completed an activity",
+                                    actionLabel = "Undo",
+                                    duration = SnackbarDuration.Short
+                                )
+                                when (snackbarResult) {
+                                    SnackbarResult.Dismissed -> null
+                                    SnackbarResult.ActionPerformed -> {
+                                        plants.add(plant)
+                                        if (plant.activity == FERTILIZE) {
+                                            plantViewModel.removeFertilizer(plant.plant.plantId)
+                                        } else {
+                                            plantViewModel.removeWater(plant.plant.plantId)
+                                        }
                                     }
                                 }
-
+                            } else {
+                                Toast.makeText(context,
+                                    "you already ${plant.activity} ${plant.plant.plantName} today"
+                                    , Toast.LENGTH_SHORT).show()
                             }
-
                         }
+                        res
                     },
                     modifier = Modifier.animateItemPlacement(tween(100))
                 )
