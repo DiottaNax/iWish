@@ -151,7 +151,7 @@ fun AddPlantScreen(
                             birthday = LocalDate.now(),
                             scientificName = type,
                             isDead = false,
-                            img = uri.toString()
+                            img = uri?.let {uri.toString()}
                         )
                     )
                     navController.navigateUp()
