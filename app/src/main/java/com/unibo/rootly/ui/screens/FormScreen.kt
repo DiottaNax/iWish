@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -51,6 +51,7 @@ sealed class FormScreen(
         vm: UserViewModel,
         scope: CoroutineScope,
         sharedPreferences: SharedPreferences,
+        snackbarHostState: SnackbarHostState,
         context: Context) -> Unit,
     val switchText: String,
     val switchButtonText: String,
@@ -59,9 +60,9 @@ sealed class FormScreen(
     data object Login: FormScreen(
         title ="rootly",
         buttonText = "Login",
-        submit = { username, password, vm, scope, sharedPreferences, context ->
+        submit = { username, password, vm, scope, pref, snackbar, context ->
             scope.launch {
-                checkLoginCredentials(username, password, vm, sharedPreferences, context)
+                checkLoginCredentials(username, password, vm, pref, snackbar, context)
             }
         },
         switchText = "Aren't you signed yet? ",
@@ -74,9 +75,9 @@ sealed class FormScreen(
     data object Registration: FormScreen(
         title ="Welcome to the rootly family!",
         buttonText = "Sign up",
-        submit = { username, password, vm, scope, sharedPreferences, context ->
+        submit = { username, password, vm, scope, pref, snackbar, context ->
             scope.launch {
-                checkRegistrationCredentials(username, password, vm, sharedPreferences, context)
+                checkRegistrationCredentials(username, password, vm, pref, snackbar, context)
             }
         },
         switchText = "Already have an account? ",
@@ -140,7 +141,17 @@ fun FormScreen(
             }
 
             Button(
-                onClick = { screen.submit(username, password, vm, scope, sharedPreferences, context) },
+                onClick = {
+                    screen.submit(
+                        username,
+                        password,
+                        vm,
+                        scope,
+                        sharedPreferences,
+                        snackbarHostState,
+                        context
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
@@ -168,11 +179,12 @@ fun FormScreen(
     }
 }
 
-fun checkLoginCredentials(
+suspend fun checkLoginCredentials(
     username: String,
     password: String,
     vm: UserViewModel,
     sharedPreferences: SharedPreferences,
+    snackbarHostState: SnackbarHostState,
     context: Context
 ) {
     val userId = vm.login(username, password)
@@ -183,7 +195,10 @@ fun checkLoginCredentials(
         context.startActivity(Intent(context, MainActivity::class.java))
         (context as Activity).finish()
     } else {
-        Toast.makeText(context, "Wrong Credentials", Toast.LENGTH_SHORT).show()
+        snackbarHostState.showSnackbar(
+            message = "Wrong credentials",
+            duration = SnackbarDuration.Short
+        )
     }
 }
 
@@ -192,6 +207,7 @@ suspend fun checkRegistrationCredentials(
     password: String,
     vm: UserViewModel,
     sharedPreferences: SharedPreferences,
+    snackbarHostState: SnackbarHostState,
     context: Context
 ) {
     if (username.isNotBlank() && username.isNotEmpty() &&
@@ -203,8 +219,11 @@ suspend fun checkRegistrationCredentials(
             editor.apply()
             context.startActivity(Intent(context, MainActivity::class.java))
             (context as Activity).finish()
-        } else {
-            Toast.makeText(context, "Wrong Credentials", Toast.LENGTH_SHORT).show()
         }
+    } else {
+        snackbarHostState.showSnackbar(
+            message = "All fields are required",
+            duration = SnackbarDuration.Short
+        )
     }
 }
