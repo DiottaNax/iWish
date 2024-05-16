@@ -56,7 +56,10 @@ import com.unibo.rootly.utils.PermissionStatus
 import com.unibo.rootly.utils.StartMonitoringResult
 import com.unibo.rootly.utils.rememberPermission
 import com.unibo.rootly.viewmodel.UserViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
+
+val address = MutableStateFlow("Click to show your location")
 
 @Composable
 fun UserProfileScreen(
@@ -64,12 +67,26 @@ fun UserProfileScreen(
     userViewModel: UserViewModel,
     locationService: LocationService
 ) {
+    LocalContext.current
     val user = userViewModel.user!!
-    val badgesReceived = userViewModel.getReceivedBadgesByUser(user.userId).collectAsState(initial = listOf()).value
-    var photoUri: Uri? by remember { mutableStateOf(null) } //TODO: save photo
+    val badgesReceived =
+        userViewModel.getReceivedBadgesByUser(user.userId).collectAsState(initial = listOf()).value
+    var photoUri: Uri? by remember {
+        mutableStateOf(
+            if (user.profileImg!!.isNotEmpty()) {
+                Uri.parse(user.profileImg)
+            } else null
+        )
+    }
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.PickVisualMedia()
-    ) { uri -> photoUri = uri }
+    ) {
+        uri -> photoUri = uri
+        if (uri != null) {
+            userViewModel.setProfilePicture(uri)
+        }
+    }
+    val ctx = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     var showLocationDisabledAlert by remember { mutableStateOf(false) }
     var showPermissionDeniedAlert by remember { mutableStateOf(false) }
@@ -102,6 +119,11 @@ fun UserProfileScreen(
             locationPermission.launchPermissionRequest()
         }
     }
+
+    getLocationName(
+        latitude = locationService.coordinates?.latitude ?: 0.toDouble(),
+        longitude = locationService.coordinates?.longitude ?: 0.toDouble()
+    )
 
     Scaffold(
         bottomBar = {
@@ -139,7 +161,7 @@ fun UserProfileScreen(
                             onClick = {
                                 launcher.launch(
                                     PickVisualMediaRequest(
-                                    mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
+                                        ActivityResultContracts.PickVisualMedia.ImageOnly
                                     )
                                 )
                             }
@@ -152,12 +174,11 @@ fun UserProfileScreen(
                         style = MaterialTheme.typography.titleLarge
                     )
                     Text(
-                        text = getLocationName(
-                            latitude = locationService.coordinates?.latitude ?: 0.toDouble(),
-                            longitude = locationService.coordinates?.longitude ?: 0.toDouble()
-                        ),
-                        modifier = Modifier.clickable { requestLocation() },
-                        style = MaterialTheme.typography.bodyMedium
+                        text = address.value,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.clickable {
+                            requestLocation()
+                        }
                     )
                     Text(
                         text = "Your badges:",
@@ -219,7 +240,6 @@ fun UserProfileScreen(
         )
     }
 
-    val ctx = LocalContext.current
     if (showPermissionPermanentlyDeniedSnackbar) {
         LaunchedEffect(snackbarHostState) {
             val res = snackbarHostState.showSnackbar(
@@ -242,14 +262,13 @@ fun UserProfileScreen(
 }
 
 @Composable
-fun getLocationName(latitude: Double, longitude: Double): String {
+fun getLocationName(latitude: Double, longitude: Double) {
     val geocoder = Geocoder(LocalContext.current, Locale.getDefault())
-    val addresses = geocoder.getFromLocation(latitude, longitude, 1)
-    return if (!addresses.isNullOrEmpty()) {
-        val city = addresses[0].locality ?: "City not found"
-        val country = addresses[0].countryName ?: "State not found"
-        "$city, $country"
-    } else {
-        "Location not found, click to sync"
+    geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
+        if (addresses.isNotEmpty()) {
+            val city = addresses[0].locality ?: "City not found"
+            val country = addresses[0].countryName ?: "State not found"
+            address.value = "$city, $country"
+        }
     }
 }
