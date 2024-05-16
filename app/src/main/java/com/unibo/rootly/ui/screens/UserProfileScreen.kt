@@ -1,12 +1,9 @@
 package com.unibo.rootly.ui.screens
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
-import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -62,7 +59,7 @@ import com.unibo.rootly.viewmodel.UserViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
 
-val address = MutableStateFlow("Location not found, click to retry")
+val address = MutableStateFlow("Click to show your location")
 
 @Composable
 fun UserProfileScreen(
@@ -76,7 +73,7 @@ fun UserProfileScreen(
         userViewModel.getReceivedBadgesByUser(user.userId).collectAsState(initial = listOf()).value
     var photoUri: Uri? by remember {
         mutableStateOf(
-            if (user.profileImg?.isNotEmpty() ?: false) {
+            if (user.profileImg!!.isNotEmpty()) {
                 Uri.parse(user.profileImg)
             } else null
         )
@@ -123,6 +120,11 @@ fun UserProfileScreen(
         }
     }
 
+    getLocationName(
+        latitude = locationService.coordinates?.latitude ?: 0.toDouble(),
+        longitude = locationService.coordinates?.longitude ?: 0.toDouble()
+    )
+
     Scaffold(
         bottomBar = {
             BottomBar(
@@ -159,7 +161,7 @@ fun UserProfileScreen(
                             onClick = {
                                 launcher.launch(
                                     PickVisualMediaRequest(
-                                    mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
+                                        ActivityResultContracts.PickVisualMedia.ImageOnly
                                     )
                                 )
                             }
@@ -172,12 +174,11 @@ fun UserProfileScreen(
                         style = MaterialTheme.typography.titleLarge
                     )
                     Text(
-                        text = getLocationName(
-                            latitude = locationService.coordinates?.latitude ?: 0.toDouble(),
-                            longitude = locationService.coordinates?.longitude ?: 0.toDouble()
-                        ),
-                        modifier = Modifier.clickable { requestLocation() },
-                        style = MaterialTheme.typography.bodyMedium
+                        text = address.value,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.clickable {
+                            requestLocation()
+                        }
                     )
                     Text(
                         text = "Your badges:",
@@ -261,14 +262,13 @@ fun UserProfileScreen(
 }
 
 @Composable
-fun getLocationName(latitude: Double, longitude: Double): String {
+fun getLocationName(latitude: Double, longitude: Double) {
     val geocoder = Geocoder(LocalContext.current, Locale.getDefault())
-    val addresses = geocoder.getFromLocation(latitude, longitude, 1)
-    return if (!addresses.isNullOrEmpty()) {
-        val city = addresses[0].locality ?: "City not found"
-        val country = addresses[0].countryName ?: "State not found"
-        "$city, $country"
-    } else {
-        "Location not found, click to sync"
+    geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
+        if (addresses.isNotEmpty()) {
+            val city = addresses[0].locality ?: "City not found"
+            val country = addresses[0].countryName ?: "State not found"
+            address.value = "$city, $country"
+        }
     }
 }
