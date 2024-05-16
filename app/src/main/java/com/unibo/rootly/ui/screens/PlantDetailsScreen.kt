@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.unibo.rootly.data.database.Species
 import com.unibo.rootly.ui.composables.ImageDisplay
 import com.unibo.rootly.viewmodel.PlantViewModel
 import kotlinx.coroutines.Dispatchers
@@ -56,11 +57,13 @@ fun PlantDetailsScreen(
     var isFavorite by remember { mutableStateOf(plant.isFavorite) }
     var nextWaterDate by remember { mutableStateOf<LocalDate?>(null) }
     var nextFertilizeDate by remember { mutableStateOf<LocalDate?>(null) }
+    var specie by remember { mutableStateOf<Species?>(null) }
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
             nextWaterDate = plantViewModel.getNextWater(plant)
             nextFertilizeDate = plantViewModel.getNextFertilize(plant)
+            specie = plantViewModel.getSpecieDetails(plant.scientificName)
         }
     }
 
@@ -114,6 +117,21 @@ fun PlantDetailsScreen(
                 }
             }
         }
+        val lightLevel: String = when (specie?.lightLevel) {
+            1 -> "dark"
+            2 -> "shade"
+            3 -> "part sun"
+            4 -> "full sun"
+            else -> "error please contact our team :("
+        }
+        Text(
+            text = "ideal light: $lightLevel",
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Text(
+            text = "ideal living temperature: ${specie?.minTemperature}° - ${specie?.maxTemperature}°",
+            style = MaterialTheme.typography.bodyMedium
+        )
         Text(
             text = "Next activities:",
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
