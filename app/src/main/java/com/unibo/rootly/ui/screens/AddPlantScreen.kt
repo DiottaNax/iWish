@@ -80,21 +80,18 @@ fun AddPlantScreen(
 
     // Camera
     val cameraLauncher = rememberCameraLauncher { uri = it }
-    var showPermissionDeniedAlert by remember { mutableStateOf(false) }
-    var showPermissionPermanentlyDeniedSnackbar by remember { mutableStateOf(false) }
+    var showCameraDeniedAlert by remember { mutableStateOf(false) }
+    var showCameraPermanentlyDeniedSnackbar by remember { mutableStateOf(false) }
 
     val cameraPermission = rememberPermission(Manifest.permission.CAMERA) { status ->
         when (status) {
             PermissionStatus.Granted -> {
                 cameraLauncher.captureImage()
             }
-
             PermissionStatus.Denied ->
-                showPermissionDeniedAlert = true
-
+                showCameraDeniedAlert = true
             PermissionStatus.PermanentlyDenied ->
-                showPermissionPermanentlyDeniedSnackbar = true
-
+                showCameraPermanentlyDeniedSnackbar = true
             PermissionStatus.Unknown -> {}
         }
     }
@@ -107,6 +104,7 @@ fun AddPlantScreen(
         }
     }
 
+    // Screen UI
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
@@ -210,28 +208,28 @@ fun AddPlantScreen(
         }
     }
 
-    if (showPermissionDeniedAlert) {
+    if (showCameraDeniedAlert) {
         AlertDialog(
             title = { Text("Camera permission denied") },
             text = { Text("Camera permission is required to add your photo in the app.") },
             confirmButton = {
                 TextButton(onClick = {
                     cameraPermission.launchPermissionRequest()
-                    showPermissionDeniedAlert = false
+                    showCameraDeniedAlert = false
                 }) {
                     Text("Grant")
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showPermissionDeniedAlert = false }) {
+                TextButton(onClick = { showCameraDeniedAlert = false }) {
                     Text("Dismiss")
                 }
             },
-            onDismissRequest = { showPermissionDeniedAlert = false }
+            onDismissRequest = { showCameraDeniedAlert = false }
         )
     }
 
-    if (showPermissionPermanentlyDeniedSnackbar) {
+    if (showCameraPermanentlyDeniedSnackbar) {
         LaunchedEffect(snackbarHostState) {
             val res = snackbarHostState.showSnackbar(
                 "Camera permission is required.",
@@ -247,7 +245,7 @@ fun AddPlantScreen(
                     ctx.startActivity(intent)
                 }
             }
-            showPermissionPermanentlyDeniedSnackbar = false
+            showCameraPermanentlyDeniedSnackbar = false
         }
     }
 }

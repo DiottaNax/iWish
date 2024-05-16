@@ -16,12 +16,13 @@ class UserRepository(
 
     fun getUserById(userId: Int): User? = userDao.getUserById(userId)
 
-    fun setProPic(id: Int, uri: Uri) {
+    fun setProPic(id: Int, uri: Uri): Uri {
         val imageUri = saveImageToStorage(
             uri,
             contentResolver,
             "ProfilePic${id}"
         )
         userDao.setProPic(id, imageUri.toString())
+        return imageUri
     }
 }

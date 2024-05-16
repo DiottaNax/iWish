@@ -38,6 +38,9 @@ class UserViewModel : ViewModel(), KoinComponent {
     }
 
     fun setProfilePicture(uri: Uri) {
-        _user?.let { userRepository.setProPic(it.userId, uri) }
+        _user?.let {
+            val imgUri = userRepository.setProPic(it.userId, uri)
+            _user = _user!!.copy(profileImg = imgUri.toString())
+        }
     }
 }

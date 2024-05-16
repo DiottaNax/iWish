@@ -68,13 +68,16 @@ fun UserProfileScreen(
     userViewModel: UserViewModel,
     locationService: LocationService
 ) {
-    LocalContext.current
+    val ctx = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
     val user = userViewModel.user!!
     val badgesReceived =
         userViewModel.getReceivedBadgesByUser(user.userId).collectAsState(initial = listOf()).value
+
+    // Profile picture
     var photoUri: Uri? by remember {
         mutableStateOf(
-            if (user.profileImg?.isNotEmpty() == true) {
+            if (userViewModel.user!!.profileImg?.isNotEmpty() == true) {
                 Uri.parse(user.profileImg)
             } else null
         )
@@ -87,11 +90,11 @@ fun UserProfileScreen(
             userViewModel.setProfilePicture(uri)
         }
     }
-    val ctx = LocalContext.current
-    val snackbarHostState = remember { SnackbarHostState() }
+
+    // Location
     var showLocationDisabledAlert by remember { mutableStateOf(false) }
-    var showPermissionDeniedAlert by remember { mutableStateOf(false) }
-    var showPermissionPermanentlyDeniedSnackbar by remember { mutableStateOf(false) }
+    var showLocationDeniedAlert by remember { mutableStateOf(false) }
+    var showLocationPermanentlyDeniedSnackbar by remember { mutableStateOf(false) }
 
     val locationPermission = rememberPermission(
         Manifest.permission.ACCESS_COARSE_LOCATION
@@ -101,13 +104,10 @@ fun UserProfileScreen(
                 val res = locationService.requestCurrentLocation()
                 showLocationDisabledAlert = res == StartMonitoringResult.GPSDisabled
             }
-
             PermissionStatus.Denied ->
-                showPermissionDeniedAlert = true
-
+                showLocationDeniedAlert = true
             PermissionStatus.PermanentlyDenied ->
-                showPermissionPermanentlyDeniedSnackbar = true
-
+                showLocationPermanentlyDeniedSnackbar = true
             PermissionStatus.Unknown -> {}
         }
     }
@@ -126,6 +126,8 @@ fun UserProfileScreen(
         longitude = locationService.coordinates?.longitude ?: 0.toDouble()
     )
 
+
+    // Screen ui
     Scaffold(
         bottomBar = {
             BottomBar(
@@ -221,28 +223,28 @@ fun UserProfileScreen(
         )
     }
 
-    if (showPermissionDeniedAlert) {
+    if (showLocationDeniedAlert) {
         AlertDialog(
             title = { Text("Location permission denied") },
             text = { Text("Location permission is required to get your current location in the app.") },
             confirmButton = {
                 TextButton(onClick = {
                     locationPermission.launchPermissionRequest()
-                    showPermissionDeniedAlert = false
+                    showLocationDeniedAlert = false
                 }) {
                     Text("Grant")
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showPermissionDeniedAlert = false }) {
+                TextButton(onClick = { showLocationDeniedAlert = false }) {
                     Text("Dismiss")
                 }
             },
-            onDismissRequest = { showPermissionDeniedAlert = false }
+            onDismissRequest = { showLocationDeniedAlert = false }
         )
     }
 
-    if (showPermissionPermanentlyDeniedSnackbar) {
+    if (showLocationPermanentlyDeniedSnackbar) {
         LaunchedEffect(snackbarHostState) {
             val res = snackbarHostState.showSnackbar(
                 "Location permission is required.",
@@ -258,7 +260,7 @@ fun UserProfileScreen(
                     ctx.startActivity(intent)
                 }
             }
-            showPermissionPermanentlyDeniedSnackbar = false
+            showLocationPermanentlyDeniedSnackbar = false
         }
     }
 }
