@@ -15,4 +15,7 @@ interface UserDao {
     fun getUserByUsername(username: String): User?
     @Query("SELECT * FROM Users WHERE user_id = :userId")
     fun getUserById(userId: Int): User?
+
+    @Query("UPDATE users SET profile_img = :uri WHERE user_id = :id")
+    fun setProPic(id: Int, uri: String)
 }

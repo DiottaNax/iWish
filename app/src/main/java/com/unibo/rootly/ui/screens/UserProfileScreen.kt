@@ -1,9 +1,12 @@
 package com.unibo.rootly.ui.screens
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -56,7 +59,10 @@ import com.unibo.rootly.utils.PermissionStatus
 import com.unibo.rootly.utils.StartMonitoringResult
 import com.unibo.rootly.utils.rememberPermission
 import com.unibo.rootly.viewmodel.UserViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
+
+val address = MutableStateFlow("Location not found, click to retry")
 
 @Composable
 fun UserProfileScreen(
@@ -64,12 +70,26 @@ fun UserProfileScreen(
     userViewModel: UserViewModel,
     locationService: LocationService
 ) {
+    LocalContext.current
     val user = userViewModel.user!!
-    val badgesReceived = userViewModel.getReceivedBadgesByUser(user.userId).collectAsState(initial = listOf()).value
-    var photoUri: Uri? by remember { mutableStateOf(null) } //TODO: save photo
+    val badgesReceived =
+        userViewModel.getReceivedBadgesByUser(user.userId).collectAsState(initial = listOf()).value
+    var photoUri: Uri? by remember {
+        mutableStateOf(
+            if (user.profileImg?.isNotEmpty() ?: false) {
+                Uri.parse(user.profileImg)
+            } else null
+        )
+    }
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.PickVisualMedia()
-    ) { uri -> photoUri = uri }
+    ) {
+        uri -> photoUri = uri
+        if (uri != null) {
+            userViewModel.setProfilePicture(uri)
+        }
+    }
+    val ctx = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     var showLocationDisabledAlert by remember { mutableStateOf(false) }
     var showPermissionDeniedAlert by remember { mutableStateOf(false) }
@@ -219,7 +239,6 @@ fun UserProfileScreen(
         )
     }
 
-    val ctx = LocalContext.current
     if (showPermissionPermanentlyDeniedSnackbar) {
         LaunchedEffect(snackbarHostState) {
             val res = snackbarHostState.showSnackbar(

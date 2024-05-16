@@ -14,7 +14,12 @@ val repositoryModule = module {
     ) }
     single { ReceivedRepository(get()) }
     single { SpeciesRepository(get()) }
-    single { UserRepository(get()) }
+    single {
+        UserRepository(
+            get(),
+            get<Context>().applicationContext.contentResolver
+        )
+    }
     single { WaterRepository(get()) }
     single { FertilizerRepository(get()) }
 

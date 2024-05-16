@@ -1,5 +1,6 @@
 package com.unibo.rootly.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.unibo.rootly.data.database.User
 import com.unibo.rootly.data.repositories.ReceivedRepository
@@ -34,5 +35,9 @@ class UserViewModel : ViewModel(), KoinComponent {
 
     fun setUser(userId: Int) {
         _user = userRepository.getUserById(userId)
+    }
+
+    fun setProfilePicture(uri: Uri) {
+        _user?.let { userRepository.setProPic(it.userId, uri) }
     }
 }

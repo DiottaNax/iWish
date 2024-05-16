@@ -15,7 +15,7 @@ class PlantRepository(
             val imageUri = saveImageToStorage(
                 Uri.parse(plant.img),
                 contentResolver,
-                "TravelDiary_Place${plant.plantId}"
+                "PlantImage${plant.plantId}"
             )
             plantDao.insertPlant(plant.copy(img = imageUri.toString()))
         } else {
