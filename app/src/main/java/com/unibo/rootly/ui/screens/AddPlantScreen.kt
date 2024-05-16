@@ -185,7 +185,7 @@ fun AddPlantScreen(
                                 scientificName = type,
                                 isDead = false,
                                 img = uri?.let { uri.toString() }
-                            )
+                            ),context = ctx
                         )
                         navController.navigateUp()
                     } else {

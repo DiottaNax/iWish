@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.unibo.rootly.R
 import com.unibo.rootly.viewmodel.PlantViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -13,9 +14,6 @@ import org.koin.core.component.inject
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-const val MONTH_BADGE = "Budding Caretaker"
-const val HALF_YEAR_BADGE = "Thriving Guardian"
-const val YEAR_BADGE ="Perennial Protector"
 class PlantCheckWorker(context: Context, params: WorkerParameters) : Worker(context, params),
     KoinComponent {
 
@@ -36,15 +34,24 @@ class PlantCheckWorker(context: Context, params: WorkerParameters) : Worker(cont
                             plants.forEach {plant ->
                                 if(!achieved1 && isPlantAliveForMonths(plant.birthday,1)){
                                     achieved1 = true
-                                    plantViewModel.insertBadge(MONTH_BADGE ,userId)
+                                    plantViewModel.insertBadge(
+                                        applicationContext,
+                                        applicationContext.getString(R.string.badge_1_month_name)
+                                        ,userId)
                                 }
                                 if(!achieved2 && isPlantAliveForMonths(plant.birthday,6)){
                                     achieved2 = true
-                                    plantViewModel.insertBadge(HALF_YEAR_BADGE,userId)
+                                    plantViewModel.insertBadge(
+                                        applicationContext,
+                                        applicationContext.getString(R.string.badge_6_months_name)
+                                        ,userId)
                                 }
                                 if(!achieved3 && isPlantAliveForMonths(plant.birthday,12)){
                                     achieved3 = true
-                                    plantViewModel.insertBadge(YEAR_BADGE,userId)
+                                    plantViewModel.insertBadge(
+                                        applicationContext,
+                                        applicationContext.getString(R.string.badge_1_year_name)
+                                        ,userId)
                                 }
                             }
                         }

@@ -53,6 +53,8 @@ fun PlantDetailsScreen(
     navController: NavHostController,
     plantViewModel: PlantViewModel
 ) {
+    val context = LocalContext.current
+
     val plant = plantViewModel.plantSelected!!
     var isFavorite by remember { mutableStateOf(plant.isFavorite) }
     var nextWaterDate by remember { mutableStateOf<LocalDate?>(null) }
@@ -169,7 +171,7 @@ fun PlantDetailsScreen(
         Button(
             onClick = {
                 navController.navigateUp()
-                plantViewModel.addDead(plant)
+                plantViewModel.addDead(plant, context = context)
             },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(

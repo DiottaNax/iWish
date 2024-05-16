@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">rootly</string>
+
+    <string name="badge_1_plant_name">First Timer</string>
+    <string name="badge_10_plants_name">Sprout Scout</string>
+    <string name="badge_50_plants_name">Green Thumb</string>
+    <string name="badge_100_plants_name">Botanical Master</string>
+    <string name="badge_1_month_name">Budding Caretaker</string>
+    <string name="badge_6_months_name">Thriving Guardian</string>
+    <string name="badge_1_year_name">Perennial Protector</string>
+    <string name="badge_water_name">Water Warrior</string>
+    <string name="badge_fertilizer_name">Zen Gardener</string>
+    <string name="badge_death_name">Heartfelt Mourner</string>
+
+    <string name="badge_1_plant_descr">you added your first plant to rootly !</string>
+    <string name="badge_10_plants_descr">you have 10 or more alive plants</string>
+    <string name="badge_50_plants_descr">you have 50 or more alive plants</string>
+    <string name="badge_100_plants_descr">you have 50 or more alive plants</string>
+    <string name="badge_1_month_descr">one of your plants lived for a month</string>
+    <string name="badge_6_months_descr">one of your plants lived for 6 months</string>
+    <string name="badge_1_year_descr">one of your plants lived for a year</string>
+    <string name="badge_water_descr">you watered plants 100 times or more</string>
+    <string name="badge_fertilizer_descr">you fertilized plants 100 times or more</string>
+    <string name="badge_death_descr">
+        you lost a plant, but don\'t worry it happens to everyone
+    </string>
+
+    <string name="badge_notification_text">
+        Congratulations, you received a new badge! go to your profile to see it
+    </string>
 </resources>

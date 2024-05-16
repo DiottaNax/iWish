@@ -1,7 +1,9 @@
 package com.unibo.rootly.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unibo.rootly.R
 import com.unibo.rootly.data.database.Fertilizer
 import com.unibo.rootly.data.database.Plant
 import com.unibo.rootly.data.database.Received
@@ -46,21 +48,21 @@ class PlantViewModel : ViewModel(), KoinComponent {
         _plantSelected = plant
     }
 
-    fun insertPlant(plant: Plant) = viewModelScope.launch {
+    fun insertPlant(plant: Plant, context: Context) = viewModelScope.launch {
         val newPlant = plant.copy(plantId = plantRepository.insert(plant).toInt())
-        insertWater(newPlant)
-        insertFertilizer(newPlant)
+        insertWater(newPlant, context = context)
+        insertFertilizer(newPlant, context = context)
 
         val plantCount = plantRepository.countByUser(plant.userId)!!
 
         if (plantCount == 1) {
-            insertBadge(userId = plant.userId , name = "First Timer")
+            insertBadge(context,userId = plant.userId , name = context.getString(R.string.badge_1_plant_name))
         }else if( plantCount >= 100){
-            insertBadge(userId = plant.userId , name = "Botanical Master")
+            insertBadge(context,userId = plant.userId , name = context.getString(R.string.badge_100_plants_name))
         }else if( plantCount >= 50){
-            insertBadge(userId = plant.userId , name = "Green Thumb")
+            insertBadge(context,userId = plant.userId , name = context.getString(R.string.badge_50_plants_name))
         }else if( plantCount >= 10){
-            insertBadge(userId = plant.userId , name = "Sprout Scout")
+            insertBadge(context,userId = plant.userId , name = context.getString(R.string.badge_100_plants_name))
         }
     }
 
@@ -77,27 +79,21 @@ class PlantViewModel : ViewModel(), KoinComponent {
 
     //dead
 
-    fun addDead(plant : Plant) = viewModelScope.launch {
+    fun addDead(plant : Plant, context: Context) = viewModelScope.launch {
         plantRepository.insertDead(plant.plantId)
-        insertBadge(userId = plant.userId , name = "Heartfelt Mourner")
+        insertBadge(context,userId = plant.userId , name = context.getString(R.string.badge_death_name))
     }
 
     // Water
 
-    fun insertWater(plant: Plant, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
-        waterRepository.insert(Water(plant.plantId, date))
+    fun insertWater(plant: Plant, date: LocalDate = LocalDate.now(), context: Context) =
+        viewModelScope.launch {
+            waterRepository.insert(Water(plant.plantId, date))
 
-        val timesWatered = waterRepository.getTimesWatered(plant.userId)
-
-        val badgesList = mutableListOf<String>()
-        receivedRepository.getByUser(plant.userId).collect { badges ->
-            badgesList.addAll(badges.map { it.name })
-
-            if ("Water Warrior" !in badgesList && timesWatered >= 100) {
-                insertBadge("Water Warrior", plant.userId)
+            if (waterRepository.getTimesWatered(plant.userId) >= 100) {
+                insertBadge(context,context.getString(R.string.badge_water_name), plant.userId)
             }
         }
-    }
 
     fun getAllWater(userId: Int) = waterRepository.getAll(userId).map { plants ->
         plants.map { plant ->
@@ -152,18 +148,11 @@ class PlantViewModel : ViewModel(), KoinComponent {
     }
     //fertilizer
 
-    fun insertFertilizer(plant: Plant, date: LocalDate = LocalDate.now()) = viewModelScope.launch {
+    fun insertFertilizer(plant: Plant, date: LocalDate = LocalDate.now(), context: Context) = viewModelScope.launch {
         fertilizerRepository.insert(Fertilizer(plant.plantId, date))
 
-        val timesFertilized = fertilizerRepository.getTimesFertilized(plant.userId)
-
-        val badgesList = mutableListOf<String>()
-        receivedRepository.getByUser(plant.userId).collect { badges ->
-            badgesList.addAll(badges.map { it.name })
-
-            if ("Zen Gardener" !in badgesList && timesFertilized >= 100) {
-                insertBadge("Zen Gardener", plant.userId)
-            }
+       if( fertilizerRepository.getTimesFertilized(plant.userId) >= 100) {
+            insertBadge(context,context.getString(R.string.badge_fertilizer_name), plant.userId)
         }
     }
 
@@ -226,14 +215,15 @@ class PlantViewModel : ViewModel(), KoinComponent {
 
     //badges
 
-    suspend fun insertBadge(name: String, userId: Int) {
+    suspend fun insertBadge(context:Context ,name: String, userId: Int) {
         val badges = receivedRepository.getByUser(userId).firstOrNull() ?: emptyList()
         val badgeNames = badges.map { it.name }
         if (name !in badgeNames) {
             receivedRepository.insert(Received(name, userId))
-            val badgeNotificationText = "Congratulations, you received a new badge!" +
-                    "go to your profile to see it"
-            Notifications.sendNotification(name, badgeNotificationText, "Badge Received")
+            Notifications.sendNotification(
+                name,
+                context.getString(R.string.badge_notification_text),
+                "Badge Received")
         }
     }
 

@@ -160,9 +160,9 @@ fun HomeScreen(
                             if (res) {
                                 plants.remove(plant)
                                 if (plant.activity == FERTILIZE) {
-                                    plantViewModel.insertFertilizer(plant.plant)
+                                    plantViewModel.insertFertilizer(plant.plant,context = context)
                                 } else {
-                                    plantViewModel.insertWater(plant.plant)
+                                    plantViewModel.insertWater(plant.plant,context = context)
                                 }
                                 val snackbarResult = snackbarHostState.showSnackbar(
                                     message = "You have completed an activity",

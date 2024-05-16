@@ -1,12 +1,14 @@
 package com.unibo.rootly.data.database
 
 import android.content.Context
+import androidx.core.content.ContextCompat.getString
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.unibo.rootly.R
 import com.unibo.rootly.data.database.daos.BadgeTypeDao
 import com.unibo.rootly.data.database.daos.FertilizerDao
 import com.unibo.rootly.data.database.daos.PlantDao
@@ -58,13 +60,15 @@ abstract class RootlyDatabase : RoomDatabase() {
                         super.onCreate(db)
                         INSTANCE?.let { database ->
                             CoroutineScope(Dispatchers.IO).launch {
-                                database.badgeTypeDao().insertAll(InitialData.getBadgeTypes())
+                                database.badgeTypeDao().insertAll(InitialData.getBadgeTypes(context))
                                 database.speciesDao().insertAll(InitialData.getInitialSpecies())
                                 database.userDao().insertUser(InitialData.getInitialUser())
                                 database.plantDao().insertAllPlants(InitialData.getInitialPlants())
                                 database.waterDao().insertAllWater(InitialData.getInitialWaters())
-                                database.fertilizerDao().insertAllFertilizer(InitialData.getInitialFertilizers())
-                                database.receivedDao().insertReceived(Received("First Timer",1))
+                                database.fertilizerDao()
+                                    .insertAllFertilizer(InitialData.getInitialFertilizers())
+                                database.receivedDao().insertReceived(
+                                    Received(context.getString(R.string.badge_1_month_name),1))
                             }
                         }
                     }

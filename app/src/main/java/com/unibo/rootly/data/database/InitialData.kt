@@ -1,5 +1,7 @@
 package com.unibo.rootly.data.database
 
+import android.content.Context
+import androidx.core.content.ContextCompat.getString
 import com.unibo.rootly.R
 import java.time.LocalDate
 
@@ -37,28 +39,39 @@ object InitialData {
         )
     }
 
-    fun getBadgeTypes(): List<BadgeType> {
+    fun getBadgeTypes(context: Context): List<BadgeType> {
         return listOf(
-            BadgeType("First Timer", R.drawable.badge1plant,
-                "you added your first plant to rootly !"),
-            BadgeType("Sprout Scout", R.drawable.badge10plant,
-                "yuo have 10 or more alive plants"),
-            BadgeType("Green Thumb", R.drawable.badge50plant,
-            "yuo have 50 or more alive plants"),
-            BadgeType("Botanical Master", R.drawable.badge100plant,
-                "yuo have 100 or more alive plants"),
-            BadgeType("Budding Caretaker",R.drawable.badge1month,
-                "one of your plants lived for a month"),
-            BadgeType("Thriving Guardian",R.drawable.badge6month,
-                "one of your plants lived for 6 months"),
-            BadgeType("Perennial Protector",R.drawable.badge1year,
-                "one of your plants lived for a year"),
-            BadgeType("Water Warrior",R.drawable.badge_water,
-                "you watered plants 100 times or more"),
-            BadgeType("Zen Gardener",R.drawable.badge_fertilize,
-                "you fertilized plants 100 times or more"),
-            BadgeType("Heartfelt Mourner",R.drawable.badge_dead,
-                "you lost a plant, but don't worry it happens to everyone")
+            BadgeType(context.getString(R.string.badge_1_plant_name),
+                R.drawable.badge1plant,
+                context.getString(R.string.badge_1_plant_name)),
+            BadgeType(context.getString(R.string.badge_10_plants_name),
+                R.drawable.badge10plant,
+                context.getString(R.string.badge_10_plants_name)),
+            BadgeType(context.getString(R.string.badge_50_plants_name),
+                R.drawable.badge50plant,
+                context.getString(R.string.badge_50_plants_name)),
+            BadgeType(context.getString(R.string.badge_100_plants_name),
+                R.drawable.badge100plant,
+                context.getString(R.string.badge_100_plants_descr)),
+            BadgeType(context.getString(R.string.badge_1_month_name),
+                R.drawable.badge1month,
+                context.getString(R.string.badge_1_month_descr)),
+            BadgeType(context.getString(R.string.badge_6_months_name),
+                R.drawable.badge6month,
+                context.getString(R.string.badge_6_months_descr)),
+            BadgeType(context.getString(R.string.badge_1_year_name),
+                R.drawable.badge1year,
+                context.getString(R.string.badge_1_year_descr)),
+            BadgeType(context.getString(R.string.badge_water_name),
+                R.drawable.badge_water,
+                context.getString(R.string.badge_water_descr)),
+            BadgeType(context.getString(R.string.badge_fertilizer_name),
+                R.drawable.badge_fertilize,
+                context.getString(R.string.badge_fertilizer_descr)),
+            BadgeType(context.getString(R.string.badge_death_name),
+                R.drawable.badge_dead,
+                context.getString(R.string.badge_death_descr))
+
         )
     }
 
