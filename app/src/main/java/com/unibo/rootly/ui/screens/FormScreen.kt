@@ -194,14 +194,17 @@ suspend fun checkRegistrationCredentials(
     sharedPreferences: SharedPreferences,
     context: Context
 ) {
-    val userId = vm.register(User( username = username, password = password )).toInt()
-    if (userId > 0) {
-        val editor: SharedPreferences.Editor = sharedPreferences.edit()
-        editor.putInt("userId", userId)
-        editor.apply()
-        context.startActivity(Intent(context, MainActivity::class.java))
-        (context as Activity).finish()
-    } else {
-        Toast.makeText(context, "Wrong Credentials", Toast.LENGTH_SHORT).show()
+    if (username.isNotBlank() && username.isNotEmpty() &&
+        password.isNotBlank() && password.isNotEmpty()) {
+        val userId = vm.register(User(username = username, password = password)).toInt()
+        if (userId > 0) {
+            val editor: SharedPreferences.Editor = sharedPreferences.edit()
+            editor.putInt("userId", userId)
+            editor.apply()
+            context.startActivity(Intent(context, MainActivity::class.java))
+            (context as Activity).finish()
+        } else {
+            Toast.makeText(context, "Wrong Credentials", Toast.LENGTH_SHORT).show()
+        }
     }
 }
