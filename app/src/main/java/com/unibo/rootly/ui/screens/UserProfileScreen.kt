@@ -73,7 +73,7 @@ fun UserProfileScreen(
         userViewModel.getReceivedBadgesByUser(user.userId).collectAsState(initial = listOf()).value
     var photoUri: Uri? by remember {
         mutableStateOf(
-            if (user.profileImg!!.isNotEmpty()) {
+            if (user.profileImg?.isNotEmpty() == true) {
                 Uri.parse(user.profileImg)
             } else null
         )
