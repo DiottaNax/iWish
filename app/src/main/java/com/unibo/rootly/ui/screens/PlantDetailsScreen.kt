@@ -90,6 +90,7 @@ fun PlantDetailsScreen(
                 style = MaterialTheme.typography.titleLarge
             )
         }
+        Spacer(Modifier.height(16.dp))
         Box(
             contentAlignment = Alignment.TopEnd
         ) {
@@ -126,14 +127,22 @@ fun PlantDetailsScreen(
             4 -> "full sun"
             else -> "error please contact our team :("
         }
+        Spacer(Modifier.height(16.dp))
         Text(
-            text = "ideal light: $lightLevel",
+            text = "Ideal conditions:",
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
+        )
+        Text(
+            text = "Light: $lightLevel",
             style = MaterialTheme.typography.bodyMedium
         )
         Text(
-            text = "ideal living temperature: ${specie?.minTemperature}° - ${specie?.maxTemperature}°",
+            text = "Living temperature: " +
+                    "${specie?.minTemperature}° - " +
+                    "${specie?.maxTemperature}°",
             style = MaterialTheme.typography.bodyMedium
         )
+        Spacer(Modifier.height(16.dp))
         Text(
             text = "Next activities:",
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
@@ -168,6 +177,7 @@ fun PlantDetailsScreen(
                     ?.toEpochMilli() ?: System.currentTimeMillis()
             )
         }
+        Spacer(Modifier.height(16.dp))
         Button(
             onClick = {
                 navController.navigateUp()

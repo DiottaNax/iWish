@@ -58,9 +58,9 @@ fun ActivityCard(
         backgroundContent = {
             val color by animateColorAsState(   // Define background color
                 when (dismissState.targetValue) {
-                    SwipeToDismissBoxValue.Settled -> MaterialTheme.colorScheme.surface
-                    SwipeToDismissBoxValue.StartToEnd -> MaterialTheme.colorScheme.primaryContainer
-                    SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.primaryContainer
+                    SwipeToDismissBoxValue.Settled -> MaterialTheme.colorScheme.surfaceVariant
+                    SwipeToDismissBoxValue.StartToEnd -> MaterialTheme.colorScheme.primary
+                    SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.primary
                 }, label = "Changing color"
             )
             Box(
