@@ -63,6 +63,8 @@ class PlantViewModel : ViewModel(), KoinComponent {
         }
     }
 
+    fun getPlantsByUser(userId: Int) = plantRepository.getPlantsByUser(userId)
+
     //like
     fun addLike(plantId : Int) = viewModelScope.launch {
         plantRepository.insertLike(plantId)
@@ -223,7 +225,7 @@ class PlantViewModel : ViewModel(), KoinComponent {
 
     //badges
 
-    private suspend fun insertBadge(name: String, userId: Int) {
+    suspend fun insertBadge(name: String, userId: Int) {
         receivedRepository.insert(Received(name, userId))
         val badgeNotificationText = "Congratulations, you received a new badge!" +
                 "go to your profile to see it"

@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.unibo.rootly.data.database.Plant
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlantDao {
@@ -24,5 +25,7 @@ interface PlantDao {
 
     @Query("SELECT COUNT(*) FROM Plant WHERE user_id = :userId and dead = 0")
     suspend fun countByUser(userId: Int): Int?
+    @Query("SELECT * FROM Plant WHERE user_id = :userId and dead = 0")
+    fun getPlantsByUser(userId: Int): Flow<List<Plant>>
 
 }

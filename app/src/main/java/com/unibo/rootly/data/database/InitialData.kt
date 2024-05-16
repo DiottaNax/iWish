@@ -78,7 +78,7 @@ object InitialData {
                     plantName = "Plant $i",
                     isDead = i==10,
                     isFavorite = false,
-                    birthday = LocalDate.of(2022, 1, 1),
+                    birthday = LocalDate.of(2023, i, i),
                     scientificName = species.scientificName,
                     img = null
                 )

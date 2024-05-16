@@ -30,5 +30,6 @@ class PlantRepository(
     fun removeLike(plantId: Int) = plantDao.removeLike(plantId)
 
     suspend fun countByUser(userId: Int): Int? = plantDao.countByUser(userId)
+    fun getPlantsByUser(userId: Int) = plantDao.getPlantsByUser(userId)
 
 }

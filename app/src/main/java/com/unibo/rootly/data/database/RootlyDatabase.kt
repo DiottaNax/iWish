@@ -65,7 +65,6 @@ abstract class RootlyDatabase : RoomDatabase() {
                                 database.waterDao().insertAllWater(InitialData.getInitialWaters())
                                 database.fertilizerDao().insertAllFertilizer(InitialData.getInitialFertilizers())
                                 database.receivedDao().insertReceived(Received("First Timer",1))
-                                database.receivedDao().insertReceived(Received("Budding Caretaker",1))
                             }
                         }
                     }
