@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddAPhoto
 import androidx.compose.material.icons.filled.Edit
@@ -53,8 +55,10 @@ fun AddPlantScreen(
     plantViewModel: PlantViewModel,
     userViewModel: UserViewModel
 ) {
-    val possiblePlantTypes = plantViewModel.getAllSpeciesNames()
-        .collectAsState(initial = listOf()).value
+    val possiblePlantTypes = plantViewModel
+        .getAllSpeciesNames()
+        .collectAsState(initial = listOf())
+        .value
     var name by rememberSaveable { mutableStateOf("") }
     var type by rememberSaveable { mutableStateOf("") }
     var uri: Uri? by remember { mutableStateOf(null) }
@@ -82,7 +86,9 @@ fun AddPlantScreen(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp),
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         Spacer(Modifier.height(16.dp))
         // Image section
