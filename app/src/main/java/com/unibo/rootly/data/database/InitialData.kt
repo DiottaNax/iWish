@@ -38,7 +38,6 @@ object InitialData {
     }
 
     fun getBadgeTypes(): List<BadgeType> {
-        //todo other badges and imgs
         return listOf(
             BadgeType("First Timer", R.drawable.badge1plant,
                 "you added your first plant to rootly !"),
