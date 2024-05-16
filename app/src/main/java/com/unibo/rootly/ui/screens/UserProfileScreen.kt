@@ -45,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.ui.RootlyRoute
@@ -192,7 +193,8 @@ fun UserProfileScreen(
             items(badgesReceived, key = { it.name }){ badge ->
                 DefaultCard(
                     title = badge.name,
-                    body = badge.description
+                    body = badge.description,
+                    painter = painterResource(id = badge.imageResourceId),
                 )
             }
         }

@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -26,7 +27,8 @@ import androidx.compose.ui.unit.dp
 fun DefaultCard(
     title: String,
     body: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    painter: Painter
 ) {
     Card(
         modifier = modifier
@@ -42,10 +44,9 @@ fun DefaultCard(
             horizontalAlignment = Alignment.Start
         ) {
             Image(
-                Icons.Outlined.Image,
+                painter = painter,
                 "Badge illustration",
                 contentScale = ContentScale.Fit,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.secondary)

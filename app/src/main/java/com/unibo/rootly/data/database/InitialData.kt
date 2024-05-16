@@ -1,5 +1,6 @@
 package com.unibo.rootly.data.database
 
+import com.unibo.rootly.R
 import java.time.LocalDate
 
 object InitialData {
@@ -39,25 +40,25 @@ object InitialData {
     fun getBadgeTypes(): List<BadgeType> {
         //todo other badges and imgs
         return listOf(
-            BadgeType("First Timer", "",
+            BadgeType("First Timer", R.drawable.badge1plant,
                 "you added your first plant to rootly !"),
-            BadgeType("Sprout Scout", "",
+            BadgeType("Sprout Scout", R.drawable.badge10plant,
                 "yuo have 10 or more alive plants"),
-            BadgeType("Green Thumb", "",
+            BadgeType("Green Thumb", R.drawable.badge50plant,
             "yuo have 50 or more alive plants"),
-            BadgeType("Botanical Master", "badge2_image",
+            BadgeType("Botanical Master", R.drawable.badge100plant,
                 "yuo have 100 or more alive plants"),
-            BadgeType("Budding Caretaker","",
+            BadgeType("Budding Caretaker",R.drawable.badge1month,
                 "one of your plants lived for a month"),
-            BadgeType("Thriving Guardian","",
+            BadgeType("Thriving Guardian",R.drawable.badge6month,
                 "one of your plants lived for 6 months"),
-            BadgeType("Perennial Protector","",
+            BadgeType("Perennial Protector",R.drawable.badge1year,
                 "one of your plants lived for a year"),
-            BadgeType("Water Warrior","",
+            BadgeType("Water Warrior",R.drawable.badge_water,
                 "you watered plants 100 times or more"),
-            BadgeType("Zen Gardener","",
+            BadgeType("Zen Gardener",R.drawable.badge_fertilize,
                 "you fertilized plants 100 times or more"),
-            BadgeType("Heartfelt Mourner","",
+            BadgeType("Heartfelt Mourner",R.drawable.badge_dead,
                 "you lost a plant, but don't worry it happens to everyone")
         )
     }

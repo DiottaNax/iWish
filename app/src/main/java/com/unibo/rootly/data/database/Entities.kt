@@ -1,5 +1,6 @@
 package com.unibo.rootly.data.database
 
+import androidx.annotation.DrawableRes
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -8,9 +9,10 @@ import java.time.LocalDate
 @Entity(tableName = "Badge_Type")
 data class BadgeType(
     @PrimaryKey val name: String,
-    @ColumnInfo(name = "img") val image: String,
+    @DrawableRes @ColumnInfo(name = "img") val imageResourceId: Int,
     @ColumnInfo(name = "description") val description: String
 )
+
 
 @Entity(tableName = "Fertilizer", primaryKeys = [ "plant_id", "date"])
 data class Fertilizer(
