@@ -13,6 +13,7 @@ import com.unibo.rootly.data.repositories.SpeciesRepository
 import com.unibo.rootly.data.repositories.WaterRepository
 import com.unibo.rootly.utils.Notifications
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -226,10 +227,14 @@ class PlantViewModel : ViewModel(), KoinComponent {
     //badges
 
     suspend fun insertBadge(name: String, userId: Int) {
-        receivedRepository.insert(Received(name, userId))
-        val badgeNotificationText = "Congratulations, you received a new badge!" +
-                "go to your profile to see it"
-        Notifications.sendNotification(name,badgeNotificationText,"Badge Received")
+        val badges = receivedRepository.getByUser(userId).firstOrNull() ?: emptyList()
+        val badgeNames = badges.map { it.name }
+        if (name !in badgeNames) {
+            receivedRepository.insert(Received(name, userId))
+            val badgeNotificationText = "Congratulations, you received a new badge!" +
+                    "go to your profile to see it"
+            Notifications.sendNotification(name, badgeNotificationText, "Badge Received")
+        }
     }
 
     fun getLastDate(activity: String, plant: Plant): LocalDate {
