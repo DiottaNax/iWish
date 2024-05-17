@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.data.database.Species
@@ -88,6 +89,10 @@ fun PlantDetailsScreen(
                 style = MaterialTheme.typography.titleLarge
             )
         }
+        Text(
+            text = "added on ${plant.birthday}",
+            style = MaterialTheme.typography.labelMedium
+        )
         Box(
             contentAlignment = Alignment.TopEnd
         ) {
