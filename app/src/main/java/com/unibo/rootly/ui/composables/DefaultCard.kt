@@ -29,7 +29,7 @@ fun DefaultCard(
 ) {
     Card(
         modifier = modifier
-            .size(200.dp)   //TODO: check
+            .size(200.dp)
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
@@ -40,12 +40,11 @@ fun DefaultCard(
         ) {
             Image(
                 painter = painter,
-                "Badge illustration",
+                "Card illustration",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.secondary)
-                    .padding(20.dp)
                     .weight(1f)
             )
             Column(
