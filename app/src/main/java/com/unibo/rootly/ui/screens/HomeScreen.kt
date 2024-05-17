@@ -155,11 +155,9 @@ fun HomeScreen(
                         navController.navigate(RootlyRoute.PlantDetails.route)
                     },
                     onCompleted = {
-                        val n = plantViewModel.getLastDate(plant.activity, plant.plant)
-                        val res = n != LocalDate.now()
                         scope.launch {
                             delay(100.milliseconds)
-                            if (res) {
+                            if (plantViewModel.getLastDate(plant.activity, plant.plant) != LocalDate.now()) {
                                 plants.remove(plant)
                                 if (plant.activity == FERTILIZE) {
                                     plantViewModel.insertFertilizer(plant.plant,context = context)
@@ -189,7 +187,6 @@ fun HomeScreen(
                                 )
                             }
                         }
-                        res
                     },
                     img = plant.plant.img,
                     modifier = Modifier.animateItemPlacement(tween(100))

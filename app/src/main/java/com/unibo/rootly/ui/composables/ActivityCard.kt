@@ -39,7 +39,7 @@ fun ActivityCard(
     activity: String,
     date: String,
     onClick: () -> Unit,
-    onCompleted: () -> Boolean,
+    onCompleted: () -> Unit,
     img: String?,
     modifier: Modifier = Modifier
 ) {
@@ -119,11 +119,9 @@ fun ActivityCard(
         if (dismissState.currentValue == SwipeToDismissBoxValue.StartToEnd ||
             dismissState.currentValue == SwipeToDismissBoxValue.EndToStart
         ) {
-            val result = onCompleted()
-            if (!result) {
-                scope.launch {
-                    dismissState.snapTo(SwipeToDismissBoxValue.Settled)
-                }
+            onCompleted()
+            scope.launch {
+                dismissState.snapTo(SwipeToDismissBoxValue.Settled)
             }
         }
     }
