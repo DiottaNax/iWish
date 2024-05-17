@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.unibo.rootly.data.database.Species
@@ -77,24 +76,26 @@ fun PlantDetailsScreen(
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(Modifier.height(16.dp))
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Text(
-                text = plant.plantName,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.SemiBold
+        Column {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = plant.plantName,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.SemiBold
+                    )
                 )
-            )
+                Text(
+                    text = "(${plant.scientificName})",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
             Text(
-                text = "(${plant.scientificName})",
-                style = MaterialTheme.typography.titleLarge
+                text = "Added on ${plant.birthday.format(formatter)}",
+                style = MaterialTheme.typography.bodySmall
             )
         }
-        Text(
-            text = "added on ${plant.birthday.format(formatter)}",
-            style = MaterialTheme.typography.labelMedium
-        )
         Box(
             contentAlignment = Alignment.TopEnd
         ) {
@@ -150,7 +151,7 @@ fun PlantDetailsScreen(
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
         )
         Row(
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -165,7 +166,7 @@ fun PlantDetailsScreen(
             )
         }
         Row(
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {

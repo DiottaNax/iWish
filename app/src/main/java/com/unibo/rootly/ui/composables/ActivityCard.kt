@@ -51,7 +51,7 @@ fun ActivityCard(
         backgroundContent = {
             val color by animateColorAsState(
                 when (dismissState.targetValue) {
-                    SwipeToDismissBoxValue.Settled -> MaterialTheme.colorScheme.surfaceVariant
+                    SwipeToDismissBoxValue.Settled -> MaterialTheme.colorScheme.surfaceContainer
                     SwipeToDismissBoxValue.StartToEnd -> MaterialTheme.colorScheme.primary
                     SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.primary
                 }, label = "Changing color"
@@ -69,7 +69,7 @@ fun ActivityCard(
             onClick = onClick,
             modifier = Modifier.height(110.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
             )
         ) {
             Row(

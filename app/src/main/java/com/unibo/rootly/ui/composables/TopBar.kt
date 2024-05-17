@@ -17,6 +17,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
 import com.unibo.rootly.MainActivity
@@ -40,7 +41,10 @@ fun TopBar(
                 text = currentRoute.title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.headlineLarge.copy(fontFamily = FontFamily.Serif),
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    fontFamily = FontFamily.Serif,
+                    fontWeight = FontWeight.Bold
+                ),
                 color = MaterialTheme.colorScheme.onSurface
             )
         },

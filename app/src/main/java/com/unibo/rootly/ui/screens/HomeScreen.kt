@@ -1,6 +1,5 @@
 package com.unibo.rootly.ui.screens
 
-import android.widget.Toast
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -173,7 +172,7 @@ fun HomeScreen(
                                     duration = SnackbarDuration.Short
                                 )
                                 when (snackbarResult) {
-                                    SnackbarResult.Dismissed -> null
+                                    SnackbarResult.Dismissed -> {}
                                     SnackbarResult.ActionPerformed -> {
                                         plants.add(plant)
                                         if (plant.activity == FERTILIZE) {
@@ -185,7 +184,7 @@ fun HomeScreen(
                                 }
                             } else {
                                 snackbarHostState.showSnackbar(
-                                    message = "you already ${plant.activity} ${plant.plant.plantName} today",
+                                    message = "You already ${plant.activity} ${plant.plant.plantName} today",
                                     duration = SnackbarDuration.Short
                                 )
                             }
