@@ -1,13 +1,16 @@
 package com.unibo.rootly.ui.screens
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.location.Geocoder
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -57,12 +60,11 @@ import com.unibo.rootly.utils.PermissionStatus
 import com.unibo.rootly.utils.StartMonitoringResult
 import com.unibo.rootly.utils.rememberPermission
 import com.unibo.rootly.viewmodel.UserViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
 
-val address = MutableStateFlow("Click to show your location")
 
 @Composable
+@RequiresApi(Build.VERSION_CODES.TIRAMISU) //for requestLocation
 fun UserProfileScreen(
     navController: NavHostController,
     userViewModel: UserViewModel,
@@ -92,9 +94,21 @@ fun UserProfileScreen(
     }
 
     // Location
+    var address by remember { mutableStateOf("Click to show your location") }
     var showLocationDisabledAlert by remember { mutableStateOf(false) }
     var showLocationDeniedAlert by remember { mutableStateOf(false) }
     var showLocationPermanentlyDeniedSnackbar by remember { mutableStateOf(false) }
+
+    fun getLocationName(latitude: Double, longitude: Double, context: Context) {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
+            if (addresses.isNotEmpty()) {
+                val city = addresses[0].locality ?: "City not found"
+                val country = addresses[0].countryName ?: "State not found"
+                address = "$city, $country"
+            }
+        }
+    }
 
     val locationPermission = rememberPermission(
         Manifest.permission.ACCESS_COARSE_LOCATION
@@ -121,11 +135,11 @@ fun UserProfileScreen(
         }
     }
 
-    getLocationName(
-        latitude = locationService.coordinates?.latitude ?: 0.toDouble(),
-        longitude = locationService.coordinates?.longitude ?: 0.toDouble()
-    )
-
+    LaunchedEffect(locationService.coordinates) {
+        locationService.coordinates?.let { coordinates ->
+            getLocationName(coordinates.latitude, coordinates.longitude, ctx)
+        }
+    }
 
     // Screen ui
     Scaffold(
@@ -177,7 +191,7 @@ fun UserProfileScreen(
                         style = MaterialTheme.typography.titleLarge
                     )
                     Text(
-                        text = address.value,
+                        text = address,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.clickable {
                             requestLocation()
@@ -261,18 +275,6 @@ fun UserProfileScreen(
                 }
             }
             showLocationPermanentlyDeniedSnackbar = false
-        }
-    }
-}
-
-@Composable
-fun getLocationName(latitude: Double, longitude: Double) {
-    val geocoder = Geocoder(LocalContext.current, Locale.getDefault())
-    geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
-        if (addresses.isNotEmpty()) {
-            val city = addresses[0].locality ?: "City not found"
-            val country = addresses[0].countryName ?: "State not found"
-            address.value = "$city, $country"
         }
     }
 }
