@@ -55,13 +55,13 @@ class PlantViewModel : ViewModel(), KoinComponent {
 
         val plantCount = plantRepository.countByUser(plant.userId)!!
 
-        if (plantCount == 1) {
+        if (plantCount in 1..9) {
             insertBadge(context,userId = plant.userId , name = context.getString(R.string.badge_1_plant_name))
-        }else if( plantCount >= 100){
-            insertBadge(context,userId = plant.userId , name = context.getString(R.string.badge_100_plants_name))
-        }else if( plantCount >= 50){
+        }else if( plantCount in 10..49){
+            insertBadge(context,userId = plant.userId , name = context.getString(R.string.badge_10_plants_name))
+        }else if( plantCount in 50..99){
             insertBadge(context,userId = plant.userId , name = context.getString(R.string.badge_50_plants_name))
-        }else if( plantCount >= 10){
+        }else if( plantCount >= 100){
             insertBadge(context,userId = plant.userId , name = context.getString(R.string.badge_100_plants_name))
         }
     }
