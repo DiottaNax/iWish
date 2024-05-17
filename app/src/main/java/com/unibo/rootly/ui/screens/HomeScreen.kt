@@ -154,7 +154,8 @@ fun HomeScreen(
                         navController.navigate(RootlyRoute.PlantDetails.route)
                     },
                     onCompleted = {
-                        val res = plantViewModel.getLastDate(plant.activity, plant.plant) != LocalDate.now()
+                        val n = plantViewModel.getLastDate(plant.activity, plant.plant)
+                        val res = n != LocalDate.now()
                         scope.launch {
                             delay(100.milliseconds)
                             if (res) {
@@ -181,9 +182,10 @@ fun HomeScreen(
                                     }
                                 }
                             } else {
-                                Toast.makeText(context,
-                                    "you already ${plant.activity} ${plant.plant.plantName} today"
-                                    , Toast.LENGTH_SHORT).show()
+                                snackbarHostState.showSnackbar(
+                                    message = "you already ${plant.activity} ${plant.plant.plantName} $n",
+                                    duration = SnackbarDuration.Short
+                                )
                             }
                         }
                         res
