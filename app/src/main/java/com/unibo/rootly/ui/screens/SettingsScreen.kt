@@ -134,17 +134,19 @@ fun SettingsScreen(
                 )
             }
             Spacer(Modifier.height(16.dp))
-            Text(
-                text = "Check your permission:",
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Button(
-                onClick = { checkNotificationPermission() }
-            ) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 Text(
-                    text = "Notification",
+                    text = "Check your permission:",
                     style = MaterialTheme.typography.bodyMedium
                 )
+                Button(
+                    onClick = { checkNotificationPermission() }
+                ) {
+                    Text(
+                        text = "Notification",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             }
         }
     }
