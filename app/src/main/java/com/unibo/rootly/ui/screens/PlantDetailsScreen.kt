@@ -3,6 +3,7 @@ package com.unibo.rootly.ui.screens
 import android.content.Intent
 import android.net.Uri
 import android.provider.CalendarContract
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -19,8 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledTonalIconButton
@@ -70,7 +68,7 @@ fun PlantDetailsScreen(
     }
 
     Column(
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .verticalScroll(rememberScrollState())
@@ -90,7 +88,6 @@ fun PlantDetailsScreen(
                 style = MaterialTheme.typography.titleLarge
             )
         }
-        Spacer(Modifier.height(16.dp))
         Box(
             contentAlignment = Alignment.TopEnd
         ) {
@@ -127,7 +124,6 @@ fun PlantDetailsScreen(
             4 -> "full sun"
             else -> "error please contact our team :("
         }
-        Spacer(Modifier.height(16.dp))
         Text(
             text = "Ideal conditions:",
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
@@ -142,7 +138,6 @@ fun PlantDetailsScreen(
                     "${specie?.maxTemperature}°",
             style = MaterialTheme.typography.bodyMedium
         )
-        Spacer(Modifier.height(16.dp))
         Text(
             text = "Next activities:",
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
@@ -156,7 +151,7 @@ fun PlantDetailsScreen(
                 text = "Water: $nextWaterDate",
                 style = MaterialTheme.typography.bodyMedium
             )
-            AddToCalendarChip(
+            AddToCalendarButton(
                 title = "Water ${plant.plantName}",
                 time = nextWaterDate?.atStartOfDay(ZoneId.systemDefault())?.toInstant()
                     ?.toEpochMilli() ?: System.currentTimeMillis()
@@ -171,7 +166,7 @@ fun PlantDetailsScreen(
                 text = "Fertilizer: $nextFertilizeDate",
                 style = MaterialTheme.typography.bodyMedium
             )
-            AddToCalendarChip(
+            AddToCalendarButton(
                 title = "Fertilizer ${plant.plantName}",
                 time = nextFertilizeDate?.atStartOfDay(ZoneId.systemDefault())?.toInstant()
                     ?.toEpochMilli() ?: System.currentTimeMillis()
@@ -196,30 +191,25 @@ fun PlantDetailsScreen(
 }
 
 @Composable
-fun AddToCalendarChip(
+fun AddToCalendarButton(
     title: String,
     time: Long
 ) {
     val context = LocalContext.current
 
-    AssistChip(
-        onClick = {
+    Box(
+        Modifier.clickable {
             val intent = Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.Events.TITLE, title)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, time)
                 .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, time)
             context.startActivity(intent)
-        },
-        label = {
-            Text(text = "Add to your calendar")
-        },
-        leadingIcon = {
-            Icon(
-                Icons.Outlined.Event,
-                contentDescription = "Add event",
-                Modifier.size(AssistChipDefaults.IconSize)
-            )
         }
-    )
+    ) {
+        Icon(
+            Icons.Outlined.Event,
+            contentDescription = "Add event",
+        )
+    }
 }
