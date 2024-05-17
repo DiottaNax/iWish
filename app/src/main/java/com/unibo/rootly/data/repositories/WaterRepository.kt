@@ -1,6 +1,5 @@
 package com.unibo.rootly.data.repositories
 
-import androidx.annotation.WorkerThread
 import com.unibo.rootly.data.database.Water
 import com.unibo.rootly.data.database.daos.WaterDao
 import java.time.LocalDate

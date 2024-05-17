@@ -1,7 +1,6 @@
 package com.unibo.rootly.data.database
 
 import android.content.Context
-import androidx.core.content.ContextCompat.getString
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase

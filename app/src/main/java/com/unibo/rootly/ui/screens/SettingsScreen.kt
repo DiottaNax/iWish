@@ -124,7 +124,7 @@ fun SettingsScreen(
                         {
                             Icon(
                                 imageVector = Icons.Filled.Done,
-                                contentDescription = "Choosen icon",
+                                contentDescription = "Chosen icon",
                                 modifier = Modifier.size(FilterChipDefaults.IconSize)
                             )
                         }
