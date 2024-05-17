@@ -183,7 +183,7 @@ fun HomeScreen(
                                 }
                             } else {
                                 snackbarHostState.showSnackbar(
-                                    message = "you already ${plant.activity} ${plant.plant.plantName} $n",
+                                    message = "you already ${plant.activity} ${plant.plant.plantName} today",
                                     duration = SnackbarDuration.Short
                                 )
                             }

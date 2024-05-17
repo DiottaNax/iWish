@@ -21,12 +21,15 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,23 +43,13 @@ fun ActivityCard(
     img: String?,
     modifier: Modifier = Modifier
 ) {
-    // Creates the dismiss state
-    val dismissState = rememberSwipeToDismissBoxState(
-        confirmValueChange = { state ->
-            if (state == SwipeToDismissBoxValue.StartToEnd ||
-                state == SwipeToDismissBoxValue.EndToStart
-                ) {   // Activity done
-                onCompleted()
-            } else {
-                false
-            }
-        }
-    )
+    val dismissState = rememberSwipeToDismissBoxState()
+    val scope = rememberCoroutineScope()
 
     SwipeToDismissBox(
         state = dismissState,
         backgroundContent = {
-            val color by animateColorAsState(   // Define background color
+            val color by animateColorAsState(
                 when (dismissState.targetValue) {
                     SwipeToDismissBoxValue.Settled -> MaterialTheme.colorScheme.surfaceVariant
                     SwipeToDismissBoxValue.StartToEnd -> MaterialTheme.colorScheme.primary
@@ -84,7 +77,6 @@ fun ActivityCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxSize()
             ) {
-                // Data section (Info on the current activity)
                 Column(
                     modifier = Modifier.padding(start = 16.dp)
                 ) {
@@ -106,7 +98,6 @@ fun ActivityCard(
                             text = activity,
                             color = MaterialTheme.colorScheme.onSecondaryContainer,
                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
-
                         )
                         Text(
                             text = date,
@@ -115,12 +106,24 @@ fun ActivityCard(
                         )
                     }
                 }
-                // Image section
                 ImageDisplay(
-                    uri = img?.let {Uri.parse(img)},
+                    uri = img?.let { Uri.parse(img) },
                     contentDescription = "Plant photo",
                     modifier = Modifier.aspectRatio(1f)
                 )
+            }
+        }
+    }
+
+    LaunchedEffect(dismissState.currentValue) {
+        if (dismissState.currentValue == SwipeToDismissBoxValue.StartToEnd ||
+            dismissState.currentValue == SwipeToDismissBoxValue.EndToStart
+        ) {
+            val result = onCompleted()
+            if (!result) {
+                scope.launch {
+                    dismissState.snapTo(SwipeToDismissBoxValue.Settled)
+                }
             }
         }
     }
