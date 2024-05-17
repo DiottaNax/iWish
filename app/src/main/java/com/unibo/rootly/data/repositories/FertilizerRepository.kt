@@ -9,11 +9,7 @@ class FertilizerRepository(
 ) {
     suspend fun insert(fertilizer: Fertilizer) = fertilizerDao.insertFertilizer(fertilizer)
 
-    fun getDuesBeforeDateFavorites(userId: Int, date: LocalDate = LocalDate.now()) = fertilizerDao.getFertilizeBeforeDateFavorites(userId,date)
-
     fun getAllFavorites(userId: Int) = fertilizerDao.getAllFertilizeFavorites(userId)
-
-    fun getDuesBeforeDate(userId: Int, date: LocalDate = LocalDate.now()) = fertilizerDao.getFertilizeBeforeDate(userId,date)
 
     fun getAll(userId: Int) = fertilizerDao.getAllFertilize(userId)
 

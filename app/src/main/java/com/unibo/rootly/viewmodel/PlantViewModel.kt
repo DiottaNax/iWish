@@ -15,6 +15,7 @@ import com.unibo.rootly.data.repositories.SpeciesRepository
 import com.unibo.rootly.data.repositories.WaterRepository
 import com.unibo.rootly.utils.Notifications
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -106,25 +107,13 @@ class PlantViewModel : ViewModel(), KoinComponent {
     }
 
     fun getWaterBeforeDate(userId: Int, date: LocalDate)
-    = waterRepository.getDuesBeforeDate(userId,date).map { plants ->
-        plants.map { plant ->
-            PlantCard(
-                plant = plant,
-                activity = WATER,
-                date = getNextWater(plant)
-            )
-        }
+            = getAllWater(userId).map{ plants ->
+        plants.filter { plant -> plant.date!! <= date }
     }
 
-    fun getWaterBeforeDateFavorite(userId: Int, date: LocalDate) =
-        waterRepository.getDuesBeforeDateFavorites(userId, date).map { plants ->
-        plants.map { plant ->
-            PlantCard(
-                plant = plant,
-                activity = WATER,
-                date = getNextWater(plant)
-            )
-        }
+    fun getWaterBeforeDateFavorite(userId: Int, date: LocalDate)
+        = getAllWaterFavorite(userId).map{ plants ->
+            plants.filter { plant -> plant.date!! <= date }
     }
 
     fun getAllWaterFavorite(userId: Int) = waterRepository.getAllFavorites(userId).map { plants ->
@@ -167,26 +156,14 @@ class PlantViewModel : ViewModel(), KoinComponent {
     }
 
     fun getFertilizerBeforeDate(userId: Int, date: LocalDate)
-            = fertilizerRepository.getDuesBeforeDate(userId,date).map { plants ->
-        plants.map { plant ->
-            PlantCard(
-                plant = plant,
-                activity = FERTILIZE,
-                date = getNextFertilize(plant)
-            )
-        }
+        = getAllFertilizer(userId).map{ plants ->
+            plants.filter { plant -> plant.date!! <= date }
     }
 
-    fun getFertilizerBeforeDateFavorite(userId: Int, date: LocalDate) =
-        fertilizerRepository.getDuesBeforeDateFavorites(userId, date).map { plants ->
-            plants.map { plant ->
-                PlantCard(
-                    plant = plant,
-                    activity = FERTILIZE,
-                    date = getNextFertilize(plant)
-                )
-            }
-        }
+    fun getFertilizerBeforeDateFavorite(userId: Int, date: LocalDate)
+        = getAllFertilizerFavorite(userId).map{ plants ->
+            plants.filter { plant -> plant.date!! <= date }
+    }
 
     fun getAllFertilizerFavorite(userId: Int) =
         fertilizerRepository.getAllFavorites(userId).map { plants ->

@@ -22,28 +22,8 @@ interface FertilizerDao {
             "left outer JOIN (SELECT  plant_id, MAX(date) AS last_fert_date FROM Fertilizer GROUP BY plant_id) f " +
             "ON p.plant_id = f.plant_id " +
             "JOIN Specie s ON s.scientific_name = p.scientific_name " +
-            "WHERE p.user_id = :userId and p.dead = 0 " +
-            "AND s.water_frequency <= CAST((julianday(:today) - julianday(f.last_fert_date)) AS INTEGER)")
-    fun getFertilizeBeforeDate(userId: Int, today: LocalDate): Flow<List<Plant>>
-
-
-    @Query("SELECT p.* " +
-            "FROM Plant p " +
-            "left outer JOIN (SELECT  plant_id, MAX(date) AS last_fert_date FROM Fertilizer GROUP BY plant_id) f " +
-            "ON p.plant_id = f.plant_id " +
-            "JOIN Specie s ON s.scientific_name = p.scientific_name " +
             "WHERE p.user_id = :userId and p.dead = 0 ")
     fun getAllFertilize(userId: Int): Flow<List<Plant>>
-
-    @Query("SELECT p.* " +
-            "FROM Plant p " +
-            "left outer JOIN (SELECT  plant_id, MAX(date) AS last_fert_date FROM Fertilizer GROUP BY plant_id) f " +
-            "ON p.plant_id = f.plant_id " +
-            "JOIN Specie s ON s.scientific_name = p.scientific_name " +
-            "WHERE p.user_id = :userId and p.dead = 0 and p.favorite = 1 " +
-            "AND s.water_frequency <= CAST((julianday(:today) - julianday(f.last_fert_date)) AS INTEGER)")
-    fun getFertilizeBeforeDateFavorites(userId: Int, today: LocalDate): Flow<List<Plant>>
-
 
     @Query("SELECT p.* " +
             "FROM Plant p " +

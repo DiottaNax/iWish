@@ -17,15 +17,6 @@ interface WaterDao {
     suspend fun insertAllWater(waterList: List<Water>) =
         waterList.forEach { water -> insertWater(water)  }
 
-    @Query("SELECT p.* " +
-            "FROM Plant p " +
-            "LEFT OUTER JOIN (SELECT plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY plant_id) w " +
-            "ON p.plant_id = w.plant_id " +
-            "JOIN Specie s ON s.scientific_name = p.scientific_name " +
-            "WHERE p.user_id = :userId AND p.dead = 0 " +
-            "AND s.water_frequency <= CAST((julianday(:today) - julianday(w.last_watered_date)) AS INTEGER)")
-    fun getWaterBeforeDate(userId: Int, today: LocalDate): Flow<List<Plant>>
-
 
     @Query("SELECT p.* " +
             "FROM Plant p " +
@@ -34,15 +25,6 @@ interface WaterDao {
             "JOIN Specie s ON s.scientific_name = p.scientific_name " +
             "WHERE p.user_id = :userId  and p.dead = 0 ")
     fun getAllWater(userId: Int): Flow<List<Plant>>
-
-    @Query("SELECT p.* " +
-            "FROM Plant p " +
-            "LEFT OUTER JOIN (SELECT plant_id, MAX(date) AS last_watered_date FROM Water GROUP BY plant_id) w " +
-            "ON p.plant_id = w.plant_id " +
-            "JOIN Specie s ON s.scientific_name = p.scientific_name " +
-            "WHERE p.user_id = :userId AND p.dead = 0 and p.favorite = 1 " +
-            "AND s.water_frequency <= CAST((julianday(:today) - julianday(w.last_watered_date)) AS INTEGER)")
-    fun getWaterBeforeDateFavorites(userId: Int, today: LocalDate): Flow<List<Plant>>
 
     @Query("SELECT p.* " +
             "FROM Plant p " +

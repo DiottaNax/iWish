@@ -10,11 +10,7 @@ class WaterRepository(
 ) {
     suspend fun insert(water: Water) = waterDao.insertWater(water)
 
-    fun getDuesBeforeDate(userId: Int, date :LocalDate = LocalDate.now()) = waterDao.getWaterBeforeDate(userId,date)
-
     fun getAll(userId: Int) = waterDao.getAllWater(userId)
-
-    fun getDuesBeforeDateFavorites(userId: Int, date :LocalDate = LocalDate.now()) = waterDao.getWaterBeforeDateFavorites(userId,date)
 
     fun getAllFavorites(userId: Int) = waterDao.getAllWaterFavorites(userId)
 
