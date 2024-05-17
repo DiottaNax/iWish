@@ -46,6 +46,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun PlantDetailsScreen(
@@ -53,6 +54,7 @@ fun PlantDetailsScreen(
     plantViewModel: PlantViewModel
 ) {
     val context = LocalContext.current
+    val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
 
     val plant = plantViewModel.plantSelected!!
     var isFavorite by remember { mutableStateOf(plant.isFavorite) }
@@ -90,7 +92,7 @@ fun PlantDetailsScreen(
             )
         }
         Text(
-            text = "added on ${plant.birthday}",
+            text = "added on ${plant.birthday.format(formatter)}",
             style = MaterialTheme.typography.labelMedium
         )
         Box(
@@ -153,7 +155,7 @@ fun PlantDetailsScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Water: $nextWaterDate",
+                text = "Water: ${nextWaterDate?.format(formatter)}",
                 style = MaterialTheme.typography.bodyMedium
             )
             AddToCalendarButton(
@@ -168,7 +170,7 @@ fun PlantDetailsScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Fertilizer: $nextFertilizeDate",
+                text = "Fertilizer: ${nextFertilizeDate?.format(formatter)}",
                 style = MaterialTheme.typography.bodyMedium
             )
             AddToCalendarButton(

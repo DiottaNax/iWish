@@ -49,6 +49,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import kotlin.time.Duration.Companion.milliseconds
 
 enum class Filter(
@@ -148,7 +149,8 @@ fun HomeScreen(
                     title = plant.plant.plantName,
                     subTitle = plant.plant.scientificName,
                     activity = plant.activity,
-                    date = if (plant.date!! <= LocalDate.now()) "today" else plant.date.toString(),
+                    date = if (plant.date!! <= LocalDate.now()) "today" else plant.date.format(
+                        DateTimeFormatter.ofPattern("dd MMMM yyyy")),
                     onClick = {
                         plantViewModel.selectPlant(plant.plant)
                         navController.navigate(RootlyRoute.PlantDetails.route)
