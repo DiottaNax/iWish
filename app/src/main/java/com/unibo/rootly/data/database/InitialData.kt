@@ -43,10 +43,10 @@ object InitialData {
         return listOf(
             BadgeType(context.getString(R.string.badge_1_plant_name),
                 R.drawable.badge1plant,
-                context.getString(R.string.badge_1_plant_name)),
+                context.getString(R.string.badge_1_plant_descr)),
             BadgeType(context.getString(R.string.badge_10_plants_name),
                 R.drawable.badge10plant,
-                context.getString(R.string.badge_10_plants_name)),
+                context.getString(R.string.badge_10_plants_descr)),
             BadgeType(context.getString(R.string.badge_50_plants_name),
                 R.drawable.badge50plant,
                 context.getString(R.string.badge_50_plants_name)),
