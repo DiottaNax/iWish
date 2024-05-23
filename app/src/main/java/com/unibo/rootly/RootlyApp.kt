@@ -30,7 +30,7 @@ class RootlyApp : Application() {
             PlantCheckWorker::class.java,
             1,
             TimeUnit.DAYS
-        ).build()
+        ).setInitialDelay(30, TimeUnit.MINUTES).build()
         WorkManager.getInstance(applicationContext).enqueue(plantCheckWorkRequest)
     }
 }
