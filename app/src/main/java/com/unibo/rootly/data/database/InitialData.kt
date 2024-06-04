@@ -41,78 +41,57 @@ object InitialData {
 
     fun getBadgeTypes(context: Context): List<BadgeType> {
         return listOf(
-            BadgeType(context.getString(R.string.badge_1_plant_name),
+            BadgeType(
+                context.getString(R.string.badge_1_plant_name),
                 R.drawable.badge1plant,
-                context.getString(R.string.badge_1_plant_descr)),
-            BadgeType(context.getString(R.string.badge_10_plants_name),
+                context.getString(R.string.badge_1_plant_descr)
+            ),
+            BadgeType(
+                context.getString(R.string.badge_10_plants_name),
                 R.drawable.badge10plant,
-                context.getString(R.string.badge_10_plants_descr)),
-            BadgeType(context.getString(R.string.badge_50_plants_name),
+                context.getString(R.string.badge_10_plants_descr)
+            ),
+            BadgeType(
+                context.getString(R.string.badge_50_plants_name),
                 R.drawable.badge50plant,
-                context.getString(R.string.badge_50_plants_name)),
-            BadgeType(context.getString(R.string.badge_100_plants_name),
+                context.getString(R.string.badge_50_plants_name)
+            ),
+            BadgeType(
+                context.getString(R.string.badge_100_plants_name),
                 R.drawable.badge100plant,
-                context.getString(R.string.badge_100_plants_descr)),
-            BadgeType(context.getString(R.string.badge_1_month_name),
+                context.getString(R.string.badge_100_plants_descr)
+            ),
+            BadgeType(
+                context.getString(R.string.badge_1_month_name),
                 R.drawable.badge1month,
-                context.getString(R.string.badge_1_month_descr)),
-            BadgeType(context.getString(R.string.badge_6_months_name),
+                context.getString(R.string.badge_1_month_descr)
+            ),
+            BadgeType(
+                context.getString(R.string.badge_6_months_name),
                 R.drawable.badge6month,
-                context.getString(R.string.badge_6_months_descr)),
-            BadgeType(context.getString(R.string.badge_1_year_name),
+                context.getString(R.string.badge_6_months_descr)
+            ),
+            BadgeType(
+                context.getString(R.string.badge_1_year_name),
                 R.drawable.badge1year,
-                context.getString(R.string.badge_1_year_descr)),
-            BadgeType(context.getString(R.string.badge_water_name),
+                context.getString(R.string.badge_1_year_descr)
+            ),
+            BadgeType(
+                context.getString(R.string.badge_water_name),
                 R.drawable.badge_water,
-                context.getString(R.string.badge_water_descr)),
-            BadgeType(context.getString(R.string.badge_fertilizer_name),
+                context.getString(R.string.badge_water_descr)
+            ),
+            BadgeType(
+                context.getString(R.string.badge_fertilizer_name),
                 R.drawable.badge_fertilize,
-                context.getString(R.string.badge_fertilizer_descr)),
-            BadgeType(context.getString(R.string.badge_death_name),
+                context.getString(R.string.badge_fertilizer_descr)
+            ),
+            BadgeType(
+                context.getString(R.string.badge_death_name),
                 R.drawable.badge_dead,
-                context.getString(R.string.badge_death_descr))
+                context.getString(R.string.badge_death_descr)
+            )
 
         )
-    }
-
-    //user example with plants for test reasons
-
-    fun getInitialUser(): User {
-        return User( username = "ExampleUser", password = "password")
-    }
-
-    fun getInitialPlants(): List<Plant> {
-        val plants = mutableListOf<Plant>()
-        for (i in 1..10) {
-            val species = getInitialSpecies()[i]
-            plants.add(
-                Plant(
-                    userId = 1,
-                    plantName = "Plant $i",
-                    isDead = i==10,
-                    isFavorite = false,
-                    birthday = LocalDate.of(2023, i, i),
-                    scientificName = species.scientificName,
-                    img = null
-                )
-            )
-        }
-        return plants
-    }
-
-    fun getInitialWaters(): List<Water> {
-        val waters = mutableListOf<Water>()
-        for (i in 1..10) {
-            waters.add(Water(plantId = i, date = LocalDate.of(2024, 4, i + 5)))
-        }
-        return waters
-    }
-
-    fun getInitialFertilizers(): List<Fertilizer> {
-        val fertilizers = mutableListOf<Fertilizer>()
-        for (i in 1..10) {
-            fertilizers.add(Fertilizer(plantId = i, date = LocalDate.of(2024, 3, i + 5)))
-        }
-        return fertilizers
     }
 }
