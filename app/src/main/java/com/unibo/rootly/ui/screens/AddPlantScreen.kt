@@ -132,7 +132,7 @@ fun AddPlantScreen(
                         Modifier.clip(RoundedCornerShape(28.dp))
                             .fillMaxWidth()
                             .heightIn(min = 256.dp,  max = 435.dp),
-                        contentScale = ContentScale.Fit,
+                        contentScale = ContentScale.Crop,
                         )
                 } else {
                     Image(

@@ -35,7 +35,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -108,7 +107,6 @@ fun PlantDetailsScreen(
                     .clip(RoundedCornerShape(28.dp))
                     .fillMaxWidth()
                     .heightIn(min = 256.dp,  max = 435.dp),
-                contentScale = ContentScale.Fit,
                 defaultHigh = 256.dp
             )
             FilledTonalIconButton(
