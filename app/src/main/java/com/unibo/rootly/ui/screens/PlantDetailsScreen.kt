@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -104,7 +105,8 @@ fun PlantDetailsScreen(
                 contentDescription = "Plant photo",
                 modifier = Modifier
                     .clip(RoundedCornerShape(28.dp))
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .heightIn(min = 256.dp,  max = 435.dp),
                 defaultHigh = 256.dp
             )
             FilledTonalIconButton(
