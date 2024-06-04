@@ -20,13 +20,14 @@ fun ImageDisplay(
     uri: Uri?,
     contentDescription: String,
     modifier: Modifier = Modifier,
-    defaultHigh: Dp = 80.dp
+    defaultHigh: Dp = 80.dp,
+    contentScale: ContentScale = ContentScale.Crop
 ) {
     if (uri != null) {
         AsyncImage(
             model = uri,
             contentDescription = contentDescription,
-            contentScale = ContentScale.Crop,
+            contentScale = contentScale,
             modifier = modifier
         )
     } else {
