@@ -10,8 +10,8 @@ Various useful functions are integrated in the app, for example, you can filter 
   <img src="https://github.com/mircoterenzi/MOB24-Rootly/blob/main/doc/mockup-2.png">
 </div>
 
-# Extra documentation
+## Extra documentation
 Inside the repository, more precisely by following the path `rootly-presentation.pdf`, you can find a short presentation document (in Italian) indicating the main features of the application.
 
-# How to use
+## How to use
 To use rootly, simply download the latest version in the release section of this repository and install it on your android device.
