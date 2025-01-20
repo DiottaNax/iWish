@@ -14,21 +14,21 @@ data class BadgeType(
 )
 
 
-@Entity(tableName = "Fertilizer", primaryKeys = [ "plant_id", "date"])
-data class Fertilizer(
-    @ColumnInfo(name = "plant_id") val plantId: Int,
+@Entity(tableName = "Cleaning", primaryKeys = [ "pet_id", "date"])
+data class Cleaning(
+    @ColumnInfo(name = "pet_id") val petId: Int,
     @ColumnInfo(name = "date") val date: LocalDate
 )
 
-@Entity(tableName = "Plant")
-data class Plant(
+@Entity(tableName = "Pet")
+data class Pet(
     @ColumnInfo(name = "user_id") val userId: Int,
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "plant_id") val plantId: Int = 0,
-    @ColumnInfo(name = "plant_name") val plantName: String,
-    @ColumnInfo(name = "dead") val isDead: Boolean = false,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "pet_id") val petId: Int = 0,
+    @ColumnInfo(name = "pet_name") val petName: String,
+    @ColumnInfo(name = "removed") val isRemoved: Boolean = false,
     @ColumnInfo(name = "favorite") val isFavorite: Boolean= false,
     @ColumnInfo(name = "birthday") val birthday: LocalDate,
-    @ColumnInfo(name = "scientific_name") val scientificName: String,
+    @ColumnInfo(name = "specie") val specie: String,
     @ColumnInfo(name = "img") val img: String? = null
 )
 
@@ -38,12 +38,18 @@ data class Received(
     @ColumnInfo(name = "user_id") val userId: Int
 )
 
-@Entity(tableName = "Specie")
-data class Species(
-    @PrimaryKey @ColumnInfo(name = "scientific_name") val scientificName: String,
-    @ColumnInfo(name = "water_frequency") val waterFrequency: Int,
-    @ColumnInfo(name = "light_level") val lightLevel: Int,
-    @ColumnInfo(name = "fertilizer_frequency") val fertilizerFrequency: Int,
+enum class DietType {
+    CARNIVORE,
+    HERBIVORE,
+    OMNIVORE
+}
+
+@Entity(tableName = "Pet_Species")
+data class PetSpecies(
+    @PrimaryKey @ColumnInfo(name = "specie_name") val specieName: String,
+    @ColumnInfo(name = "feeding_frequency") val feedingFrequency: Int,
+    @ColumnInfo(name = "diet_type") val dietType: DietType,
+    @ColumnInfo(name = "cleaning_frequency") val cleaningFrequency: Int,
     @ColumnInfo(name = "tem_max") val maxTemperature: Float,
     @ColumnInfo(name = "tem_min") val minTemperature: Float
 )
@@ -56,9 +62,9 @@ data class User(
     @ColumnInfo(name = "profile_img") val profileImg: String? = null,
 )
 
-@Entity(tableName = "Water", primaryKeys = ["plant_id", "date"])
-data class Water(
-    @ColumnInfo(name = "plant_id") val plantId: Int,
+@Entity(tableName = "Feeding", primaryKeys = ["pet_id", "date"])
+data class Feeding(
+    @ColumnInfo(name = "pet_id") val petId: Int,
     @ColumnInfo(name = "date") val date: LocalDate
 )
 

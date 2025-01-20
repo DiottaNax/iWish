@@ -7,14 +7,13 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.unibo.rootly.R
 import com.unibo.rootly.data.database.daos.BadgeTypeDao
-import com.unibo.rootly.data.database.daos.FertilizerDao
-import com.unibo.rootly.data.database.daos.PlantDao
+import com.unibo.rootly.data.database.daos.CleaningDao
+import com.unibo.rootly.data.database.daos.PetDao
 import com.unibo.rootly.data.database.daos.ReceivedDao
-import com.unibo.rootly.data.database.daos.SpeciesDao
+import com.unibo.rootly.data.database.daos.PetSpeciesDao
 import com.unibo.rootly.data.database.daos.UserDao
-import com.unibo.rootly.data.database.daos.WaterDao
+import com.unibo.rootly.data.database.daos.FeedingDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,12 +35,12 @@ import java.time.LocalDate
 abstract class RootlyDatabase : RoomDatabase() {
 
     abstract fun badgeTypeDao(): BadgeTypeDao
-    abstract fun fertilizerDao(): FertilizerDao
-    abstract fun plantDao(): PlantDao
+    abstract fun fertilizerDao(): CleaningDao
+    abstract fun plantDao(): PetDao
     abstract fun receivedDao(): ReceivedDao
-    abstract fun speciesDao(): SpeciesDao
+    abstract fun speciesDao(): PetSpeciesDao
     abstract fun userDao(): UserDao
-    abstract fun waterDao(): WaterDao
+    abstract fun waterDao(): FeedingDao
 
     companion object {
         @Volatile

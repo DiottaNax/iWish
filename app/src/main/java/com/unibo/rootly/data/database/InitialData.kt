@@ -3,41 +3,21 @@ package com.unibo.rootly.data.database
 import android.content.Context
 import androidx.core.content.ContextCompat.getString
 import com.unibo.rootly.R
-import java.time.LocalDate
 
 object InitialData {
-    fun getInitialSpecies(): List<Species> {
+    fun getInitialPetSpecies(): List<PetSpecies> {
         return listOf(
-            Species("Spider Plant", 15, 2, 65, 25.0f, 10.0f),
-            Species("Snake Plant", 12, 1, 50, 30.0f, 15.0f),
-            Species("Pothos", 18, 1, 75, 25.0f, 15.0f),
-            Species("Peace Lily", 14, 1, 60, 25.0f, 15.0f),
-            Species("ZZ Plant", 11, 1, 35, 30.0f, 15.0f),
-            Species("Monstera", 16, 2, 80, 30.0f, 15.0f),
-            Species("Philodendron", 19, 2, 70, 25.0f, 15.0f),
-            Species("Rubber Plant", 13, 2, 45, 25.0f, 10.0f),
-            Species("Fiddle Leaf Fig", 17, 3, 85, 25.0f, 15.0f),
-            Species("Aloe Vera", 20, 2, 90, 35.0f, 10.0f),
-            Species("English Ivy", 15, 1, 60, 25.0f, 15.0f),
-            Species("Chinese Evergreen", 19, 1, 70, 25.0f, 15.0f),
-            Species("Parlor Palm", 11, 1, 45, 25.0f, 15.0f),
-            Species("Fern", 18, 2, 75, 25.0f, 15.0f),
-            Species("Jade Plant", 20, 2, 85, 35.0f, 10.0f),
-            Species("Succulent", 13, 2, 90, 35.0f, 10.0f),
-            Species("Calathea", 15, 2, 65, 25.0f, 15.0f),
-            Species("Bird of Paradise", 16, 3, 75, 30.0f, 15.0f),
-            Species("Money Tree", 19, 2, 90, 30.0f, 15.0f),
-            Species("Dracaena", 18, 2, 70, 30.0f, 15.0f),
-            Species("Pilea", 20, 1, 75, 25.0f, 15.0f),
-            Species("Christmas Cactus", 14, 1, 35, 25.0f, 10.0f),
-            Species("Hoya", 12, 1, 75, 25.0f, 15.0f),
-            Species("Dieffenbachia", 17, 1, 60, 25.0f, 15.0f),
-            Species("Oxalis", 18, 1, 65, 25.0f, 15.0f),
-            Species("Bromeliad", 15, 2, 40, 25.0f, 15.0f),
-            Species("Schefflera", 16, 1, 70, 25.0f, 15.0f),
-            Species("String of Pearls", 20, 1, 90, 35.0f, 10.0f)
+            PetSpecies("Dog", 1, DietType.OMNIVORE, 7, 35.0f, -10.0f),
+            PetSpecies("Cat", 1, DietType.CARNIVORE, 10, 30.0f, 0.0f),
+            PetSpecies("Hamster", 1, DietType.HERBIVORE, 5, 25.0f, 15.0f),
+            PetSpecies("Rabbit", 1, DietType.HERBIVORE, 7, 28.0f, 5.0f),
+            PetSpecies("Parrot", 1, DietType.OMNIVORE, 3, 30.0f, 18.0f),
+            PetSpecies("Goldfish", 1, DietType.OMNIVORE, 10, 28.0f, 18.0f),
+            PetSpecies("Turtle", 2, DietType.HERBIVORE, 15, 30.0f, 20.0f),
+            PetSpecies("Snake", 10, DietType.CARNIVORE, 14, 35.0f, 20.0f)
         )
     }
+}
 
     fun getBadgeTypes(context: Context): List<BadgeType> {
         return listOf(

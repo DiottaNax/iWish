@@ -4,21 +4,21 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.unibo.rootly.data.database.Species
+import com.unibo.rootly.data.database.PetSpecies
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface SpeciesDao {
+interface PetSpeciesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertSpecies(species: Species)
+    suspend fun insertSpecies(species: PetSpecies)
 
-    @Query("SELECT * FROM Specie WHERE scientific_name = :scientificName")
-    fun getSpeciesByName(scientificName: String): Species?
-    suspend fun insertAll(species: List<Species>) {
+    @Query("SELECT * FROM Pet_Species WHERE specie_name = :specieName")
+    fun getSpeciesByName(specieName: String): PetSpecies?
+    suspend fun insertAll(species: List<PetSpecies>) {
         species.forEach{ s -> insertSpecies(s)}
     }
 
-    @Query("SELECT scientific_name FROM specie")
+    @Query("SELECT specie_name FROM Pet_Species")
     fun getAllSpeciesName() : Flow<List<String>>
 
 }
