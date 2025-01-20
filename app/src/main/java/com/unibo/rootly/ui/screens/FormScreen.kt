@@ -116,12 +116,11 @@ fun FormScreen(
             Text(
                 text = screen.title,
                 style = MaterialTheme.typography.displayMedium.copy(
-                    fontFamily = FontFamily.Serif,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center // Mantieni il solo textAlign personalizzato
                 ),
                 modifier = Modifier.padding(bottom = 16.dp)
             )
+
 
             Column {
                 TextField(
@@ -170,7 +169,7 @@ fun FormScreen(
                 )
                 Text(
                     text = screen.switchButtonText,
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clickable { screen.onSwitch(context) }
                 )
