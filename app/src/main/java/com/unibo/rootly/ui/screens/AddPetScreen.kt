@@ -50,27 +50,27 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.unibo.rootly.data.database.Plant
+import com.unibo.rootly.data.database.Pet
 import com.unibo.rootly.ui.composables.DropDownMenuField
 import com.unibo.rootly.ui.composables.TextField
 import com.unibo.rootly.utils.PermissionStatus
 import com.unibo.rootly.utils.rememberCameraLauncher
 import com.unibo.rootly.utils.rememberPermission
-import com.unibo.rootly.viewmodel.PlantViewModel
+import com.unibo.rootly.viewmodel.PetViewModel
 import com.unibo.rootly.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @Composable
-fun AddPlantScreen(
+fun AddPetScreen(
     navController: NavHostController,
-    plantViewModel: PlantViewModel,
+    petViewModel: PetViewModel,
     userViewModel: UserViewModel
 ) {
     val ctx = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    val possiblePlantTypes = plantViewModel
+    val possiblePetTypes = petViewModel
         .getAllSpeciesNames()
         .collectAsState(initial = listOf())
         .value
@@ -128,7 +128,7 @@ fun AddPlantScreen(
                             .data(cameraLauncher.capturedImageUri)
                             .crossfade(true)
                             .build(),
-                        "Plant image",
+                        "Pet image",
                         Modifier.clip(RoundedCornerShape(28.dp))
                             .fillMaxWidth()
                             .heightIn(min = 256.dp,  max = 435.dp),
@@ -137,7 +137,7 @@ fun AddPlantScreen(
                 } else {
                     Image(
                         Icons.Outlined.Image,
-                        contentDescription = "Plant image",
+                        contentDescription = "Pet image",
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
                         modifier = Modifier
                             .clip(RoundedCornerShape(28.dp))
@@ -174,19 +174,19 @@ fun AddPlantScreen(
             DropDownMenuField(
                 value = type,
                 label = "Type",
-                list = possiblePlantTypes,
+                list = possiblePetTypes,
                 onChange = { type = it }
             )
             Button(
                 onClick = {
                     if (name != "" && type != "") {
-                        plantViewModel.insertPlant(
-                            Plant(
+                        petViewModel.insertPet(
+                            Pet(
                                 userId = userViewModel.user!!.userId,
-                                plantName = name,
+                                petName = name,
                                 birthday = LocalDate.now(),
-                                scientificName = type,
-                                isDead = false,
+                                specie = type,
+                                isRemoved = false,
                                 img = uri?.let { uri.toString() }
                             ),context = ctx
                         )

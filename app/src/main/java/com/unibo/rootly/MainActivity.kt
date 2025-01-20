@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.unibo.rootly.ui.RootlyNavGraph
-import com.unibo.rootly.ui.RootlyRoute
+import com.unibo.rootly.ui.PetlyRoute
 import com.unibo.rootly.ui.composables.TopBar
 import com.unibo.rootly.ui.theme.RootlyTheme
 import com.unibo.rootly.utils.LocationService
@@ -57,9 +57,9 @@ class MainActivity : ComponentActivity() {
                     val backStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute by remember {
                         derivedStateOf {
-                            RootlyRoute.routes.find {
+                            PetlyRoute.routes.find {
                                 it.route == backStackEntry?.destination?.route
-                            } ?: RootlyRoute.Home
+                            } ?: PetlyRoute.Home
                         }
                     }
 

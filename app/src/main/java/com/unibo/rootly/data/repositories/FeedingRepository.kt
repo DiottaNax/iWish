@@ -9,15 +9,15 @@ class FeedingRepository(
 ) {
     suspend fun insert(feeding: Feeding) = feedingDao.insertFeeding(feeding)
 
-    fun getAll(userId: Int) = feedingDao.getAllWater(userId)
+    fun getAll(userId: Int) = feedingDao.getAllFeeding(userId)
 
-    fun getAllFavorites(userId: Int) = feedingDao.getAllWaterFavorites(userId)
+    fun getAllFavorites(userId: Int) = feedingDao.getAllFeedingFavorites(userId)
 
     suspend fun remove(petId: Int, date: LocalDate) {
-        feedingDao.removeWater(petId,date)
+        feedingDao.removeFeeding(petId,date)
     }
 
-    fun getLastWaterDate(petId: Int) = feedingDao.getLastWateredDate(petId)
+    fun getLastFeedingDate(petId: Int) = feedingDao.getLastFeedingDate(petId)
 
-    suspend fun getTimesWatered(userId:Int ) = feedingDao.getTimesWatered(userId)
+    suspend fun getFeedingTimes(userId:Int ) = feedingDao.getFeedingTimes(userId)
 }

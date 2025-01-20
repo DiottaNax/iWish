@@ -37,12 +37,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.unibo.rootly.ui.RootlyRoute
+import com.unibo.rootly.ui.PetlyRoute
 import com.unibo.rootly.ui.composables.ActivityCard
 import com.unibo.rootly.ui.composables.BottomBar
-import com.unibo.rootly.viewmodel.FERTILIZE
-import com.unibo.rootly.viewmodel.PlantCard
-import com.unibo.rootly.viewmodel.PlantViewModel
+import com.unibo.rootly.viewmodel.FEEDING
+import com.unibo.rootly.viewmodel.PetCard
+import com.unibo.rootly.viewmodel.PetViewModel
 import com.unibo.rootly.viewmodel.UserViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -57,15 +57,15 @@ enum class Filter(
     Favourites("Favourites"),
     Today("Today"),
     ThisWeek("This week"),
-    Water("Water"),
-    Fertilize("Fertilize")
+    Feeding("Feeding"),
+    Cleaning("Cleaning")
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    plantViewModel: PlantViewModel,
+    petViewModel: PetViewModel,
     userViewModel: UserViewModel,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -76,15 +76,15 @@ fun HomeScreen(
     val userId = userViewModel.user!!.userId
 
     var selectedFilters by remember { mutableStateOf(emptyList<Filter>()) }
-    val plants = emptySet<PlantCard>().toMutableSet()
+    val pets = emptySet<PetCard>().toMutableSet()
 
     Scaffold (
         floatingActionButton = {
             FloatingActionButton(
                 containerColor = MaterialTheme.colorScheme.primary,
-                onClick = { navController.navigate(RootlyRoute.AddPlant.route) }
+                onClick = { navController.navigate(PetlyRoute.AddPlant.route) }
             ) {
-                Icon(Icons.Outlined.Add, "Add plant")
+                Icon(Icons.Outlined.Add, "Add pet")
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -115,22 +115,26 @@ fun HomeScreen(
         bottomBar = {
             BottomBar(
                 navController = navController,
-                currentRoute = RootlyRoute.Home
+                currentRoute = PetlyRoute.Home
             )
         }
     ) { contentPadding ->
 
-        plants.clear()
-        if(selectedFilters.contains(Filter.Water)){
-            plants.addAll(getDueWater(selectedFilters,plantViewModel,userId)
+        pets.clear()
+        if(selectedFilters.contains(Filter.Cleaning)){
+            pets.addAll(
+                getDueCleaning(selectedFilters,petViewModel,userId)
                 .collectAsState(initial = listOf()).value)
-        }else if(selectedFilters.contains(Filter.Fertilize)){
-            plants.addAll(getDueFertilizer(selectedFilters,plantViewModel,userId)
+        }else if(selectedFilters.contains(Filter.Feeding)){
+            pets.addAll(
+                getDueFeeding(selectedFilters,petViewModel,userId)
                 .collectAsState(initial = listOf()).value)
         }else{
-            plants.addAll(getDueWater(selectedFilters, plantViewModel, userId)
+            pets.addAll(
+                getDueCleaning(selectedFilters, petViewModel, userId)
                 .collectAsState(initial = listOf()).value)
-            plants.addAll(getDueFertilizer(selectedFilters, plantViewModel, userId)
+            pets.addAll(
+                getDueFeeding(selectedFilters, petViewModel, userId)
                 .collectAsState(initial = listOf()).value)
         }
 
@@ -141,28 +145,28 @@ fun HomeScreen(
             modifier = Modifier.padding(contentPadding)
         ) {
 
-            items(plants.toMutableList().sortedBy { it.date },
-                key = {"${it.plant.plantId}${it.activity}${it.date}${it.plant.plantName}"}
-            ) { plant ->
+            items(pets.toMutableList().sortedBy { it.date },
+                key = {"${it.pet.petId}${it.activity}${it.date}${it.pet.petName}"}
+            ) { pet ->
                 ActivityCard(
-                    title = plant.plant.plantName,
-                    subTitle = plant.plant.scientificName,
-                    activity = plant.activity,
-                    date = if (plant.date!! <= LocalDate.now()) "today" else plant.date.format(
+                    title = pet.pet.petName,
+                    subTitle = pet.pet.specie,
+                    activity = pet.activity,
+                    date = if (pet.date!! <= LocalDate.now()) "today" else pet.date.format(
                         DateTimeFormatter.ofPattern("dd MMMM yyyy")),
                     onClick = {
-                        plantViewModel.selectPlant(plant.plant)
-                        navController.navigate(RootlyRoute.PlantDetails.route)
+                        petViewModel.selectPet(pet.pet)
+                        navController.navigate(PetlyRoute.PlantDetails.route)
                     },
                     onCompleted = {
                         scope.launch {
                             delay(100.milliseconds)
-                            if (plantViewModel.getLastDate(plant.activity, plant.plant) != LocalDate.now()) {
-                                plants.remove(plant)
-                                if (plant.activity == FERTILIZE) {
-                                    plantViewModel.insertFertilizer(plant.plant,context = context)
+                            if (petViewModel.getLastDate(pet.activity, pet.pet) != LocalDate.now()) {
+                                pets.remove(pet)
+                                if (pet.activity == FEEDING) {
+                                    petViewModel.insertFeeding(pet.pet,context = context)
                                 } else {
-                                    plantViewModel.insertWater(plant.plant,context = context)
+                                    petViewModel.insertCleaning(pet.pet,context = context)
                                 }
                                 val snackbarResult = snackbarHostState.showSnackbar(
                                     message = "You have completed an activity",
@@ -172,23 +176,23 @@ fun HomeScreen(
                                 when (snackbarResult) {
                                     SnackbarResult.Dismissed -> {}
                                     SnackbarResult.ActionPerformed -> {
-                                        plants.add(plant)
-                                        if (plant.activity == FERTILIZE) {
-                                            plantViewModel.removeFertilizer(plant.plant.plantId)
+                                        pets.add(pet)
+                                        if (pet.activity == FEEDING) {
+                                            petViewModel.removeFeeding(pet.pet.petId)
                                         } else {
-                                            plantViewModel.removeWater(plant.plant.plantId)
+                                            petViewModel.removeCleaning(pet.pet.petId)
                                         }
                                     }
                                 }
                             } else {
                                 snackbarHostState.showSnackbar(
-                                    message = "You already ${plant.activity} ${plant.plant.plantName} today",
+                                    message = "You already ${pet.activity} ${pet.pet.petName} today",
                                     duration = SnackbarDuration.Short
                                 )
                             }
                         }
                     },
-                    img = plant.plant.img,
+                    img = pet.pet.img,
                     modifier = Modifier.animateItemPlacement(tween(100))
                 )
             }
@@ -196,48 +200,48 @@ fun HomeScreen(
     }
 }
 
-fun getDueFertilizer(selectedFilters: List<Filter>, plantViewModel: PlantViewModel, userId: Int)
-        :Flow<List<PlantCard>> {
+fun getDueFeeding(selectedFilters: List<Filter>, petViewModel: PetViewModel, userId: Int)
+        :Flow<List<PetCard>> {
     if (selectedFilters.contains(Filter.Today)){
         return if(selectedFilters.contains(Filter.Favourites)){
-            plantViewModel.getFertilizerBeforeDateFavorite(userId, LocalDate.now())
+            petViewModel.getFeedingBeforeDateFavorite(userId, LocalDate.now())
         }else{
-            plantViewModel.getFertilizerBeforeDate(userId, LocalDate.now())
+            petViewModel.getFeedingBeforeDate(userId, LocalDate.now())
         }
     }else if(selectedFilters.contains(Filter.ThisWeek)){
         return if(selectedFilters.contains(Filter.Favourites)){
-            plantViewModel.getFertilizerBeforeDateFavorite(userId, LocalDate.now().plusDays(7L))
+            petViewModel.getFeedingBeforeDateFavorite(userId, LocalDate.now().plusDays(7L))
         }else{
-            plantViewModel.getFertilizerBeforeDate(userId, LocalDate.now().plusDays(7L))
+            petViewModel.getFeedingBeforeDate(userId, LocalDate.now().plusDays(7L))
         }
     }else{
         return if(selectedFilters.contains(Filter.Favourites)){
-            plantViewModel.getAllFertilizerFavorite(userId)
+            petViewModel.getAllFeedingFavorite(userId)
         }else{
-            plantViewModel.getAllFertilizer(userId)
+            petViewModel.getAllFeeding(userId)
         }
     }
 }
 
-fun getDueWater(selectedFilters: List<Filter>, plantViewModel: PlantViewModel, userId: Int)
-        :Flow<List<PlantCard>> {
+fun getDueCleaning(selectedFilters: List<Filter>, petViewModel: PetViewModel, userId: Int)
+        :Flow<List<PetCard>> {
     if (selectedFilters.contains(Filter.Today)){
         return if(selectedFilters.contains(Filter.Favourites)){
-            plantViewModel.getWaterBeforeDateFavorite(userId, LocalDate.now())
+            petViewModel.getCleaningBeforeDateFavorite(userId, LocalDate.now())
         }else{
-            plantViewModel.getWaterBeforeDate(userId, LocalDate.now())
+            petViewModel.getCleaningBeforeDate(userId, LocalDate.now())
         }
     }else if(selectedFilters.contains(Filter.ThisWeek)){
         return if(selectedFilters.contains(Filter.Favourites)){
-            plantViewModel.getWaterBeforeDateFavorite(userId, LocalDate.now().plusDays(7L))
+            petViewModel.getCleaningBeforeDateFavorite(userId, LocalDate.now().plusDays(7L))
         }else{
-            plantViewModel.getWaterBeforeDate(userId, LocalDate.now().plusDays(7L))
+            petViewModel.getCleaningBeforeDate(userId, LocalDate.now().plusDays(7L))
         }
     }else{
         return if(selectedFilters.contains(Filter.Favourites)){
-            plantViewModel.getAllWaterFavorite(userId)
+            petViewModel.getAllCleaningFavorite(userId)
         }else{
-            plantViewModel.getAllWater(userId)
+            petViewModel.getAllCleaning(userId)
         }
     }
 }

@@ -21,13 +21,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
 import com.unibo.rootly.MainActivity
-import com.unibo.rootly.ui.RootlyRoute
+import com.unibo.rootly.ui.PetlyRoute
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
     navController: NavHostController,
-    currentRoute: RootlyRoute,
+    currentRoute: PetlyRoute,
     sharedPreferences: SharedPreferences,
     context: Context,
     modifier: Modifier = Modifier
@@ -62,7 +62,7 @@ fun TopBar(
         },
 
         actions = {
-            if (currentRoute == RootlyRoute.UserProfile) {
+            if (currentRoute == PetlyRoute.UserProfile) {
                 IconButton(onClick = {
                     val editor: SharedPreferences.Editor = sharedPreferences.edit()
                     editor.putInt("userId", -1)

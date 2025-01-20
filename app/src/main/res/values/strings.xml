@@ -10,17 +10,35 @@
     <string name="badge_first_feeding_name">First Feeding</string>
     <string name="badge_cleaning_bro_name">Cleaning Bro</string>
     <string name="badge_feeding_bro_name">Feeding Bro</string>
+    <string name="badge_1_month_name">One Month</string>
+    <string name="badge_6_months_name">Six Months</string>
+    <string name="badge_1_year_name">One Year</string>
 
     <!-- Descriptions -->
-    <string name="badge_first_pet_description">Your first furry friend! 🐾 Keep going—you’re just getting started on your pet journey!</string>
+    <string name="badge_first_pet_description">Your first furry friend! 🐾 Keep going, you’re just getting started on your pet journey!</string>
     <string name="badge_five_pets_description">Five pawsome pets! 🐕🐕🐕🐕🐕 You\'ve built a lovely family. Care for each one with love and watch them thrive!</string>
-    <string name="badge_ten_pets_description">Animal Squad! 🐾🐾🐾🐾🐾🐾🐾🐾🐾🐾 You\'ve built an amazing squad! Keep the games, love, and treats coming!</string>
-    <string name="badge_cleaning_guru_description">Cleaning Guru! 🧹✨ You’ve mastered the art of keeping every corner spotless. Clean paws, happy tails—pure bliss!</string>
-    <string name="badge_feeding_guru_description">Feeding Guru! 🍖🥗🐶 You know exactly what each pet needs to stay happy and healthy. Keep those bowls full and tails wagging!</string>
-    <string name="badge_first_cleaning_description">First Cleaning! 🧹 You’ve taken your first step towards making your pet space shine. Great job—let\'s keep it going!</string>
-    <string name="badge_first_feeding_description">First Feeding! 🥩🍖 You’ve started the journey of feeding your pet with love. Keep those bowls filled with care!</string>
-    <string name="badge_cleaning_bro_description">Cleaning Bro! 🧹✨ You’ve mastered the cleanup routine! The pet space is spotless—way to go!</string>
-    <string name="badge_feeding_bro_description">Feeding Bro! 🍖🥗 You’ve nailed down the art of feeding your pets. Happy pets mean happy you!</string>
+    <string name="badge_ten_pets_description">Ten pets!? 🐾🐾🐾🐾🐾🐾🐾🐾🐾🐾 You\'ve built an amazing squad! Keep the games, love, and treats coming!</string>
+
+    <string name="badge_cleaning_guru_description">
+        Cleaning Guru! 🧹✨ You’ve cleaned 40 times! 🏠 An expert at keeping every surface fur-free and every corner shining.
+    </string>
+    <string name="badge_feeding_guru_description">
+        Feeding Guru! 🍖🥗 You’ve fed 100 times! 🐾 Every pet is happy and knows that their appetite is always satisfied with love.
+    </string>
+
+    <string name="badge_first_cleaning_description">First Cleaning! 🧹 You’ve started making your pet space clean and tidy. Great first step! 🏠</string>
+    <string name="badge_first_feeding_description">First Feeding! 🥩🍖 This is your first step in taking care of your pet’s meals with love. 🐾</string>
+
+    <string name="badge_cleaning_bro_description">
+        Cleaning Bro! 🧹✨ You’ve cleaned 15 times! 🏠 A true expert, keeping everything orderly and free of fur and mess.
+    </string>
+    <string name="badge_feeding_bro_description">
+        Feeding Bro! 🍖🥗 You’ve fed 30 times! 🐾 Every pet is well-fed and happy thanks to you!
+    </string>
+
+    <string name="badge_1_month_descr">You’ve been using the app for one month! 🐾 Your pet journey is just getting started. Keep tracking and caring!</string>
+    <string name="badge_6_months_descr">You’ve been using the app for six months! 🐶 Great consistency in caring for your pets. Keep up the good work!</string>
+    <string name="badge_1_year_descr">Congratulations! You’ve been using the app for one whole year! 🐕 Your dedication to your pets is inspiring!</string>
 
     <string name="badge_notification_text">
         Congratulations, you received a new badge! Go to your profile to see it.

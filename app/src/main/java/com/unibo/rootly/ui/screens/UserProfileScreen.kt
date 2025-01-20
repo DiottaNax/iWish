@@ -51,7 +51,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.unibo.rootly.ui.RootlyRoute
+import com.unibo.rootly.ui.PetlyRoute
 import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.ui.composables.DefaultCard
 import com.unibo.rootly.ui.composables.ImageDisplay
@@ -146,7 +146,7 @@ fun UserProfileScreen(
         bottomBar = {
             BottomBar(
                 navController = navController,
-                currentRoute = RootlyRoute.UserProfile
+                currentRoute = PetlyRoute.UserProfile
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }

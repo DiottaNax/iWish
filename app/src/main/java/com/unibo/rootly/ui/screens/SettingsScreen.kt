@@ -36,7 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.unibo.rootly.ui.RootlyRoute
+import com.unibo.rootly.ui.PetlyRoute
 import com.unibo.rootly.ui.composables.BottomBar
 import com.unibo.rootly.utils.PermissionStatus
 import com.unibo.rootly.utils.rememberPermission
@@ -94,7 +94,7 @@ fun SettingsScreen(
         bottomBar = {
             BottomBar(
                 navController = navController,
-                currentRoute = RootlyRoute.Settings
+                currentRoute = PetlyRoute.Settings
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }

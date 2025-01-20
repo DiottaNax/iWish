@@ -23,7 +23,7 @@ interface CleaningDao {
             "ON p.pet_id = f.pet_id " +
             "JOIN Pet_Species s ON s.specie_name = p.specie " +
             "WHERE p.user_id = :userId and p.removed = 0 ")
-    fun getAllFertilize(userId: Int): Flow<List<Pet>>
+    fun getAllCleaning(userId: Int): Flow<List<Pet>>
 
     @Query("SELECT p.* " +
             "FROM Pet p " +
@@ -31,17 +31,17 @@ interface CleaningDao {
             "ON p.pet_id = f.pet_id " +
             "JOIN Pet_Species s ON s.specie_name = p.specie " +
             "WHERE p.user_id = :userId and p.removed = 0 and p.favorite = 1 ")
-    fun getAllFertilizeFavorites(userId: Int): Flow<List<Pet>>
+    fun getAllCleaningFavorites(userId: Int): Flow<List<Pet>>
 
     @Query("DELETE FROM Cleaning WHERE pet_id = :plantId AND date = :date")
     suspend fun removeFertilize(plantId: Int, date: LocalDate)
 
     @Query("SELECT MAX(date) FROM Cleaning WHERE pet_id = :plantId")
-    fun getLastFertilizeDate(plantId: Int) :LocalDate?
+    fun getLastCleaningDate(plantId: Int) :LocalDate?
 
     @Query("SELECT COUNT(*) " +
             "FROM Cleaning f join Pet p " +
             "on p.pet_id = f.pet_id " +
             "WHERE p.user_id =:userId")
-    fun getTimesFertilized(userId: Int): Int
+    fun getCleaningTimes(userId: Int): Int
 }

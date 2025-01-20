@@ -23,7 +23,7 @@ class PetRepository(
         }
     }
 
-    suspend fun insertDead(petId: Int) = petDao.insertDead(petId)
+    suspend fun removePet(petId: Int) = petDao.removePet(petId)
 
     suspend fun insertLike(petId: Int) = petDao.insertLike(petId)
 

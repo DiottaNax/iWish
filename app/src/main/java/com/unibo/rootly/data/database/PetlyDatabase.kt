@@ -22,35 +22,35 @@ import java.time.LocalDate
 @Database(
     entities = [
         BadgeType::class,
-        Fertilizer::class,
-        Plant::class,
+        Feeding::class,
+        Pet::class,
         Received::class,
-        Species::class,
+        PetSpecies::class,
         User::class,
-        Water::class
+        Cleaning::class
     ],
     version = 1,
 )
 @TypeConverters(Converters::class)
-abstract class RootlyDatabase : RoomDatabase() {
+abstract class PetlyDatabase : RoomDatabase() {
 
     abstract fun badgeTypeDao(): BadgeTypeDao
-    abstract fun fertilizerDao(): CleaningDao
-    abstract fun plantDao(): PetDao
+    abstract fun cleaningDao(): CleaningDao
+    abstract fun petDao(): PetDao
     abstract fun receivedDao(): ReceivedDao
     abstract fun speciesDao(): PetSpeciesDao
     abstract fun userDao(): UserDao
-    abstract fun waterDao(): FeedingDao
+    abstract fun feedingDao(): FeedingDao
 
     companion object {
         @Volatile
-        private var INSTANCE: RootlyDatabase? = null
+        private var INSTANCE: PetlyDatabase? = null
 
-        fun getDatabase(context: Context): RootlyDatabase {
+        fun getDatabase(context: Context): PetlyDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    RootlyDatabase::class.java,
+                    PetlyDatabase::class.java,
                     "rootly_database"
                 ).allowMainThreadQueries()
                 .addCallback(object : Callback() {
@@ -59,7 +59,7 @@ abstract class RootlyDatabase : RoomDatabase() {
                         INSTANCE?.let { database ->
                             CoroutineScope(Dispatchers.IO).launch {
                                 database.badgeTypeDao().insertAll(InitialData.getBadgeTypes(context))
-                                database.speciesDao().insertAll(InitialData.getInitialSpecies())
+                                database.speciesDao().insertAll(InitialData.getInitialPetSpecies())
                             }
                         }
                     }

@@ -7,17 +7,17 @@ import java.time.LocalDate
 class CleaningRepository(
     private val cleaningDao: CleaningDao
 ) {
-    suspend fun insert(fertilizer: Cleaning) = cleaningDao.insertCleaning(fertilizer)
+    suspend fun insert(cleaning: Cleaning) = cleaningDao.insertCleaning(cleaning)
 
-    fun getAllFavorites(userId: Int) = cleaningDao.getAllFertilizeFavorites(userId)
+    fun getAllFavorites(userId: Int) = cleaningDao.getAllCleaningFavorites(userId)
 
-    fun getAll(userId: Int) = cleaningDao.getAllFertilize(userId)
+    fun getAll(userId: Int) = cleaningDao.getAllCleaning(userId)
 
     suspend fun remove(plantId: Int, date: LocalDate) {
         cleaningDao.removeFertilize(plantId,date)
     }
 
-    fun getLastFertilizeDate(plantId: Int) = cleaningDao.getLastFertilizeDate(plantId)
+    fun getLastCleaningDate(plantId: Int) = cleaningDao.getLastCleaningDate(plantId)
 
-    fun getTimesFertilized(userId: Int) = cleaningDao.getTimesFertilized(userId)
+    fun getCleaningTimes(userId: Int) = cleaningDao.getCleaningTimes(userId)
 }

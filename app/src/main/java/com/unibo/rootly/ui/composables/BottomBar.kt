@@ -17,26 +17,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.unibo.rootly.ui.RootlyRoute
+import com.unibo.rootly.ui.PetlyRoute
 
 sealed class NavBarItem(
     val icon: ImageVector,
     val iconOnSelect: ImageVector,
-    val route: RootlyRoute
+    val route: PetlyRoute
 ) {
     data object Home: NavBarItem(
         Icons.Outlined.Checklist,
         Icons.Filled.Checklist,
-        RootlyRoute.Home
+        PetlyRoute.Home
     )
     data object Profile: NavBarItem(
         Icons.Outlined.Person,
-        Icons.Filled.Person, RootlyRoute.UserProfile
+        Icons.Filled.Person, PetlyRoute.UserProfile
     )
     data object Settings: NavBarItem(
         Icons.Outlined.Settings,
         Icons.Filled.Settings,
-        RootlyRoute.Settings
+        PetlyRoute.Settings
     )
 }
 val navBarItems = listOf(NavBarItem.Home, NavBarItem.Profile, NavBarItem.Settings)
@@ -44,7 +44,7 @@ val navBarItems = listOf(NavBarItem.Home, NavBarItem.Profile, NavBarItem.Setting
 @Composable
 fun BottomBar(
     navController: NavHostController,
-    currentRoute: RootlyRoute,
+    currentRoute: PetlyRoute,
     modifier: Modifier = Modifier
 ) {
     NavigationBar(

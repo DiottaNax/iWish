@@ -17,61 +17,69 @@ object InitialData {
             PetSpecies("Snake", 10, DietType.CARNIVORE, 14, 35.0f, 20.0f)
         )
     }
-}
-
     fun getBadgeTypes(context: Context): List<BadgeType> {
         return listOf(
             BadgeType(
-                context.getString(R.string.badge_1_plant_name),
-                R.drawable.badge1plant,
-                context.getString(R.string.badge_1_plant_descr)
+                context.getString(R.string.badge_first_pet_name),
+                R.drawable.badge_water,
+                context.getString(R.string.badge_first_pet_description)
             ),
             BadgeType(
-                context.getString(R.string.badge_10_plants_name),
-                R.drawable.badge10plant,
-                context.getString(R.string.badge_10_plants_descr)
+                context.getString(R.string.badge_five_pets_name),
+                R.drawable.badge_water,
+                context.getString(R.string.badge_five_pets_description)
             ),
             BadgeType(
-                context.getString(R.string.badge_50_plants_name),
-                R.drawable.badge50plant,
-                context.getString(R.string.badge_50_plants_name)
+                context.getString(R.string.badge_ten_pets_name),
+                R.drawable.badge_water,
+                context.getString(R.string.badge_ten_pets_description)
             ),
             BadgeType(
-                context.getString(R.string.badge_100_plants_name),
-                R.drawable.badge100plant,
-                context.getString(R.string.badge_100_plants_descr)
+                context.getString(R.string.badge_cleaning_guru_name),
+                R.drawable.badge_water,
+                context.getString(R.string.badge_cleaning_guru_description)
+            ),
+            BadgeType(
+                context.getString(R.string.badge_feeding_guru_name),
+                R.drawable.badge_water,
+                context.getString(R.string.badge_feeding_guru_description)
+            ),
+            BadgeType(
+                context.getString(R.string.badge_first_cleaning_name),
+                R.drawable.badge_water,
+                context.getString(R.string.badge_first_cleaning_description)
+            ),
+            BadgeType(
+                context.getString(R.string.badge_first_feeding_name),
+                R.drawable.badge_water,
+                context.getString(R.string.badge_first_feeding_description)
+            ),
+            BadgeType(
+                context.getString(R.string.badge_cleaning_bro_name),
+                R.drawable.badge_water,
+                context.getString(R.string.badge_cleaning_bro_description)
             ),
             BadgeType(
                 context.getString(R.string.badge_1_month_name),
-                R.drawable.badge1month,
+                R.drawable.badge_water,
                 context.getString(R.string.badge_1_month_descr)
             ),
             BadgeType(
                 context.getString(R.string.badge_6_months_name),
-                R.drawable.badge6month,
+                R.drawable.badge_water,
                 context.getString(R.string.badge_6_months_descr)
             ),
             BadgeType(
                 context.getString(R.string.badge_1_year_name),
-                R.drawable.badge1year,
+                R.drawable.badge_water,
                 context.getString(R.string.badge_1_year_descr)
             ),
             BadgeType(
-                context.getString(R.string.badge_water_name),
+                context.getString(R.string.badge_feeding_bro_name),
                 R.drawable.badge_water,
-                context.getString(R.string.badge_water_descr)
-            ),
-            BadgeType(
-                context.getString(R.string.badge_fertilizer_name),
-                R.drawable.badge_fertilize,
-                context.getString(R.string.badge_fertilizer_descr)
-            ),
-            BadgeType(
-                context.getString(R.string.badge_death_name),
-                R.drawable.badge_dead,
-                context.getString(R.string.badge_death_descr)
+                context.getString(R.string.badge_feeding_bro_description)
             )
-
         )
     }
 }
+

@@ -21,7 +21,7 @@ interface PetDao {
     fun removeLike(petId: Int)
 
     @Query("UPDATE pet SET removed = 1 WHERE pet_id = :petId ")
-    suspend fun insertDead(petId : Int)
+    suspend fun removePet(petId : Int)
 
     @Query("SELECT COUNT(*) FROM Pet WHERE user_id = :userId and removed = 0")
     suspend fun countByUser(userId: Int): Int?

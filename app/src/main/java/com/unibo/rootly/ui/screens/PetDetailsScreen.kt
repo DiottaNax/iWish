@@ -39,9 +39,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.unibo.rootly.data.database.Species
+import com.unibo.rootly.data.database.PetSpecies
 import com.unibo.rootly.ui.composables.ImageDisplay
-import com.unibo.rootly.viewmodel.PlantViewModel
+import com.unibo.rootly.viewmodel.PetViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -49,24 +49,24 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun PlantDetailsScreen(
+fun PetDetailsScreen(
     navController: NavHostController,
-    plantViewModel: PlantViewModel
+    petViewModel: PetViewModel
 ) {
     val context = LocalContext.current
     val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
 
-    val plant = plantViewModel.plantSelected!!
-    var isFavorite by remember { mutableStateOf(plant.isFavorite) }
-    var nextWaterDate by remember { mutableStateOf<LocalDate?>(null) }
-    var nextFertilizeDate by remember { mutableStateOf<LocalDate?>(null) }
-    var specie by remember { mutableStateOf<Species?>(null) }
+    val pet = petViewModel.petSelected!!
+    var isFavorite by remember { mutableStateOf(pet.isFavorite) }
+    var nextFeedingDate by remember { mutableStateOf<LocalDate?>(null) }
+    var nextCleaningDate by remember { mutableStateOf<LocalDate?>(null) }
+    var specie by remember { mutableStateOf<PetSpecies?>(null) }
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
-            nextWaterDate = plantViewModel.getNextWater(plant)
-            nextFertilizeDate = plantViewModel.getNextFertilize(plant)
-            specie = plantViewModel.getSpecieDetails(plant.scientificName)
+            nextFeedingDate = petViewModel.getNextFeeding(pet)
+            nextCleaningDate = petViewModel.getNextCleaning(pet)
+            specie = petViewModel.getSpecieDetails(pet.specie)
         }
     }
 
@@ -82,18 +82,18 @@ fun PlantDetailsScreen(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    text = plant.plantName,
+                    text = pet.petName,
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.SemiBold
                     )
                 )
                 Text(
-                    text = "(${plant.scientificName})",
+                    text = "(${pet.specie})",
                     style = MaterialTheme.typography.titleLarge
                 )
             }
             Text(
-                text = "Added on ${plant.birthday.format(formatter)}",
+                text = "Added on ${pet.birthday.format(formatter)}",
                 style = MaterialTheme.typography.bodySmall
             )
         }
@@ -101,7 +101,7 @@ fun PlantDetailsScreen(
             contentAlignment = Alignment.TopEnd
         ) {
             ImageDisplay(
-                uri = plant.img?.let { Uri.parse(plant.img) },
+                uri = pet.img?.let { Uri.parse(pet.img) },
                 contentDescription = "Plant photo",
                 modifier = Modifier
                     .clip(RoundedCornerShape(28.dp))
@@ -112,9 +112,9 @@ fun PlantDetailsScreen(
             FilledTonalIconButton(
                 onClick = {
                     if (isFavorite) {
-                        plantViewModel.removeLike(plant.plantId)
+                        petViewModel.removeLike(pet.petId)
                     } else {
-                        plantViewModel.addLike(plant.plantId)
+                        petViewModel.addLike(pet.petId)
                     }
                     isFavorite = !isFavorite
                 },
@@ -127,19 +127,13 @@ fun PlantDetailsScreen(
                 }
             }
         }
-        val lightLevel: String = when (specie?.lightLevel) {
-            1 -> "dark"
-            2 -> "shade"
-            3 -> "part sun"
-            4 -> "full sun"
-            else -> "error please contact our team :("
-        }
+        val dietType: String = (specie?.dietType ?: "No diet available").toString().lowercase()
         Text(
             text = "Ideal conditions:",
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
         )
         Text(
-            text = "Light: $lightLevel",
+            text = "Diet: $dietType",
             style = MaterialTheme.typography.bodyMedium
         )
         Text(
@@ -158,12 +152,12 @@ fun PlantDetailsScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Water: ${nextWaterDate?.format(formatter)}",
+                text = "Feeding: ${nextFeedingDate?.format(formatter)}",
                 style = MaterialTheme.typography.bodyMedium
             )
             AddToCalendarButton(
-                title = "Water ${plant.plantName}",
-                time = nextWaterDate?.atStartOfDay(ZoneId.systemDefault())?.toInstant()
+                title = "Feeding ${pet.petName}",
+                time = nextFeedingDate?.atStartOfDay(ZoneId.systemDefault())?.toInstant()
                     ?.toEpochMilli() ?: System.currentTimeMillis()
             )
         }
@@ -173,12 +167,12 @@ fun PlantDetailsScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Fertilizer: ${nextFertilizeDate?.format(formatter)}",
+                text = "Cleaning: ${nextCleaningDate?.format(formatter)}",
                 style = MaterialTheme.typography.bodyMedium
             )
             AddToCalendarButton(
-                title = "Fertilizer ${plant.plantName}",
-                time = nextFertilizeDate?.atStartOfDay(ZoneId.systemDefault())?.toInstant()
+                title = "Cleaning ${pet.petName}",
+                time = nextCleaningDate?.atStartOfDay(ZoneId.systemDefault())?.toInstant()
                     ?.toEpochMilli() ?: System.currentTimeMillis()
             )
         }
@@ -186,7 +180,7 @@ fun PlantDetailsScreen(
         Button(
             onClick = {
                 navController.navigateUp()
-                plantViewModel.addDead(plant, context = context)
+                petViewModel.removePet(pet, context = context)
             },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(

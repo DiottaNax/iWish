@@ -1,5 +1,7 @@
 package com.unibo.rootly.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NamedNavArgument
@@ -8,27 +10,27 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.unibo.rootly.ui.screens.AddPlantScreen
+import com.unibo.rootly.ui.screens.AddPetScreen
 import com.unibo.rootly.ui.screens.HomeScreen
-import com.unibo.rootly.ui.screens.PlantDetailsScreen
+import com.unibo.rootly.ui.screens.PetDetailsScreen
 import com.unibo.rootly.ui.screens.SettingsScreen
 import com.unibo.rootly.ui.screens.UserProfileScreen
 import com.unibo.rootly.utils.LocationService
-import com.unibo.rootly.viewmodel.PlantViewModel
+import com.unibo.rootly.viewmodel.PetViewModel
 import com.unibo.rootly.viewmodel.SettingsViewModel
 import com.unibo.rootly.viewmodel.UserViewModel
 import org.koin.androidx.compose.koinViewModel
 
-sealed class RootlyRoute(
+sealed class PetlyRoute(
     val route: String,
     val title: String,
     val arguments: List<NamedNavArgument> = emptyList()
 ){
-    data object Home : RootlyRoute("plants" , "To-do")
-    data object Settings : RootlyRoute("settings", "Settings")
-    data object AddPlant : RootlyRoute("add","Add a plant")
-    data object PlantDetails: RootlyRoute("plant","Plant details")
-    data object UserProfile : RootlyRoute(
+    data object Home : PetlyRoute("plants" , "To-do")
+    data object Settings : PetlyRoute("settings", "Settings")
+    data object AddPlant : PetlyRoute("add","Add a plant")
+    data object PlantDetails: PetlyRoute("plant","Plant details")
+    data object UserProfile : PetlyRoute(
         "user/{userId}",
         "Profile",
         listOf(navArgument("userId") { type = NavType.StringType } )
@@ -39,6 +41,7 @@ sealed class RootlyRoute(
 }
 
 @Composable
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun RootlyNavGraph(
     navController: NavHostController,
     settingsVM: SettingsViewModel,
@@ -46,25 +49,25 @@ fun RootlyNavGraph(
     userId: Int,
     modifier: Modifier = Modifier
 ) {
-    val  plantViewModel = koinViewModel<PlantViewModel>()
+    val  petViewModel = koinViewModel<PetViewModel>()
     val  userViewModel = koinViewModel<UserViewModel>()
     userViewModel.setUser(userId)
 
     NavHost(
         navController = navController,
-        startDestination = RootlyRoute.Home.route,
+        startDestination = PetlyRoute.Home.route,
         modifier = modifier
     ) {
-        with(RootlyRoute.Home) {
+        with(PetlyRoute.Home) {
             composable(route) {
                 HomeScreen(
                     navController,
-                    plantViewModel,
+                    petViewModel,
                     userViewModel
                 )
             }
         }
-        with(RootlyRoute.UserProfile) {
+        with(PetlyRoute.UserProfile) {
             composable(route, arguments) {
                 UserProfileScreen(
                     navController,
@@ -73,23 +76,23 @@ fun RootlyNavGraph(
                 )
             }
         }
-        with(RootlyRoute.PlantDetails) {
+        with(PetlyRoute.PlantDetails) {
             composable(route, arguments) {
-                val plant = plantViewModel.plantSelected
+                val plant = petViewModel.petSelected
                 if(plant != null) {
-                    PlantDetailsScreen(
+                    PetDetailsScreen(
                         navController,
-                        plantViewModel
+                        petViewModel
                     )
                 }
             }
         }
-        with(RootlyRoute.AddPlant) {
+        with(PetlyRoute.AddPlant) {
             composable(route) {
-                AddPlantScreen(navController, plantViewModel, userViewModel)
+                AddPetScreen(navController, petViewModel, userViewModel)
             }
         }
-        with(RootlyRoute.Settings) {
+        with(PetlyRoute.Settings) {
             composable(route) {
                 SettingsScreen(
                     navController,

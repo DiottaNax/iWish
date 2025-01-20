@@ -43,5 +43,5 @@ interface FeedingDao {
             "FROM Feeding w join Pet p " +
             "on p.pet_id = w.pet_id " +
             "WHERE p.user_id =:userId")
-    suspend fun getTimesFeeding(userId :Int) :Int
+    suspend fun getFeedingTimes(userId :Int) :Int
 }
