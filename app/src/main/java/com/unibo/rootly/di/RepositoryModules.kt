@@ -8,7 +8,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single { PlantRepository(
+    single { PetRepository(
         get(),
         get<Context>().applicationContext.contentResolver
     ) }
@@ -20,8 +20,8 @@ val repositoryModule = module {
             get<Context>().applicationContext.contentResolver
         )
     }
-    single { WaterRepository(get()) }
-    single { FertilizerRepository(get()) }
+    single { FeedingRepository(get()) }
+    single { CleaningRepository(get()) }
 
     viewModel { UserViewModel() }
     viewModel { PlantViewModel() }

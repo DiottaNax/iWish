@@ -25,11 +25,11 @@ private fun provideBadgeTypeDao(database: RootlyDatabase): BadgeTypeDao {
     return database.badgeTypeDao()
 }
 
-private fun provideFertilizerDao(database: RootlyDatabase): FertilizerDao {
+private fun provideFertilizerDao(database: RootlyDatabase): CleaningDao {
     return database.fertilizerDao()
 }
 
-private fun providePlantDao(database: RootlyDatabase): PlantDao {
+private fun providePlantDao(database: RootlyDatabase): PetDao {
     return database.plantDao()
 }
 
@@ -37,7 +37,7 @@ private fun provideReceivedDao(database: RootlyDatabase): ReceivedDao {
     return database.receivedDao()
 }
 
-private fun provideSpeciesDao(database: RootlyDatabase): SpeciesDao {
+private fun provideSpeciesDao(database: RootlyDatabase): PetSpeciesDao {
     return database.speciesDao()
 }
 
@@ -45,6 +45,6 @@ private fun provideUserDao(database: RootlyDatabase): UserDao {
     return database.userDao()
 }
 
-private fun provideWaterDao(database: RootlyDatabase): WaterDao {
+private fun provideWaterDao(database: RootlyDatabase): FeedingDao {
     return database.waterDao()
 }

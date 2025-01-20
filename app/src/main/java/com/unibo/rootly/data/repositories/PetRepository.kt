@@ -2,34 +2,34 @@ package com.unibo.rootly.data.repositories
 
 import android.content.ContentResolver
 import android.net.Uri
-import com.unibo.rootly.data.database.Plant
-import com.unibo.rootly.data.database.daos.PlantDao
+import com.unibo.rootly.data.database.Pet
+import com.unibo.rootly.data.database.daos.PetDao
 import com.unibo.rootly.utils.saveImageToStorage
 
-class PlantRepository(
-    private val plantDao: PlantDao,
+class PetRepository(
+    private val petDao: PetDao,
     private val contentResolver: ContentResolver
 ) {
-    suspend fun insert(plant: Plant): Long {
-        return if (plant.img?.isNotEmpty() == true) {
+    suspend fun insert(pet: Pet): Long {
+        return if (pet.img?.isNotEmpty() == true) {
             val imageUri = saveImageToStorage(
-                Uri.parse(plant.img),
+                Uri.parse(pet.img),
                 contentResolver,
-                "PlantImage${plant.plantId}"
+                "PetImage${pet.petId}"
             )
-            plantDao.insertPlant(plant.copy(img = imageUri.toString()))
+            petDao.insertPet(pet.copy(img = imageUri.toString()))
         } else {
-            plantDao.insertPlant(plant)
+            petDao.insertPet(pet)
         }
     }
 
-    suspend fun insertDead(plantId: Int) = plantDao.insertDead(plantId)
+    suspend fun insertDead(petId: Int) = petDao.insertDead(petId)
 
-    suspend fun insertLike(plantId: Int) = plantDao.insertLike(plantId)
+    suspend fun insertLike(petId: Int) = petDao.insertLike(petId)
 
-    fun removeLike(plantId: Int) = plantDao.removeLike(plantId)
+    fun removeLike(petId: Int) = petDao.removeLike(petId)
 
-    suspend fun countByUser(userId: Int): Int? = plantDao.countByUser(userId)
-    fun getPlantsByUser(userId: Int) = plantDao.getPlantsByUser(userId)
+    suspend fun countByUser(userId: Int): Int? = petDao.countByUser(userId)
+    fun getPetsByUser(userId: Int) = petDao.getPetsByUser(userId)
 
 }

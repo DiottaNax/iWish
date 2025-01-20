@@ -1,23 +1,23 @@
 package com.unibo.rootly.data.repositories
 
-import com.unibo.rootly.data.database.Fertilizer
-import com.unibo.rootly.data.database.daos.FertilizerDao
+import com.unibo.rootly.data.database.Cleaning
+import com.unibo.rootly.data.database.daos.CleaningDao
 import java.time.LocalDate
 
-class FertilizerRepository(
-    private val fertilizerDao: FertilizerDao
+class CleaningRepository(
+    private val cleaningDao: CleaningDao
 ) {
-    suspend fun insert(fertilizer: Fertilizer) = fertilizerDao.insertFertilizer(fertilizer)
+    suspend fun insert(fertilizer: Cleaning) = cleaningDao.insertCleaning(fertilizer)
 
-    fun getAllFavorites(userId: Int) = fertilizerDao.getAllFertilizeFavorites(userId)
+    fun getAllFavorites(userId: Int) = cleaningDao.getAllFertilizeFavorites(userId)
 
-    fun getAll(userId: Int) = fertilizerDao.getAllFertilize(userId)
+    fun getAll(userId: Int) = cleaningDao.getAllFertilize(userId)
 
     suspend fun remove(plantId: Int, date: LocalDate) {
-        fertilizerDao.removeFertilize(plantId,date)
+        cleaningDao.removeFertilize(plantId,date)
     }
 
-    fun getLastFertilizeDate(plantId: Int) = fertilizerDao.getLastFertilizeDate(plantId)
+    fun getLastFertilizeDate(plantId: Int) = cleaningDao.getLastFertilizeDate(plantId)
 
-    fun getTimesFertilized(userId: Int) = fertilizerDao.getTimesFertilized(userId)
+    fun getTimesFertilized(userId: Int) = cleaningDao.getTimesFertilized(userId)
 }

@@ -1,23 +1,23 @@
 package com.unibo.rootly.data.repositories
 
-import com.unibo.rootly.data.database.Water
-import com.unibo.rootly.data.database.daos.WaterDao
+import com.unibo.rootly.data.database.Feeding
+import com.unibo.rootly.data.database.daos.FeedingDao
 import java.time.LocalDate
 
-class WaterRepository(
-    private val waterDao: WaterDao
+class FeedingRepository(
+    private val feedingDao: FeedingDao
 ) {
-    suspend fun insert(water: Water) = waterDao.insertWater(water)
+    suspend fun insert(feeding: Feeding) = feedingDao.insertFeeding(feeding)
 
-    fun getAll(userId: Int) = waterDao.getAllWater(userId)
+    fun getAll(userId: Int) = feedingDao.getAllWater(userId)
 
-    fun getAllFavorites(userId: Int) = waterDao.getAllWaterFavorites(userId)
+    fun getAllFavorites(userId: Int) = feedingDao.getAllWaterFavorites(userId)
 
-    suspend fun remove(plantId: Int, date: LocalDate) {
-        waterDao.removeWater(plantId,date)
+    suspend fun remove(petId: Int, date: LocalDate) {
+        feedingDao.removeWater(petId,date)
     }
 
-    fun getLastWaterDate(plantId: Int) = waterDao.getLastWateredDate(plantId)
+    fun getLastWaterDate(petId: Int) = feedingDao.getLastWateredDate(petId)
 
-    suspend fun getTimesWatered(userId:Int ) = waterDao.getTimesWatered(userId)
+    suspend fun getTimesWatered(userId:Int ) = feedingDao.getTimesWatered(userId)
 }

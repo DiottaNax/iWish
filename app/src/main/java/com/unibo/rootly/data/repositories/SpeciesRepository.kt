@@ -1,12 +1,12 @@
 package com.unibo.rootly.data.repositories
 
-import com.unibo.rootly.data.database.Species
-import com.unibo.rootly.data.database.daos.SpeciesDao
+import com.unibo.rootly.data.database.PetSpecies
+import com.unibo.rootly.data.database.daos.PetSpeciesDao
 
 class SpeciesRepository(
-    private val speciesDao: SpeciesDao
+    private val speciesDao: PetSpeciesDao
 ) {
-    suspend fun insert(species: Species) = speciesDao.insertSpecies(species)
+    suspend fun insert(species: PetSpecies) = speciesDao.insertSpecies(species)
 
     fun getByName(name: String) = speciesDao.getSpeciesByName(name)
 
