@@ -262,6 +262,12 @@ fun FilterSelector(
         } else {
             null
         },
+        colors = androidx.compose.material3.FilterChipDefaults.filterChipColors(
+            containerColor = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+            labelColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
+//            disabledLeadingIconColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
+//            selectedLeadingIconColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+        ),
         modifier = modifier
     )
 }
