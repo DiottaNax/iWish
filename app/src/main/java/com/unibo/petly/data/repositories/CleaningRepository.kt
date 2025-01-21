@@ -13,11 +13,11 @@ class CleaningRepository(
 
     fun getAll(userId: Int) = cleaningDao.getAllCleaning(userId)
 
-    suspend fun remove(plantId: Int, date: LocalDate) {
-        cleaningDao.removeFertilize(plantId,date)
+    suspend fun remove(petId: Int, date: LocalDate) {
+        cleaningDao.removeCleaning(petId,date)
     }
 
-    fun getLastCleaningDate(plantId: Int) = cleaningDao.getLastCleaningDate(plantId)
+    fun getLastCleaningDate(petId: Int) = cleaningDao.getLastCleaningDate(petId)
 
     fun getCleaningTimes(userId: Int) = cleaningDao.getCleaningTimes(userId)
 }

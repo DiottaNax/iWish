@@ -144,7 +144,6 @@ class PetViewModel : ViewModel(), KoinComponent {
             getLastDate(FEEDING,pet).plusDays(feedingFrequency.toLong())
         }
     }
-    //fertilizer
 
     fun insertCleaning(pet: Pet, date: LocalDate = LocalDate.now(), context: Context) = viewModelScope.launch {
         cleaningRepository.insert(Cleaning(pet.petId, date))

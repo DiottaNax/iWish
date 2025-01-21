@@ -12,7 +12,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.unibo.petly.ui.screens.FormScreen
-import com.unibo.petly.ui.theme.RootlyTheme
+import com.unibo.petly.ui.theme.PetlyTheme
 import com.unibo.petly.viewmodel.SettingsViewModel
 import com.unibo.petly.viewmodel.Theme
 import org.koin.androidx.compose.koinViewModel
@@ -25,7 +25,7 @@ class RegistrationActivity: ComponentActivity() {
             val settingsVM = koinViewModel<SettingsViewModel>()
             val sharedPreferences: SharedPreferences = getSharedPreferences("userId", Context.MODE_PRIVATE)
 
-            RootlyTheme(
+            PetlyTheme(
                 darkTheme = when (settingsVM.state.theme) {
                     Theme.Light -> false
                     Theme.Dark -> true

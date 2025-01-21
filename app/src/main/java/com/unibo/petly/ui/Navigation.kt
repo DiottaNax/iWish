@@ -26,23 +26,23 @@ sealed class PetlyRoute(
     val title: String,
     val arguments: List<NamedNavArgument> = emptyList()
 ){
-    data object Home : PetlyRoute("plants" , "To-do")
+    data object Home : PetlyRoute("pets" , "To-do")
     data object Settings : PetlyRoute("settings", "Settings")
-    data object AddPlant : PetlyRoute("add","Add a plant")
-    data object PlantDetails: PetlyRoute("plant","Plant details")
+    data object AddPet : PetlyRoute("add","Add a pet")
+    data object PetDetails: PetlyRoute("pet","Pet details")
     data object UserProfile : PetlyRoute(
         "user/{userId}",
         "Profile",
         listOf(navArgument("userId") { type = NavType.StringType } )
     )
     companion object {
-        val routes = setOf(Home, Settings, PlantDetails, UserProfile, AddPlant)
+        val routes = setOf(Home, Settings, PetDetails, UserProfile, AddPet)
     }
 }
 
 @Composable
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-fun RootlyNavGraph(
+fun PetlyNavGraph(
     navController: NavHostController,
     settingsVM: SettingsViewModel,
     locationService: LocationService,
@@ -76,10 +76,10 @@ fun RootlyNavGraph(
                 )
             }
         }
-        with(PetlyRoute.PlantDetails) {
+        with(PetlyRoute.PetDetails) {
             composable(route, arguments) {
-                val plant = petViewModel.petSelected
-                if(plant != null) {
+                val pet = petViewModel.petSelected
+                if(pet != null) {
                     PetDetailsScreen(
                         navController,
                         petViewModel
@@ -87,7 +87,7 @@ fun RootlyNavGraph(
                 }
             }
         }
-        with(PetlyRoute.AddPlant) {
+        with(PetlyRoute.AddPet) {
             composable(route) {
                 AddPetScreen(navController, petViewModel, userViewModel)
             }

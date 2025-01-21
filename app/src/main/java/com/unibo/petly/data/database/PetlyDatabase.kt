@@ -51,7 +51,7 @@ abstract class PetlyDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     PetlyDatabase::class.java,
-                    "rootly_database"
+                    "petly_database"
                 ).allowMainThreadQueries()
                 .addCallback(object : Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {

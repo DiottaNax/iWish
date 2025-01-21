@@ -25,7 +25,7 @@ class PetlyApp : Application() {
             modules(settingsModule, databaseModule , repositoryModule)
         }
 
-        // add a check everyday to check badges about plantLife
+        // add a check everyday to check badges about app using
         val userCheckWorkRequest = PeriodicWorkRequest.Builder(
             UserCheckWorker::class.java,
             1,

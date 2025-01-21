@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">petly</string>
+    <string name="app_name">Petly</string>
 
     <string name="badge_first_pet_name">First Friend</string>
     <string name="badge_five_pets_name">Big Family!</string>

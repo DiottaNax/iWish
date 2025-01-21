@@ -108,7 +108,7 @@ fun ActivityCard(
                 }
                 ImageDisplay(
                     uri = img?.let { Uri.parse(img) },
-                    contentDescription = "Plant photo",
+                    contentDescription = "Pet photo",
                     modifier = Modifier.aspectRatio(1f)
                 )
             }

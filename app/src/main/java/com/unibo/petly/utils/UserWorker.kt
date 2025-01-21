@@ -23,13 +23,13 @@ class UserCheckWorker(context: Context, params: WorkerParameters) : Worker(conte
             val sharedPreferences: SharedPreferences =
                 applicationContext.getSharedPreferences("userId", Context.MODE_PRIVATE)
             val userId = sharedPreferences.getInt("userId",-1)
+            var achieved1 = false
+            var achieved2 = false
+            var achieved3 = false
 
             if(userId > -1){
                 runBlocking {
                     withContext(Dispatchers.IO) {
-                        var achieved1 = false
-                        var achieved2 = false
-                        var achieved3 = false
                         val inscriptionDate: LocalDate = userViewModel.user?.inscriptionDate ?: LocalDate.now()
 
                         when {

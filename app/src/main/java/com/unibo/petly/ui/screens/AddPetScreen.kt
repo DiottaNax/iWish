@@ -205,7 +205,7 @@ fun AddPetScreen(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "Add plant",
+                    text = "Add pet",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

@@ -100,13 +100,17 @@ fun UserProfileScreen(
     var showLocationPermanentlyDeniedSnackbar by remember { mutableStateOf(false) }
 
     fun getLocationName(latitude: Double, longitude: Double, context: Context) {
-        val geocoder = Geocoder(context, Locale.getDefault())
-        geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
-            if (addresses.isNotEmpty()) {
-                val city = addresses[0].locality ?: "City not found"
-                val country = addresses[0].countryName ?: "State not found"
-                address = "$city, $country"
+        try {
+            val geocoder = Geocoder(context, Locale.getDefault())
+            geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
+                if (addresses.isNotEmpty()) {
+                    val city = addresses[0].locality ?: "City not found"
+                    val country = addresses[0].countryName ?: "State not found"
+                    address = "$city, $country"
+                }
             }
+        } catch(exception: Exception) {
+            address = "Unable to determine location right now"
         }
     }
 

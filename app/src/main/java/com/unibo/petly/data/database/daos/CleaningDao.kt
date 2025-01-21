@@ -34,7 +34,7 @@ interface CleaningDao {
     fun getAllCleaningFavorites(userId: Int): Flow<List<Pet>>
 
     @Query("DELETE FROM Cleaning WHERE pet_id = :petId AND date = :date")
-    suspend fun removeFertilize(petId: Int, date: LocalDate)
+    suspend fun removeCleaning(petId: Int, date: LocalDate)
 
     @Query("SELECT MAX(date) FROM Cleaning WHERE pet_id = :petId")
     fun getLastCleaningDate(petId: Int) :LocalDate?

@@ -82,7 +82,7 @@ fun HomeScreen(
         floatingActionButton = {
             FloatingActionButton(
                 containerColor = MaterialTheme.colorScheme.primary,
-                onClick = { navController.navigate(PetlyRoute.AddPlant.route) }
+                onClick = { navController.navigate(PetlyRoute.AddPet.route) }
             ) {
                 Icon(Icons.Outlined.Add, "Add pet")
             }
@@ -156,7 +156,7 @@ fun HomeScreen(
                         DateTimeFormatter.ofPattern("dd MMMM yyyy")),
                     onClick = {
                         petViewModel.selectPet(pet.pet)
-                        navController.navigate(PetlyRoute.PlantDetails.route)
+                        navController.navigate(PetlyRoute.PetDetails.route)
                     },
                     onCompleted = {
                         scope.launch {
@@ -186,7 +186,7 @@ fun HomeScreen(
                                 }
                             } else {
                                 snackbarHostState.showSnackbar(
-                                    message = "You already ${pet.activity} ${pet.pet.petName} today",
+                                    message = "You already ${if(pet.activity == "cleaning") "cleaned" else "fed"} ${pet.pet.petName} today",
                                     duration = SnackbarDuration.Short
                                 )
                             }

@@ -56,7 +56,7 @@ sealed class FormScreen(
     val onSwitch: (context: Context) -> Unit
 ) {
     data object Login: FormScreen(
-        title ="rootly",
+        title ="Petly",
         buttonText = "Login",
         submit = { username, password, vm, scope, pref, snackbar, context ->
             scope.launch {
@@ -71,7 +71,7 @@ sealed class FormScreen(
         }
     )
     data object Registration: FormScreen(
-        title ="Welcome to the rootly family!",
+        title ="Welcome to the Petly Family!",
         buttonText = "Sign up",
         submit = { username, password, vm, scope, pref, snackbar, context ->
             scope.launch {

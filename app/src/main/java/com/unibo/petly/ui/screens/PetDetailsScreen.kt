@@ -102,7 +102,7 @@ fun PetDetailsScreen(
         ) {
             ImageDisplay(
                 uri = pet.img?.let { Uri.parse(pet.img) },
-                contentDescription = "Plant photo",
+                contentDescription = "Pet photo",
                 modifier = Modifier
                     .clip(RoundedCornerShape(28.dp))
                     .fillMaxWidth()
@@ -129,7 +129,7 @@ fun PetDetailsScreen(
         }
         val dietType: String = (specie?.dietType ?: "No diet available").toString().lowercase()
         Text(
-            text = "Ideal conditions:",
+            text = "Pet Info:",
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
         )
         Text(
@@ -188,7 +188,7 @@ fun PetDetailsScreen(
                 contentColor = MaterialTheme.colorScheme.onErrorContainer
             )
         ) {
-            Text("Mark as dead")
+            Text("Remove pet")
         }
         Spacer(Modifier.height(16.dp))
     }

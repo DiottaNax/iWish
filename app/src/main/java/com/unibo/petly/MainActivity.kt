@@ -4,9 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,10 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.unibo.petly.ui.RootlyNavGraph
+import com.unibo.petly.ui.PetlyNavGraph
 import com.unibo.petly.ui.PetlyRoute
 import com.unibo.petly.ui.composables.TopBar
-import com.unibo.petly.ui.theme.RootlyTheme
+import com.unibo.petly.ui.theme.PetlyTheme
 import com.unibo.petly.utils.LocationService
 import com.unibo.petly.viewmodel.SettingsViewModel
 import com.unibo.petly.viewmodel.Theme
@@ -32,6 +34,7 @@ import org.koin.androidx.compose.koinViewModel
 class MainActivity : ComponentActivity() {
     private lateinit var locationService: LocationService
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sharedPreferences: SharedPreferences = getSharedPreferences("userId", Context.MODE_PRIVATE)
@@ -42,7 +45,7 @@ class MainActivity : ComponentActivity() {
             val settingsVM = koinViewModel<SettingsViewModel>()
 
 
-            RootlyTheme(
+            PetlyTheme(
                 darkTheme = when (settingsVM.state.theme) {
                     Theme.Light -> false
                     Theme.Dark -> true
@@ -73,7 +76,7 @@ class MainActivity : ComponentActivity() {
                                 context = context
                             )}
                         ) { innerPadding ->
-                            RootlyNavGraph(
+                            PetlyNavGraph(
                                 navController = navController,
                                 settingsVM = settingsVM,
                                 locationService = locationService,
