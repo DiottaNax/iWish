@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.unibo.rootly"
+    namespace = "com.unibo.petly"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.unibo.rootly"
+        applicationId = "com.unibo.petly"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

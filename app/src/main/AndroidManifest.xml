@@ -33,12 +33,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/petly_icon_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Rootly"
+        android:theme="@style/Theme.Petly"
         tools:targetApi="34">
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Rootly">
+            android:theme="@style/Theme.Petly">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,12 +48,12 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.Rootly"
+            android:theme="@style/Theme.Petly"
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".RegistrationActivity"
             android:exported="true"
-            android:theme="@style/Theme.Rootly"
+            android:theme="@style/Theme.Petly"
             android:windowSoftInputMode="adjustResize"/>
         <provider
             android:name="androidx.core.content.FileProvider"
