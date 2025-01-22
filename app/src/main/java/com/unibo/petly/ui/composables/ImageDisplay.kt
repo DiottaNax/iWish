@@ -21,6 +21,7 @@ fun ImageDisplay(
     contentDescription: String,
     modifier: Modifier = Modifier,
     defaultHigh: Dp = 80.dp,
+    tint: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.primary // Parametro tint
 ) {
     if (uri != null) {
         AsyncImage(
@@ -34,7 +35,7 @@ fun ImageDisplay(
         Image(
             Icons.Outlined.Image,
             contentDescription = contentDescription,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
+            colorFilter = ColorFilter.tint(tint), // Usa il parametro tint
             modifier = modifier
                 .background(MaterialTheme.colorScheme.secondary)
                 .padding(defaultHigh/2)
