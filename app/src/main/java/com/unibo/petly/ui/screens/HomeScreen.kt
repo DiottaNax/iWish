@@ -68,6 +68,7 @@ fun HomeScreen(
     petViewModel: PetViewModel,
     userViewModel: UserViewModel,
 ) {
+    val incompatibleFilters: Map<Filter, Filter> = mapOf(Filter.Today to Filter.ThisWeek, Filter.Cleaning to Filter.Feeding, Filter.ThisWeek to Filter.Today, Filter.Feeding to Filter.Cleaning)
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -97,7 +98,13 @@ fun HomeScreen(
                     .padding(horizontal = 16.dp)
                     .horizontalScroll(rememberScrollState())
             ) {
-                Filter.entries.forEach { filter ->
+                val incompatibleWithSelectedFilters = selectedFilters.map {
+                    incompatibleFilters[it]
+                    }
+                    .toSet()
+                Filter.entries.filter {
+                    it !in incompatibleWithSelectedFilters
+                }.forEach { filter ->
                     FilterSelector(
                         name = filter.displayedName,
                         selected = filter in selectedFilters,
