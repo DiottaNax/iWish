@@ -230,5 +230,4 @@ class PetViewModel : ViewModel(), KoinComponent {
     }
 
     fun getSpecieDetails(scientificName: String) = speciesRepository.getByName(scientificName)
-
 }

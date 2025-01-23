@@ -39,6 +39,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.unibo.petly.R
+import com.unibo.petly.data.database.Pet
 import com.unibo.petly.data.database.PetSpecies
 import com.unibo.petly.ui.composables.ImageDisplay
 import com.unibo.petly.viewmodel.PetViewModel
@@ -61,6 +63,22 @@ fun PetDetailsScreen(
     var nextFeedingDate by remember { mutableStateOf<LocalDate?>(null) }
     var nextCleaningDate by remember { mutableStateOf<LocalDate?>(null) }
     var specie by remember { mutableStateOf<PetSpecies?>(null) }
+
+    fun petImageOrDefault(pet: Pet): String? {
+        val basePath = "android.resource://${context.packageName}/"
+
+        return if(!pet.img.isNullOrBlank()) pet.img
+        else when(pet.specie.lowercase()) {
+            "dog" -> basePath.plus(R.drawable.dog_default_image)
+            "cat" -> basePath.plus(R.drawable.cat_default_image)
+            "parrot" -> basePath.plus(R.drawable.parrot_default_image)
+            "goldfish" -> basePath.plus(R.drawable.goldfish_default_image)
+            "hamster" -> basePath.plus(R.drawable.hamster_default_image)
+            "snake" -> basePath.plus(R.drawable.snake_default_image)
+            "rabbit" -> basePath.plus(R.drawable.rabbit_default_image)
+            else -> null
+        }
+    }
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
@@ -101,7 +119,7 @@ fun PetDetailsScreen(
             contentAlignment = Alignment.TopEnd
         ) {
             ImageDisplay(
-                uri = pet.img?.let { Uri.parse(pet.img) },
+                uri = petImageOrDefault(pet)?.let { Uri.parse(petImageOrDefault(pet)) },
                 contentDescription = "Pet photo",
                 modifier = Modifier
                     .clip(RoundedCornerShape(28.dp))

@@ -1,5 +1,6 @@
 package com.unibo.petly.ui.screens
 
+import android.net.Uri
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -37,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.unibo.petly.R
 import com.unibo.petly.ui.PetlyRoute
 import com.unibo.petly.ui.composables.ActivityCard
 import com.unibo.petly.ui.composables.BottomBar
@@ -78,6 +80,22 @@ fun HomeScreen(
 
     var selectedFilters by remember { mutableStateOf(emptyList<Filter>()) }
     val pets = emptySet<PetCard>().toMutableSet()
+
+    fun getDefaultImageFromPetType(petType: String): String? {
+        val basePath = "android.resource://${context.packageName}/"
+
+        return when(petType.lowercase()) {
+            "dog" -> basePath.plus(R.drawable.dog_default_image)
+            "cat" -> basePath.plus(R.drawable.cat_default_image)
+            "parrot" -> basePath.plus(R.drawable.parrot_default_image)
+            "goldfish" -> basePath.plus(R.drawable.goldfish_default_image)
+            "hamster" -> basePath.plus(R.drawable.hamster_default_image)
+            "snake" -> basePath.plus(R.drawable.snake_default_image)
+            "snake" -> basePath.plus(R.drawable.snake_default_image)
+            "rabbit" -> basePath.plus(R.drawable.rabbit_default_image)
+            else -> null
+        }
+    }
 
     Scaffold (
         floatingActionButton = {
@@ -154,26 +172,26 @@ fun HomeScreen(
 
             items(pets.toMutableList().sortedBy { it.date },
                 key = {"${it.pet.petId}${it.activity}${it.date}${it.pet.petName}"}
-            ) { pet ->
+            ) { petCard ->
                 ActivityCard(
-                    title = pet.pet.petName,
-                    subTitle = pet.pet.specie,
-                    activity = pet.activity,
-                    date = if (pet.date!! <= LocalDate.now()) "today" else pet.date.format(
+                    title = petCard.pet.petName,
+                    subTitle = petCard.pet.specie,
+                    activity = petCard.activity,
+                    date = if (petCard.date!! <= LocalDate.now()) "today" else petCard.date.format(
                         DateTimeFormatter.ofPattern("dd MMMM yyyy")),
                     onClick = {
-                        petViewModel.selectPet(pet.pet)
+                        petViewModel.selectPet(petCard.pet)
                         navController.navigate(PetlyRoute.PetDetails.route)
                     },
                     onCompleted = {
                         scope.launch {
                             delay(100.milliseconds)
-                            if (petViewModel.getLastDate(pet.activity, pet.pet) != LocalDate.now()) {
-                                pets.remove(pet)
-                                if (pet.activity == FEEDING) {
-                                    petViewModel.insertFeeding(pet.pet,context = context)
+                            if (petViewModel.getLastDate(petCard.activity, petCard.pet) != LocalDate.now()) {
+                                pets.remove(petCard)
+                                if (petCard.activity == FEEDING) {
+                                    petViewModel.insertFeeding(petCard.pet,context = context)
                                 } else {
-                                    petViewModel.insertCleaning(pet.pet,context = context)
+                                    petViewModel.insertCleaning(petCard.pet,context = context)
                                 }
                                 val snackbarResult = snackbarHostState.showSnackbar(
                                     message = "You have completed an activity",
@@ -183,23 +201,23 @@ fun HomeScreen(
                                 when (snackbarResult) {
                                     SnackbarResult.Dismissed -> {}
                                     SnackbarResult.ActionPerformed -> {
-                                        pets.add(pet)
-                                        if (pet.activity == FEEDING) {
-                                            petViewModel.removeFeeding(pet.pet.petId)
+                                        pets.add(petCard)
+                                        if (petCard.activity == FEEDING) {
+                                            petViewModel.removeFeeding(petCard.pet.petId)
                                         } else {
-                                            petViewModel.removeCleaning(pet.pet.petId)
+                                            petViewModel.removeCleaning(petCard.pet.petId)
                                         }
                                     }
                                 }
                             } else {
                                 snackbarHostState.showSnackbar(
-                                    message = "You already ${if(pet.activity == "cleaning") "cleaned" else "fed"} ${pet.pet.petName} today",
+                                    message = "You already ${if(petCard.activity == "cleaning") "cleaned" else "fed"} ${petCard.pet.petName} today",
                                     duration = SnackbarDuration.Short
                                 )
                             }
                         }
                     },
-                    img = pet.pet.img,
+                    img = if(petCard.pet.img.isNullOrBlank()) getDefaultImageFromPetType(petCard.pet.specie) else petCard.pet.img,
                     modifier = Modifier.animateItemPlacement(tween(100))
                 )
             }
