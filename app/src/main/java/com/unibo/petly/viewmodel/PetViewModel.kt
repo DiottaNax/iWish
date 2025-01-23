@@ -73,8 +73,6 @@ class PetViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun getPetsByUser(userId: Int) = petRepository.getPetsByUser(userId)
-
     fun addLike(petId : Int) = viewModelScope.launch {
         petRepository.insertLike(petId)
     }
@@ -83,7 +81,7 @@ class PetViewModel : ViewModel(), KoinComponent {
         petRepository.removeLike(petId)
     }
 
-    fun removePet(pet : Pet, context: Context) = viewModelScope.launch {
+    fun removePet(pet : Pet) = viewModelScope.launch {
         petRepository.removePet(pet.petId)
     }
 
@@ -210,7 +208,7 @@ class PetViewModel : ViewModel(), KoinComponent {
 
     //badges
 
-    suspend fun insertBadge(context:Context ,name: String, userId: Int) {
+    private suspend fun insertBadge(context:Context ,name: String, userId: Int) {
         val badges = receivedRepository.getByUser(userId).firstOrNull() ?: emptyList()
         val badgeNames = badges.map { it.name }
         if (name !in badgeNames) {

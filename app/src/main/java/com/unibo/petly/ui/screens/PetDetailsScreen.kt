@@ -198,7 +198,7 @@ fun PetDetailsScreen(
         Button(
             onClick = {
                 navController.navigateUp()
-                petViewModel.removePet(pet, context = context)
+                petViewModel.removePet(pet)
             },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
