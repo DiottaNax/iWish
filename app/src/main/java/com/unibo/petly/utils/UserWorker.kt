@@ -2,7 +2,6 @@ package com.unibo.petly.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.unibo.petly.R
@@ -11,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
@@ -26,12 +24,10 @@ class UserCheckWorker(context: Context, params: WorkerParameters) : Worker(conte
             var achieved2 = false
             var achieved3 = false
 
-            println("GREAT DAY TODAY")
             val userViewModel = UserViewModel()
             userViewModel.setUser(userId)
-            println("Doing Work for user: " + userViewModel.user?.username );
 
-            if(userId > -1){
+            if(userId > -1) {
                 runBlocking {
                     withContext(Dispatchers.IO) {
                         val inscriptionDate: LocalDate = userViewModel.user?.inscriptionDate ?: LocalDate.now()
