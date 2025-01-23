@@ -2,6 +2,7 @@ package com.unibo.petly.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.unibo.petly.R
@@ -17,8 +18,6 @@ import java.time.temporal.ChronoUnit
 class UserCheckWorker(context: Context, params: WorkerParameters) : Worker(context, params),
     KoinComponent {
 
-    private val userViewModel: UserViewModel by inject()
-
         override fun doWork(): Result {
             val sharedPreferences: SharedPreferences =
                 applicationContext.getSharedPreferences("userId", Context.MODE_PRIVATE)
@@ -27,33 +26,36 @@ class UserCheckWorker(context: Context, params: WorkerParameters) : Worker(conte
             var achieved2 = false
             var achieved3 = false
 
+            println("GREAT DAY TODAY")
+            val userViewModel = UserViewModel()
+            userViewModel.setUser(userId)
+            println("Doing Work for user: " + userViewModel.user?.username );
+
             if(userId > -1){
                 runBlocking {
                     withContext(Dispatchers.IO) {
                         val inscriptionDate: LocalDate = userViewModel.user?.inscriptionDate ?: LocalDate.now()
 
-                        when {
-                            !achieved1 && isUsingAppForMonths(inscriptionDate, 1) -> {
+                        if(!achieved1 && isUsingAppForMonths(inscriptionDate, 1)) {
                                 achieved1 = true
                                 userViewModel.insertBadge(
                                     applicationContext,
                                     applicationContext.getString(R.string.badge_1_month_name)
                                     ,userId)
-                            }
-                            !achieved2 && isUsingAppForMonths(inscriptionDate,6) -> {
+                        }
+                        if (!achieved2 && isUsingAppForMonths(inscriptionDate,6)) {
                                 achieved2 = true
                                 userViewModel.insertBadge(
                                     applicationContext,
                                     applicationContext.getString(R.string.badge_6_months_name)
                                     ,userId)
-                            }
-                            !achieved3 && isUsingAppForMonths(inscriptionDate,12) -> {
+                        }
+                        if (!achieved3 && isUsingAppForMonths(inscriptionDate,12)) {
                                 achieved3 = true
                                 userViewModel.insertBadge(
                                     applicationContext,
                                     applicationContext.getString(R.string.badge_1_year_name)
                                     ,userId)
-                            }
                         }
                     }
                 }
