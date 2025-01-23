@@ -1,6 +1,8 @@
 package com.unibo.petly.ui.screens
 
+import android.Manifest
 import android.net.Uri
+import android.os.Build
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -42,6 +44,8 @@ import com.unibo.petly.R
 import com.unibo.petly.ui.PetlyRoute
 import com.unibo.petly.ui.composables.ActivityCard
 import com.unibo.petly.ui.composables.BottomBar
+import com.unibo.petly.utils.PermissionStatus
+import com.unibo.petly.utils.rememberPermission
 import com.unibo.petly.viewmodel.FEEDING
 import com.unibo.petly.viewmodel.PetCard
 import com.unibo.petly.viewmodel.PetViewModel
@@ -90,7 +94,6 @@ fun HomeScreen(
             "parrot" -> basePath.plus(R.drawable.parrot_default_image)
             "goldfish" -> basePath.plus(R.drawable.goldfish_default_image)
             "hamster" -> basePath.plus(R.drawable.hamster_default_image)
-            "snake" -> basePath.plus(R.drawable.snake_default_image)
             "snake" -> basePath.plus(R.drawable.snake_default_image)
             "rabbit" -> basePath.plus(R.drawable.rabbit_default_image)
             else -> null
@@ -163,13 +166,13 @@ fun HomeScreen(
                 .collectAsState(initial = listOf()).value)
         }
 
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(16.dp, 16.dp),
             modifier = Modifier.padding(contentPadding)
         ) {
-
             items(pets.toMutableList().sortedBy { it.date },
                 key = {"${it.pet.petId}${it.activity}${it.date}${it.pet.petName}"}
             ) { petCard ->
