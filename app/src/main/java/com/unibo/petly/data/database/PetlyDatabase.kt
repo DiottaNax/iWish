@@ -60,6 +60,7 @@ abstract class PetlyDatabase : RoomDatabase() {
                             CoroutineScope(Dispatchers.IO).launch {
                                 database.badgeTypeDao().insertAll(InitialData.getBadgeTypes(context))
                                 database.speciesDao().insertAll(InitialData.getInitialPetSpecies())
+                                InitialData.getInitialUsers().forEach {database.userDao().insertUser(it)}
                             }
                         }
                     }
