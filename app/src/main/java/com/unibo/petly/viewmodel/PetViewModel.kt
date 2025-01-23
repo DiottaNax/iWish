@@ -9,10 +9,10 @@ import com.unibo.petly.data.database.Feeding
 import com.unibo.petly.data.database.Pet
 import com.unibo.petly.data.database.Received
 import com.unibo.petly.data.repositories.CleaningRepository
+import com.unibo.petly.data.repositories.FeedingRepository
 import com.unibo.petly.data.repositories.PetRepository
 import com.unibo.petly.data.repositories.ReceivedRepository
 import com.unibo.petly.data.repositories.SpeciesRepository
-import com.unibo.petly.data.repositories.FeedingRepository
 import com.unibo.petly.utils.Notifications
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
@@ -50,8 +50,8 @@ class PetViewModel : ViewModel(), KoinComponent {
 
     fun insertPet(pet: Pet, context: Context) = viewModelScope.launch {
         val newPet = pet.copy(petId = petRepository.insert(pet).toInt())
-        insertFeeding(newPet, context = context)
-        insertCleaning(newPet, context = context)
+        insertFeeding(newPet, LocalDate.now().minusDays(1), context = context)
+        insertCleaning(newPet, LocalDate.now().minusDays(1), context = context)
 
         val petCount = petRepository.countByUser(pet.userId)!!
 
@@ -91,14 +91,15 @@ class PetViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             feedingRepository.insert(Feeding(pet.petId, date))
 
+            val feedingTimes = feedingRepository.getFeedingTimes(pet.userId)
             when {
-                feedingRepository.getFeedingTimes(pet.userId) >= 100 -> {
+                 feedingTimes >= 100 -> {
                     insertBadge(context, context.getString(R.string.badge_feeding_guru_name), pet.userId)
                 }
-                feedingRepository.getFeedingTimes(pet.userId) >= 30 -> {
+                feedingTimes >= 30 -> {
                     insertBadge(context, context.getString(R.string.badge_feeding_bro_name), pet.userId)
                 }
-                feedingRepository.getFeedingTimes(pet.userId) >= 1 -> {
+                feedingTimes >= 2 -> {
                     insertBadge(context, context.getString(R.string.badge_first_feeding_name), pet.userId)
                 }
                 else -> { /* No action */ }
@@ -147,15 +148,15 @@ class PetViewModel : ViewModel(), KoinComponent {
 
     fun insertCleaning(pet: Pet, date: LocalDate = LocalDate.now(), context: Context) = viewModelScope.launch {
         cleaningRepository.insert(Cleaning(pet.petId, date))
-
+        val cleaningTimes = cleaningRepository.getCleaningTimes(pet.userId)
         when {
-            cleaningRepository.getCleaningTimes(pet.userId) >= 40 -> {
+            cleaningTimes >= 40 -> {
                 insertBadge(context, context.getString(R.string.badge_cleaning_guru_name), pet.userId)
             }
-            cleaningRepository.getCleaningTimes(pet.userId) >= 15 -> {
+            cleaningTimes >= 15 -> {
                 insertBadge(context, context.getString(R.string.badge_cleaning_bro_name), pet.userId)
             }
-            cleaningRepository.getCleaningTimes(pet.userId) >= 1 -> {
+            cleaningTimes >= 2 -> {
                 insertBadge(context, context.getString(R.string.badge_first_cleaning_name), pet.userId)
             }
             else -> { /* No action */ }
