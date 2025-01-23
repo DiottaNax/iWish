@@ -30,7 +30,7 @@ class PetlyApp : Application() {
             UserCheckWorker::class.java,
             1,
             TimeUnit.DAYS
-        ).setInitialDelay(30, TimeUnit.MINUTES).build()
+        ).setInitialDelay(1, TimeUnit.MINUTES).build()
         WorkManager.getInstance(applicationContext).enqueue(userCheckWorkRequest)
     }
 }
