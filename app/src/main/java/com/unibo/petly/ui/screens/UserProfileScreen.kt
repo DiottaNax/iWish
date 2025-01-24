@@ -50,6 +50,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.unibo.petly.ui.PetlyRoute
 import com.unibo.petly.ui.composables.BottomBar
@@ -193,21 +194,28 @@ fun UserProfileScreen(
                     Text(
                         text = user.username,
                         style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 32.sp,
+                        modifier = Modifier
+                            .padding(top = 4.dp)
                     )
                     Text(
                         text = address,
                         style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.clickable {
                             requestLocation()
                         }
                     )
                     Text(
                         text = "Your badges:",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontSize = 25.sp,
+                        color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
                             .fillMaxWidth()
                             .align(Alignment.Start)
+                            .padding(top = 20.dp)
                     )
                 }
             }

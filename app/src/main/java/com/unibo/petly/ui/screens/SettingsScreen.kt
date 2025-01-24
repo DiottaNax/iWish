@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.unibo.petly.ui.PetlyRoute
 import com.unibo.petly.ui.composables.BottomBar
@@ -106,7 +107,11 @@ fun SettingsScreen(
         ) {
             Text(
                 text = "Select your theme:",
-                style = MaterialTheme.typography.bodyMedium
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.titleLarge,
+                fontSize = 30.sp,
+                modifier = Modifier
+                        .padding(top = 20.dp)
             )
             Theme.entries.forEach { theme ->
                 val selected = (theme == state.theme)
@@ -137,7 +142,11 @@ fun SettingsScreen(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 Text(
                     text = "Check your permission:",
-                    style = MaterialTheme.typography.bodyMedium
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontSize = 30.sp,
+                    modifier = Modifier
+                        .padding(top = 20.dp)
                 )
                 Button(
                     onClick = { checkNotificationPermission() }

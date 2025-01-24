@@ -4,15 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.CalendarContract
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -20,24 +12,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FilledTonalIconButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import com.unibo.petly.R
 import com.unibo.petly.data.database.Pet
@@ -49,9 +33,6 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import androidx.compose.ui.unit.sp
-import androidx.compose.material3.IconButtonDefaults
-
 
 @Composable
 fun PetDetailsScreen(
@@ -70,8 +51,8 @@ fun PetDetailsScreen(
     fun petImageOrDefault(pet: Pet): String? {
         val basePath = "android.resource://${context.packageName}/"
 
-        return if(!pet.img.isNullOrBlank()) pet.img
-        else when(pet.specie.lowercase()) {
+        return if (!pet.img.isNullOrBlank()) pet.img
+        else when (pet.specie.lowercase()) {
             "dog" -> basePath.plus(R.drawable.dog_default_image)
             "cat" -> basePath.plus(R.drawable.cat_default_image)
             "parrot" -> basePath.plus(R.drawable.parrot_default_image)
@@ -104,9 +85,12 @@ fun PetDetailsScreen(
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.SemiBold
             ),
-            fontSize = 37.sp,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            fontSize = 45.sp,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 0.dp), // Margine inferiore più piccolo
+            textAlign = TextAlign.Center
         )
         // Immagine con pulsante "Preferito"
         Box(
@@ -132,21 +116,21 @@ fun PetDetailsScreen(
                 },
                 modifier = Modifier.padding(4.dp),
                 colors = IconButtonDefaults.filledTonalIconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.secondary, // Colore fisso del cerchietto
-                    contentColor = MaterialTheme.colorScheme.onSecondary // Colore del contenuto
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary
                 )
             ) {
                 if (isFavorite) {
                     Icon(
                         imageVector = Icons.Filled.Favorite,
                         contentDescription = "add to Favorites",
-                        tint = MaterialTheme.colorScheme.primary // Colore del cuore pieno
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 } else {
                     Icon(
                         imageVector = Icons.Outlined.FavoriteBorder,
                         contentDescription = "remove from Favorites",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant // Colore del cuore vuoto
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -154,34 +138,41 @@ fun PetDetailsScreen(
         // Scritta "Added on"
         Text(
             text = "Added on ${pet.birthday.format(formatter)}",
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.primary
         )
         // Specie sotto "Added on"
         Text(
             text = "(${pet.specie})",
+            fontSize = 30.sp,
             style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.fillMaxWidth(),
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            textAlign = TextAlign.Center
         )
         Spacer(Modifier.height(8.dp))
         // Informazioni sull'animale
         Text(
             text = "Pet Info:",
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+            color = MaterialTheme.colorScheme.primary
         )
         Text(
             text = "Diet: ${specie?.dietType ?: "No diet available"}",
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.primary
         )
         Text(
             text = "Living temperature: " +
                     "${specie?.minTemperature}°  –  " +
                     "${specie?.maxTemperature}°",
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.primary
         )
         Text(
-            text = "\n Next activities:",
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
+            text = "\nNext activities:",
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+            color = MaterialTheme.colorScheme.primary
         )
         // Attività di alimentazione e pulizia
         Row(
@@ -191,7 +182,8 @@ fun PetDetailsScreen(
         ) {
             Text(
                 text = "Feeding: ${nextFeedingDate?.format(formatter)}",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary
             )
             AddToCalendarButton(
                 title = "Feeding ${pet.petName}",
@@ -206,7 +198,8 @@ fun PetDetailsScreen(
         ) {
             Text(
                 text = "Cleaning: ${nextCleaningDate?.format(formatter)}",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary
             )
             AddToCalendarButton(
                 title = "Cleaning ${pet.petName}",
@@ -222,8 +215,8 @@ fun PetDetailsScreen(
             },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.errorContainer,
-                contentColor = MaterialTheme.colorScheme.onErrorContainer
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.background
             )
         ) {
             Text("Remove pet")
