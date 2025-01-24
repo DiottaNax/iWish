@@ -192,7 +192,8 @@ fun UserProfileScreen(
                     }
                     Text(
                         text = user.username,
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.primary
                     )
                     Text(
                         text = address,

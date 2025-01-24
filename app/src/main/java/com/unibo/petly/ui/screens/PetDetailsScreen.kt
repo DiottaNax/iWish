@@ -49,6 +49,9 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import androidx.compose.ui.unit.sp
+import androidx.compose.material3.IconButtonDefaults
+
 
 @Composable
 fun PetDetailsScreen(
@@ -95,26 +98,17 @@ fun PetDetailsScreen(
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(Modifier.height(16.dp))
-        Column {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Text(
-                    text = pet.petName,
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.SemiBold
-                    )
-                )
-                Text(
-                    text = "(${pet.specie})",
-                    style = MaterialTheme.typography.titleLarge
-                )
-            }
-            Text(
-                text = "Added on ${pet.birthday.format(formatter)}",
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
+        // Nome centrato sopra l'immagine
+        Text(
+            text = pet.petName,
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            fontSize = 37.sp,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+        )
+        // Immagine con pulsante "Preferito"
         Box(
             contentAlignment = Alignment.TopEnd
         ) {
@@ -124,7 +118,7 @@ fun PetDetailsScreen(
                 modifier = Modifier
                     .clip(RoundedCornerShape(28.dp))
                     .fillMaxWidth()
-                    .heightIn(min = 256.dp,  max = 435.dp),
+                    .heightIn(min = 256.dp, max = 435.dp),
                 defaultHigh = 256.dp
             )
             FilledTonalIconButton(
@@ -136,34 +130,60 @@ fun PetDetailsScreen(
                     }
                     isFavorite = !isFavorite
                 },
-                modifier = Modifier.padding(4.dp)
+                modifier = Modifier.padding(4.dp),
+                colors = IconButtonDefaults.filledTonalIconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary, // Colore fisso del cerchietto
+                    contentColor = MaterialTheme.colorScheme.onSecondary // Colore del contenuto
+                )
             ) {
-                if(isFavorite) {
-                    Icon(Icons.Filled.Favorite, "add to Favorites")
+                if (isFavorite) {
+                    Icon(
+                        imageVector = Icons.Filled.Favorite,
+                        contentDescription = "add to Favorites",
+                        tint = MaterialTheme.colorScheme.primary // Colore del cuore pieno
+                    )
                 } else {
-                    Icon(Icons.Outlined.FavoriteBorder , "remove from Favorites")
+                    Icon(
+                        imageVector = Icons.Outlined.FavoriteBorder,
+                        contentDescription = "remove from Favorites",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant // Colore del cuore vuoto
+                    )
                 }
             }
         }
-        val dietType: String = (specie?.dietType ?: "No diet available").toString().lowercase()
+        // Scritta "Added on"
+        Text(
+            text = "Added on ${pet.birthday.format(formatter)}",
+            style = MaterialTheme.typography.bodySmall
+        )
+        // Specie sotto "Added on"
+        Text(
+            text = "(${pet.specie})",
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+        )
+        Spacer(Modifier.height(8.dp))
+        // Informazioni sull'animale
         Text(
             text = "Pet Info:",
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
         )
         Text(
-            text = "Diet: $dietType",
+            text = "Diet: ${specie?.dietType ?: "No diet available"}",
             style = MaterialTheme.typography.bodyMedium
         )
         Text(
             text = "Living temperature: " +
-                    "${specie?.minTemperature}° - " +
+                    "${specie?.minTemperature}° → " +
                     "${specie?.maxTemperature}°",
             style = MaterialTheme.typography.bodyMedium
         )
         Text(
-            text = "Next activities:",
+            text = "\n Next activities:",
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
         )
+        // Attività di alimentazione e pulizia
         Row(
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.SpaceBetween,
