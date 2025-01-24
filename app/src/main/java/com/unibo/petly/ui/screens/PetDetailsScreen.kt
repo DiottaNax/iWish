@@ -175,7 +175,7 @@ fun PetDetailsScreen(
         )
         Text(
             text = "Living temperature: " +
-                    "${specie?.minTemperature}° → " +
+                    "${specie?.minTemperature}°  –  " +
                     "${specie?.maxTemperature}°",
             style = MaterialTheme.typography.bodyMedium
         )
