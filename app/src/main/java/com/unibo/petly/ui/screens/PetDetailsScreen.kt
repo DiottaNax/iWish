@@ -60,6 +60,7 @@ fun PetDetailsScreen(
             "hamster" -> basePath.plus(R.drawable.hamster_default_image)
             "snake" -> basePath.plus(R.drawable.snake_default_image)
             "rabbit" -> basePath.plus(R.drawable.rabbit_default_image)
+            "turtle" -> basePath.plus(R.drawable.turtle_default_image)
             else -> null
         }
     }
