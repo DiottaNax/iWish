@@ -61,6 +61,7 @@ import com.unibo.petly.utils.PermissionStatus
 import com.unibo.petly.utils.StartMonitoringResult
 import com.unibo.petly.utils.rememberPermission
 import com.unibo.petly.viewmodel.UserViewModel
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
@@ -198,6 +199,10 @@ fun UserProfileScreen(
                         fontSize = 32.sp,
                         modifier = Modifier
                             .padding(top = 4.dp)
+                    )
+                    Text(
+                        text = "Inscription date: " + user.inscriptionDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                        style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
                         text = address,
