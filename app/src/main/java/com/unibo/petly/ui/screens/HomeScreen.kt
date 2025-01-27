@@ -113,11 +113,11 @@ fun HomeScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surfaceContainer)
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 16.dp, vertical = 0.dp)
                     .horizontalScroll(rememberScrollState())
             ) {
                 val incompatibleWithSelectedFilters = selectedFilters.map {

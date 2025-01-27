@@ -45,7 +45,7 @@ fun TopBar(
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontFamily = BrightFontFamily,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 50.sp
+                    fontSize = 56.sp
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
