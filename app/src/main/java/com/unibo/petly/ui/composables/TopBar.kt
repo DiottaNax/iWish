@@ -16,12 +16,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.unibo.petly.MainActivity
 import com.unibo.petly.ui.PetlyRoute
+import com.unibo.petly.ui.theme.BrightFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,8 +43,9 @@ fun TopBar(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.headlineLarge.copy(
-                    fontFamily = FontFamily.Serif,
-                    fontWeight = FontWeight.Bold
+                    fontFamily = BrightFontFamily,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 50.sp
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -62,7 +64,7 @@ fun TopBar(
         },
 
         actions = {
-            if (currentRoute == PetlyRoute.UserProfile) {
+            if (currentRoute == PetlyRoute.UserProfile || currentRoute == PetlyRoute.Settings) {
                 IconButton(onClick = {
                     val editor: SharedPreferences.Editor = sharedPreferences.edit()
                     editor.putInt("userId", -1)
